@@ -1,0 +1,5 @@
+{
+  "port": 5000,
+  "mongo_uri": "mongodb+srv://i-suveev:1234qwer@cluster0.jzcwpni.mongodb.net/?retryWrites=true&w=majority",
+  "jwt_secret_key": "i-suveev-wish-list-app"
+}
