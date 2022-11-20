@@ -1,0 +1,11 @@
+.switchButton {
+  padding: 12px;
+  width: 50%;
+  border: 1px solid #ababab;
+}
+
+.switchButtonActive {
+  color: white;
+  background: linear-gradient(304deg, rgba(175,175,182,1) 0%, rgba(122,122,213,1) 35%, rgba(202,220,223,1) 100%);
+  border: 1px solid transparent;
+}

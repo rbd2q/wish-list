@@ -1,0 +1,21 @@
+
+.Input {
+  @apply block w-full h-10 px-3 py-2 leading-6 rounded-md shadow-sm outline-none border border-[#d1d5db];
+}
+
+.Input:hover {
+  transition: border-color .275s;
+  border-color: #a7b8d3;
+}
+
+.Input:focus {
+  border-color: #1f44cc;
+  box-shadow: 0 0 0 3px rgba(20, 60, 204, 0.25);
+}
+
+.Input:disabled {
+  border: 1px solid #c8c8c8;
+  background-color: #f6f6f6;
+  color: #ababab;
+  cursor: not-allowed;
+}
