@@ -1,5 +1,11 @@
+import { Registered } from '../src/shared/components/registered-layout';
+
 const Home = () => {
-  return <div className="text-3xl">Hello</div>;
+  return (
+    <div>
+      <Registered>Hello</Registered>
+    </div>
+  );
 };
 
 export default Home;
