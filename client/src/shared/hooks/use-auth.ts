@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useCallback, useEffect, useState } from 'react';
 
 const DEFAULT_URL_AFTER_AUTH = '/';
 
@@ -36,12 +36,14 @@ export const useAuth = () => {
   }, []);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem(storageName) ?? '');
+    if (localStorage.getItem(storageName)) {
+      const data = JSON.parse(localStorage.getItem(storageName) ?? '');
 
-    if (data && data.token) {
-      login(data.token, data.userId);
+      if (data && data.token) {
+        login(data.token, data.userId);
+      }
+      setIsReady(true);
     }
-    setIsReady(true);
   }, [login]);
 
   return { login, logout, token, userId, isReady };

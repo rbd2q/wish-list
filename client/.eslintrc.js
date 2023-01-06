@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint', 'react', 'prettier', 'react-hooks', 'simple-import-sort', 'jest'],
+  plugins: ['@typescript-eslint', 'react', 'prettier', 'react-hooks', 'simple-import-sort'],
   extends: [
     'airbnb',
     'prettier',
@@ -67,8 +67,5 @@ module.exports = {
     'jsx-a11y/label-has-associated-control': 'off',
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['error'],
-  },
-  env: {
-    'jest/globals': true,
   },
 };
