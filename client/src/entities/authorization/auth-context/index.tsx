@@ -1,8 +1,10 @@
-import { createContext, useEffect } from 'react';
-import noop from 'lodash/noop';
-import { FCWithChildren } from '../../../shared/types';
-import { useAuth } from '../../../shared/hooks/use-auth';
+// @ts-ignore
+import noop from 'lodash';
 import { useRouter } from 'next/router';
+import { createContext, useEffect } from 'react';
+
+import { useAuth } from '../../../shared/hooks/use-auth';
+import { FCWithChildren } from '../../../shared/types';
 
 interface AuthContextType {
   token: string | null;

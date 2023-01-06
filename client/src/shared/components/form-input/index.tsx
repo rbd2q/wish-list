@@ -1,15 +1,16 @@
-import { Controller, ControllerProps, FieldValues, useFormState } from 'react-hook-form';
-import { FormError } from '../form-error';
 // @ts-ignore
 import get from 'lodash/get';
 import { InputHTMLAttributes } from 'react';
+import { Controller, ControllerProps, FieldValues, useFormState } from 'react-hook-form';
+
+import { FormError } from '../form-error';
 import styles from './form-input.module.css';
 
 type Props<TFieldValues extends FieldValues = FieldValues> = InputHTMLAttributes<HTMLInputElement> &
   Omit<ControllerProps<TFieldValues>, 'render'>;
 
 export function FormInput<TFieldValues extends FieldValues = FieldValues>(props: Props<TFieldValues>): JSX.Element {
-  const { name, defaultValue, rules, shouldUnregister, control, color, ...rest } = props;
+  const { name, defaultValue, rules, shouldUnregister, control, ...rest } = props;
   const { errors } = useFormState<TFieldValues>({ control });
   const errorMessage = get(errors, `${name}.message`);
 
