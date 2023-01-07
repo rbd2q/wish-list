@@ -6,11 +6,11 @@ const nextConfig = {
     return [
       {
         source: '/api/auth/register',
-        destination: 'http://localhost:5000/api/auth/register',
+        destination: 'http://localhost:8000/api/auth/register',
       },
       {
         source: '/api/auth/login',
-        destination: 'http://localhost:5000/api/auth/login',
+        destination: 'http://localhost:8000/api/auth/login',
       },
     ];
   },
