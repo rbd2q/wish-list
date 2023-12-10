@@ -1,17 +1,19 @@
 import { FC, useContext } from 'react';
-import { FormField } from '../../shared/components/form-field';
-import { FormInput } from '../../shared/components/form-input';
 import { UnpackNestedValue, useForm } from 'react-hook-form';
-import { AuthFormResource } from '../../shared/types';
-import { Button } from '../../shared/components/button';
-import { useApi } from '../../shared/hooks/useApi';
-import { showErrorToast } from '../../utils';
-import { ToastContainer } from '../../shared/components/toast';
+
+import { Button } from '@/shared/components/button';
+import { FormField } from '@/shared/components/form-field';
+import { FormInput } from '@/shared/components/form-input';
+import { ToastContainer } from '@/shared/components/toast';
+import { useApi } from '@/shared/hooks/useApi';
+import { AuthFormResource } from '@/shared/types';
+import { showErrorToast } from '@/utils';
+
 import { AuthContext } from '../authorization/auth-context';
 
 export const SignInForm: FC = () => {
   const auth = useContext(AuthContext);
-  const { request } = useApi();
+  const api = useApi();
   const {
     control,
     handleSubmit,
@@ -20,14 +22,13 @@ export const SignInForm: FC = () => {
   } = useForm<AuthFormResource>();
   const formFields = watch();
 
-  const handleFormSubmit = async (data: UnpackNestedValue<AuthFormResource>) => {
+  const handleFormSubmit = async (formData: UnpackNestedValue<AuthFormResource>) => {
     try {
-      const response = await request('/api/auth/login', 'POST', data);
-      auth.login(response.token, response.userId);
-    } catch (e) {
+      const { data } = await api.post('/api/auth/login', formData);
+      auth.login(data.token, data.userId);
+    } catch (error) {
       // TODO
-      // @ts-ignore
-      showErrorToast(e.message);
+      showErrorToast(error.message);
     }
   };
   return (

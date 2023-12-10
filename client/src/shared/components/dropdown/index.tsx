@@ -1,13 +1,16 @@
-import { FCWithChildren } from '../../types';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Arrow, useLayer } from 'react-laag';
-import { useState } from 'react';
-import styles from './Dropdown.module.scss';
-import Link from 'next/link';
 import clsx from 'clsx';
+import { AnimatePresence, motion } from 'framer-motion';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { ReactNode, useState } from 'react';
+import { Arrow, useLayer } from 'react-laag';
 
-interface Props {}
+import { FCWithChildren } from '../../types';
+import styles from './Dropdown.module.scss';
+
+interface Props {
+  children: ReactNode;
+}
 
 export const Dropdown: FCWithChildren<Props> = ({ children }) => {
   const [isOpen, setOpen] = useState(false);
@@ -57,7 +60,7 @@ export const Dropdown: FCWithChildren<Props> = ({ children }) => {
                 <Link href="/profile">
                   <a className={styles.dropdownOption}>
                     <div className={clsx(styles.menuItem, router.pathname === '/profile' && styles.menuItemActive)}>
-                      <span className="geecko-profile-layout__menu-wrapper-link-title geecko-profile-layout__menu-wrapper-link-title--dropdown m-l-8">
+                      <span className="-profile-layout__menu-wrapper-link-title -profile-layout__menu-wrapper-link-title--dropdown m-l-8">
                         Profile
                       </span>
                     </div>

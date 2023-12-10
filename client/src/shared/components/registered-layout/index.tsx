@@ -1,12 +1,10 @@
 import { FCWithChildren } from '../../types';
-import { Header } from '../header';
 import { Container } from '../container';
+import { Header } from '../header';
 
-export const Registered: FCWithChildren = ({ children }) => {
-  return (
-    <div className="w-screen h-screen">
-      <Header />
-      <Container>{children}</Container>
-    </div>
-  );
-};
+export const Registered: FCWithChildren = ({ children }) => (
+  <div className="w-screen h-screen">
+    <Header />
+    <Container>{children}</Container>
+  </div>
+);
