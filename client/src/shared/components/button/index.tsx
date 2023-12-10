@@ -1,5 +1,5 @@
-import styles from './Button.module.scss';
 import { FCWithChildren } from '../../types';
+import styles from './Button.module.scss';
 
 interface Props {
   variant?: 'primary' | 'outlined';
@@ -14,16 +14,14 @@ export const Button: FCWithChildren<Props> = ({
   isLoading,
   disabled,
   children,
-}) => {
-  return (
-    <button
-      disabled={disabled || isLoading}
-      data-variant={variant}
-      data-color={color}
-      data-loading={isLoading}
-      className={styles.Button}
-    >
-      {children}
-    </button>
-  );
-};
+}) => (
+  <button
+    disabled={disabled || isLoading}
+    data-variant={variant}
+    data-color={color}
+    data-loading={isLoading}
+    className={styles.Button}
+  >
+    {children}
+  </button>
+);

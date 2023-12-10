@@ -1,10 +1,9 @@
-import { FC, useState } from 'react';
-
-import styles from './authorization-form.module.css';
 import clsx from 'clsx';
+import { FC, useState } from 'react';
 
 import { SignInForm } from '../sign-in-form';
 import { SignUpForm } from '../sign-up-form';
+import styles from './authorization-form.module.css';
 
 export const AuthorizationForm: FC = () => {
   const [hasAccount, setHasAccount] = useState(true);

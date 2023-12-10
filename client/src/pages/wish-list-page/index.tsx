@@ -1,5 +1,3 @@
-import { Registered } from '../../shared/components/registered-layout';
+import { Registered } from '@/shared/components/registered-layout';
 
-export const WishListPage = () => {
-  return <Registered>Wish List Page</Registered>;
-};
+export const WishListPage = () => <Registered>Wish List Page</Registered>;

@@ -1,0 +1,104 @@
+.accordion {
+  border: 1px solid transparent;
+  border-radius: 8px;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: border 250ms;
+
+  &--opened {
+    border: 1px solid #D5DADF;
+    .accordion__header {
+      background-color: transparent;
+    }
+
+    .accordion__arrow {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__header {
+    padding: 4px;
+
+    user-select: none;
+    color: #101014;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    background: #F5F6F8;
+
+    box-sizing: border-box;
+
+    cursor: pointer;
+
+    transition: opacity 200ms, background-color 250ms;
+
+    &:hover {
+      opacity: 0.75;
+    }
+
+    &--has-icon {
+      .accordion__title {
+        margin-left: 16px;
+      }
+    }
+  }
+
+  &__title {
+    color: var(--text-primary);
+    flex-grow: 1;
+  }
+
+  &__icon {
+    svg {
+      display: block;
+      color: var(--text-primary);
+    }
+  }
+
+  &__arrow {
+    transition: transform 300ms;
+    color: #D5DADF;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+
+    &--before {
+      height: 10px;
+    }
+
+    &--after {
+      height: 24px;
+    }
+  }
+}
+
+.accordion__buttons {
+  display: flex;
+}
+
+.button--cancel {
+  color: #060C38;
+  opacity: 0.5;
+  font-family: Proxima Nova;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 16px;
+  padding: 0 4px;
+}
+
+@media (max-width: 1080px) {
+  .accordion__buttons {
+    flex-direction: column;
+  }
+
+  .button--cancel {
+    margin-top: 16px;
+  }
+}

@@ -9,6 +9,7 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
   ],
+
   settings: {
     'import/resolver': {
       typescript: {},
@@ -29,6 +30,7 @@ module.exports = {
     'import/order': 'off',
     'import/prefer-default-export': 'off',
     'import/extensions': 'off',
+    'react/function-component-definition': 0,
     'no-case-declarations': 'off',
     'max-len': [
       'warn',

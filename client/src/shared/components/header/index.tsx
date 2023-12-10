@@ -1,16 +1,19 @@
-import { FC, useMemo } from 'react';
-import styles from './Header.module.css';
+import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { WishListIcon } from '../../icons/WishListIcon';
+import { FC, useContext, useMemo } from 'react';
+
+import { AuthContext } from '../../../entities/authorization/auth-context';
 import { ProfileIcon } from '../../icons/ProfileIcon';
 import { WalletIcon } from '../../icons/WalletIcon';
-import clsx from 'clsx';
+import { WishListIcon } from '../../icons/WishListIcon';
 import { AVATAR_EMPTY } from '../../utils/constants';
 import { Dropdown } from '../dropdown';
+import styles from './Header.module.css';
 
 export const Header: FC = () => {
   const router = useRouter();
+  const auth = useContext(AuthContext);
 
   const avatarStyle = useMemo(
     () => ({
@@ -19,44 +22,53 @@ export const Header: FC = () => {
     [],
   );
 
+  const handleLogout = () => {
+    auth.logout();
+  };
+
   return (
     <div className="w-full bg-white px-12 py-3 flex items-center justify-between">
-      <div className="flex">
+      <div className="flex w-full">
         <Link href="/" className="flex items-center">
           <img src="images/wish-list-logo.jpg" alt="logo" className={styles.logo} />
           <span className="font-bold">Wishlist</span>
         </Link>
-        <div className="flex gap-12 ml-20">
-          <Link
-            href="/wish-list"
-            className={clsx(
-              'flex gap-2 px-2 py-1 rounded-md text-sm items-center',
-              router.pathname === '/wish-list' && 'bg-[#edeef0]',
-            )}
-          >
-            <WishListIcon />
-            Wishlist
-          </Link>
-          <Link
-            href="/profile"
-            className={clsx(
-              'flex gap-2 px-2 py-1 rounded-md text-sm items-center',
-              router.pathname === '/profile' && 'bg-[#edeef0]',
-            )}
-          >
-            <ProfileIcon />
-            Profile
-          </Link>
-          <Link
-            href="/budget"
-            className={clsx(
-              'flex gap-2 px-2 py-1 rounded-md text-sm items-center',
-              router.pathname === '/budget' && 'bg-[#edeef0]',
-            )}
-          >
-            <WalletIcon />
-            Budget
-          </Link>
+        <div className="flex w-full justify-between items-center">
+          <div className="flex gap-12 ml-20">
+            <Link
+              href="/wish-list"
+              className={clsx(
+                'flex gap-2 px-2 py-1 rounded-md text-sm items-center',
+                router.pathname === '/wish-list' && 'bg-[#edeef0]',
+              )}
+            >
+              <WishListIcon />
+              Wishlist
+            </Link>
+            <Link
+              href="/profile"
+              className={clsx(
+                'flex gap-2 px-2 py-1 rounded-md text-sm items-center',
+                router.pathname === '/profile' && 'bg-[#edeef0]',
+              )}
+            >
+              <ProfileIcon />
+              Profile
+            </Link>
+            <Link
+              href="/budget"
+              className={clsx(
+                'flex gap-2 px-2 py-1 rounded-md text-sm items-center',
+                router.pathname === '/budget' && 'bg-[#edeef0]',
+              )}
+            >
+              <WalletIcon />
+              Budget
+            </Link>
+          </div>
+          <button onClick={handleLogout} className="text-red-400 text-sm">
+            Logout
+          </button>
         </div>
       </div>
       <div>

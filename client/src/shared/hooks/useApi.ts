@@ -1,37 +1,16 @@
-import { useCallback, useState } from 'react';
+import axios, { AxiosRequestConfig } from 'axios';
 
-type Headers = Record<string, string>;
+const config: AxiosRequestConfig = {
+  withCredentials: true,
+  headers: {
+    Accept: 'application/json',
+    'X-Detect-Locale': 'false',
+  },
+};
 
+// TODO refactor working with api
 export const useApi = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const actualConfig = { ...config, headers: { ...config.headers } };
 
-  const request = useCallback(async (url: string, method = 'GET', body: any = null, headers: Headers = {}) => {
-    setLoading(true);
-    try {
-      if (body) {
-        body = JSON.stringify(body);
-        headers['Content-Type'] = 'application/json';
-      }
-
-      const response = await fetch(url, { method, body, headers });
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Something went wrong');
-      }
-
-      setLoading(false);
-
-      return data;
-    } catch (e: any) {
-      setLoading(false);
-      setError(e.message);
-      throw e;
-    }
-  }, []);
-
-  const clearError = useCallback(() => setError(null), []);
-
-  return { loading, request, error, clearError };
+  return axios.create(actualConfig);
 };
