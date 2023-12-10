@@ -30,7 +30,7 @@ export const AuthContextProvider: FCWithChildren = ({ children }) => {
     if (isReady && !isAuthenticated) {
       router.replace('/auth');
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, isReady]);
 
   return (
     <AuthContext.Provider value={{ token, login, logout, userId, isAuthenticated }}>{children}</AuthContext.Provider>
