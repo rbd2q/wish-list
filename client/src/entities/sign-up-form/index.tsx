@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { useSignUp } from '@/entities/sign-up-form/model';
 import { Button } from '@/shared/components/button';
@@ -20,7 +20,7 @@ export const SignUpForm: FC = () => {
 
   const formFields = watch();
 
-  const handleFormSubmit = async (formData: AuthFormResource) => {
+  const handleFormSubmit: SubmitHandler<AuthFormResource> = async (formData: AuthFormResource) => {
     await signUp.mutateAsync(formData);
   };
 
