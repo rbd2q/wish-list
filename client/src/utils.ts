@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+
 import { showToast } from './shared/components/toast';
 
 export const showSuccessToast = (content: ReactNode): void => {

@@ -7,7 +7,6 @@ import { FCWithChildren } from '@/shared/types';
 
 interface AuthContextType {
   token: string | null;
-  userId: string | null;
   login: (jwtToken: string, id: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
@@ -15,7 +14,6 @@ interface AuthContextType {
 
 export const AuthContext = createContext<AuthContextType>({
   token: null,
-  userId: null,
   login: noop,
   logout: noop,
   isAuthenticated: false,
@@ -23,7 +21,7 @@ export const AuthContext = createContext<AuthContextType>({
 
 export const AuthContextProvider: FCWithChildren = ({ children }) => {
   const router = useRouter();
-  const { token, userId, login, logout, isReady } = useAuth();
+  const { token, login, logout, isReady } = useAuth();
   const isAuthenticated = !!token;
 
   useEffect(() => {
@@ -32,7 +30,5 @@ export const AuthContextProvider: FCWithChildren = ({ children }) => {
     }
   }, [isAuthenticated, isReady]);
 
-  return (
-    <AuthContext.Provider value={{ token, login, logout, userId, isAuthenticated }}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ token, login, logout, isAuthenticated }}>{children}</AuthContext.Provider>;
 };
