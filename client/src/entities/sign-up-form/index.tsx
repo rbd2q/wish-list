@@ -28,11 +28,15 @@ export const SignUpForm: FC = () => {
     <form onSubmit={handleSubmit(handleFormSubmit)}>
       <ToastContainer />
       <h1 className="text-3xl font-semibold mb-4">Sign Up</h1>
-      <FormField htmlFor="email" label="Email">
+      <FormField htmlFor="name" label="Name" required>
+        <FormInput id="name" name="name" placeholder="Name" control={control} />
+      </FormField>
+
+      <FormField htmlFor="email" label="Email" required>
         <FormInput id="email" name="email" type="email" placeholder="E-mail" control={control} />
       </FormField>
 
-      <FormField htmlFor="password" label="Password">
+      <FormField htmlFor="password" label="Password" required>
         <FormInput id="password" name="password" type="password" placeholder="Password" control={control} />
       </FormField>
 
