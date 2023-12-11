@@ -23,7 +23,7 @@ router.post(
           message: 'Something went wrong while creating user',
         });
       }
-      const { email, password } = req.body;
+      const { name, email, password } = req.body;
       const candidate = await User.findOne({ email });
 
       if (candidate) {
@@ -31,7 +31,7 @@ router.post(
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
-      const user = new User({ email, password: hashedPassword });
+      const user = new User({ name, email, password: hashedPassword });
       await user.save();
 
       res.status(201).json({ message: 'User has been created!' });
