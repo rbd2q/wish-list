@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ReactNode, useState } from 'react';
 
-import { ChevronIcon } from '../../icons/ChevronIcon';
-import { FCWithChildren } from '../../types';
+import { ChevronIcon } from '@/shared/icons/ChevronIcon';
+import { FCWithChildren } from '@/shared/types';
 
 interface Props {
   title: ReactNode;
