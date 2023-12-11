@@ -1,12 +1,16 @@
-const express = require('express');
-const config = require('config');
-const mongoose = require('mongoose');
+import express from 'express';
+import config from 'config';
+import mongoose from 'mongoose';
+
+import AuthRoutes from './routes/auth-routes.js';
+import UserRoutes from './routes/users-routes.js';
 
 const app = express();
 
 app.use(express.json({ extended: true }));
 
-app.use('/api/auth', require('./routes/auth-routes'));
+app.use('/api/auth', AuthRoutes);
+app.use('/api/users', UserRoutes);
 
 const PORT = config.get('port') || 8000;
 

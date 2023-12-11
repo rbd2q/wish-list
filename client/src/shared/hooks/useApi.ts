@@ -1,5 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
+import { storageName } from '@/shared/hooks/use-auth';
+
 const config: AxiosRequestConfig = {
   withCredentials: true,
   headers: {
@@ -8,9 +10,19 @@ const config: AxiosRequestConfig = {
   },
 };
 
-// TODO refactor working with api
 export const useApi = () => {
-  const actualConfig = { ...config, headers: { ...config.headers } };
+  let impersonationToken = '';
+  if (typeof window !== 'undefined' && localStorage.getItem(storageName)) {
+    impersonationToken = localStorage.getItem(storageName) ?? '';
+  }
+
+  const actualConfig = {
+    ...config,
+    headers: {
+      ...config.headers,
+      Authorization: `Bearer ${impersonationToken || process.env.NEXT_PUBLIC_BEARER_TOKEN}`,
+    },
+  };
 
   return axios.create(actualConfig);
 };

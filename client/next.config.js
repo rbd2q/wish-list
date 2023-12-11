@@ -12,6 +12,10 @@ const nextConfig = {
         source: '/api/auth/login',
         destination: 'http://localhost:8000/api/auth/login',
       },
+      {
+        source: '/api/users/current',
+        destination: 'http://localhost:8000/api/users/current',
+      },
     ];
   },
 };
