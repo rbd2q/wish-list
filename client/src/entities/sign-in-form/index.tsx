@@ -1,19 +1,16 @@
-import { FC, useContext } from 'react';
-import { UnpackNestedValue, useForm } from 'react-hook-form';
+import { FC } from 'react';
+import { useForm } from 'react-hook-form';
 
+import { useSignIn } from '@/entities/sign-in-form/model';
 import { Button } from '@/shared/components/button';
 import { FormField } from '@/shared/components/form-field';
 import { FormInput } from '@/shared/components/form-input';
 import { ToastContainer } from '@/shared/components/toast';
-import { useApi } from '@/shared/hooks/useApi';
 import { AuthFormResource } from '@/shared/types';
-import { showErrorToast } from '@/utils';
-
-import { AuthContext } from '../authorization/auth-context';
 
 export const SignInForm: FC = () => {
-  const auth = useContext(AuthContext);
-  const api = useApi();
+  const signIn = useSignIn();
+
   const {
     control,
     handleSubmit,
@@ -22,15 +19,10 @@ export const SignInForm: FC = () => {
   } = useForm<AuthFormResource>();
   const formFields = watch();
 
-  const handleFormSubmit = async (formData: UnpackNestedValue<AuthFormResource>) => {
-    try {
-      const { data } = await api.post('/api/auth/login', formData);
-      auth.login(data.token, data.userId);
-    } catch (error) {
-      // TODO
-      showErrorToast(error.message);
-    }
+  const handleFormSubmit = async (formData: AuthFormResource) => {
+    await signIn.mutateAsync(formData);
   };
+
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
       <ToastContainer />
