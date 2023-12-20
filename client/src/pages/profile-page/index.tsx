@@ -1,6 +1,6 @@
-import { useCurrentUser } from '@/pages/profile-page/model';
 import { Accordion } from '@/shared/components/accordion';
 import { Registered } from '@/shared/components/registered-layout';
+import { useCurrentUser } from '@/shared/hooks/use-get-current-user';
 
 export function ProfilePage() {
   const currentUser = useCurrentUser();
