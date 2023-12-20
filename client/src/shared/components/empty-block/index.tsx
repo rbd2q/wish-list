@@ -1,0 +1,16 @@
+import { FC } from 'react';
+
+import { TumbleweedIcon } from '@/shared/icons/TumbleweedIcon';
+
+import styles from './empty-block.module.css';
+
+export const EmptyBlock: FC = () => (
+  <div className="mt-12 flex items-center flex-col text-[#858A9C]">
+    <span className={styles.tumbleweedWrapper}>
+      <span className={styles.tumbleweed}>
+        <TumbleweedIcon />
+      </span>
+    </span>
+    <span className="text-lg font-bold mt-3 mb-12">Тут пока пусто :(</span>
+  </div>
+);
