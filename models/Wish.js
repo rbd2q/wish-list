@@ -11,6 +11,7 @@ const schema = new mongoose.Schema({
   tags: [{ type: String }],
   date: { type: Date, default: Date.now() },
   userId: { type: mongoose.Types.ObjectId, ref: 'User' },
+  isCompleted: { type: Boolean, default: false },
 });
 
 export default mongoose.model('Wish', schema);

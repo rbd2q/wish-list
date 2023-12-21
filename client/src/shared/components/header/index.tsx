@@ -30,7 +30,7 @@ export const Header: FC = () => {
     <div className="w-full bg-white px-12 py-3 flex items-center justify-between">
       <div className="flex w-full">
         <Link href="/" className="flex items-center">
-          <img src="images/wish-list-logo.jpg" alt="logo" className={styles.logo} />
+          <img src="/images/wish-list-logo.jpg" alt="logo" className={styles.logo} />
           <span className="font-bold">Wishlist</span>
         </Link>
         <div className="flex w-full justify-between items-center">
@@ -39,7 +39,7 @@ export const Header: FC = () => {
               href="/wish-list"
               className={clsx(
                 'flex gap-2 px-2 py-1 rounded-md text-sm items-center',
-                router.pathname === '/wish-list' && 'bg-[#edeef0]',
+                router.pathname.includes('/wish-list') && 'bg-[#edeef0]',
               )}
             >
               <WishListIcon />
