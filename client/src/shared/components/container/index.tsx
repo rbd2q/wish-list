@@ -1,5 +1,5 @@
 import { FCWithChildren } from '@/shared/types';
 
 export const Container: FCWithChildren = ({ children }) => (
-  <div className="max-w-4xl mx-auto w-full h-[calc(100%-56px)] px-12">{children}</div>
+  <div className="w-full max-w-4xl h-[calc(100%-56px)] flex flex-col items-center mx-auto px-12 py-8">{children}</div>
 );

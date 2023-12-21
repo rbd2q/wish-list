@@ -16,6 +16,14 @@ const nextConfig = {
         source: '/api/users/current',
         destination: 'http://localhost:8000/api/users/current',
       },
+      {
+        source: '/api/wish',
+        destination: 'http://localhost:8000/api/wish',
+      },
+      {
+        source: '/api/wish/create',
+        destination: 'http://localhost:8000/api/wish/create',
+      },
     ];
   },
 };

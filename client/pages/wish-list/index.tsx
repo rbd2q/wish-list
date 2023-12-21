@@ -1,3 +1,3 @@
-import { WishListPage } from '../../src/pages/wish-list-page';
+import { WishListPage } from '@/pages/wish-list-page';
 
 export default WishListPage;
