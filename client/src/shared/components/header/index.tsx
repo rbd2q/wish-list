@@ -65,6 +65,16 @@ export const Header: FC = () => {
               <WalletIcon />
               Budget
             </Link>
+            <Link
+              href="/ideas"
+              className={clsx(
+                'flex gap-2 px-2 py-1 rounded-md text-sm items-center',
+                router.pathname === '/ideas' && 'bg-[#edeef0]',
+              )}
+            >
+              <WalletIcon />
+              Ideas
+            </Link>
           </div>
           <button onClick={handleLogout} className="text-red-400 text-sm">
             Logout
