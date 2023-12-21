@@ -1,6 +1,9 @@
 import { useRouter } from 'next/router';
-import { FC } from 'react';
+import { FC, MouseEvent } from 'react';
 
+import { useDeleteItem, useMarkAsCompleted } from '@/entities/item-card/model';
+import { Button } from '@/shared/components/button';
+import { DeleteIcon } from '@/shared/icons/DeleteIcon';
 import { WishListItemType } from '@/shared/types';
 
 interface Props {
@@ -9,9 +12,21 @@ interface Props {
 
 export const ItemCard: FC<Props> = ({ item }) => {
   const router = useRouter();
+  const deleteItem = useDeleteItem();
+  const completeItem = useMarkAsCompleted();
 
   const handleClickItem = async () => {
     await router.push(`wish-list/${item._id}`);
+  };
+
+  const handleDeleteItem = async (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    await deleteItem.mutateAsync(item._id);
+  };
+
+  const handleMarkAsCompleted = async (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    await completeItem.mutateAsync(item._id);
   };
 
   return (
@@ -23,7 +38,20 @@ export const ItemCard: FC<Props> = ({ item }) => {
       }}
     >
       <div className="hidden absolute top-0 bottom-0 right-0 left-0 bg-black opacity-50 group-hover:block" />
+      <button
+        onClick={handleDeleteItem}
+        className="hidden group-hover:block absolute top-2 right-2 text-white border border-white rounded-md p-1 hover:bg-red-600 hover:text-white"
+      >
+        <DeleteIcon />
+      </button>
       <span className="hidden group-hover:block text-white z-10">{item.title}</span>
+      {!item.isCompleted ? (
+        <div className="hidden group-hover:block absolute bottom-3 right-6 left-6">
+          <Button onClick={handleMarkAsCompleted} size="sm" rounded="md">
+            Completed
+          </Button>
+        </div>
+      ) : null}
     </button>
   );
 };

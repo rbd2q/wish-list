@@ -68,3 +68,44 @@ export const create = async (req, res) => {
     res.status(500).json({ message: 'Something went wrong. Try again' });
   }
 };
+
+export const update = async (req, res) => {
+  try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array(),
+        message: 'Something went wrong while updating item',
+      });
+    }
+
+    const { id } = req.params;
+    const updatedWish = await Wish.findByIdAndUpdate(id, { isCompleted: true });
+    await updatedWish.save();
+
+    return res.status(201).json(updatedWish);
+  } catch (e) {
+    res.status(500).json({ message: 'Something went wrong. Try again' });
+  }
+};
+
+export const deleteItem = async (req, res) => {
+  try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array(),
+        message: 'Something went wrong while updating item',
+      });
+    }
+
+    const { id } = req.params;
+    const deletedWish = await Wish.findOneAndDelete(id);
+
+    return res.status(201).json(deletedWish);
+  } catch (e) {
+    res.status(500).json({ message: 'Something went wrong. Try again' });
+  }
+};

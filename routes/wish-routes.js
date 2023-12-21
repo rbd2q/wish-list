@@ -13,4 +13,10 @@ router.get('/:id', WishController.getWishListItem);
 // api/wish/create
 router.post('/create', checkAuth, WishController.create);
 
+// api/wish/:id
+router.delete('/:id', WishController.deleteItem);
+
+// api/wish/:id
+router.patch('/:id', WishController.update);
+
 export default router;
