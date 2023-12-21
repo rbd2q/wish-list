@@ -32,17 +32,19 @@ export interface AddItemFormResource {
   currency?: string;
   imageUrl?: string;
   tags?: string[];
+  isCompleted?: boolean;
 }
 
 export interface WishListItemType {
   _id: string;
   title: string;
   isHidden: boolean;
+  price: string;
+  currency: string;
+  userId: string;
+  isCompleted: boolean;
   description?: string;
   url?: string;
-  price?: string;
-  currency?: string;
   imageUrl?: string;
   tags?: string[];
-  userId?: string;
 }

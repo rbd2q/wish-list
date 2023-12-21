@@ -1,11 +1,9 @@
-import { Registered } from '../src/shared/components/registered-layout';
+import { Registered } from '@/shared/components/registered-layout';
 
-const Home = () => {
-  return (
-    <div>
-      <Registered>Hello</Registered>
-    </div>
-  );
-};
+const Home = () => (
+  <div>
+    <Registered>Hello</Registered>
+  </div>
+);
 
 export default Home;
