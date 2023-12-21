@@ -6,6 +6,7 @@ interface Props {
   color?: 'primary' | 'danger';
   isLoading?: boolean;
   disabled?: boolean;
+  onClick?: () => void;
 }
 
 export const Button: FCWithChildren<Props> = ({
@@ -13,6 +14,7 @@ export const Button: FCWithChildren<Props> = ({
   color = 'primary',
   isLoading,
   disabled,
+  onClick,
   children,
 }) => (
   <button
@@ -21,6 +23,7 @@ export const Button: FCWithChildren<Props> = ({
     data-color={color}
     data-loading={isLoading}
     className={styles.Button}
+    onClick={onClick}
   >
     {children}
   </button>

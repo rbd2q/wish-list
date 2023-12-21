@@ -22,3 +22,27 @@ export interface AuthFormResource {
   password: string;
   name?: string;
 }
+
+export interface AddItemFormResource {
+  title: string;
+  isHidden: boolean;
+  description?: string;
+  url?: string;
+  price?: string;
+  currency?: string;
+  imageUrl?: string;
+  tags?: string[];
+}
+
+export interface WishListItemType {
+  _id: string;
+  title: string;
+  isHidden: boolean;
+  description?: string;
+  url?: string;
+  price?: string;
+  currency?: string;
+  imageUrl?: string;
+  tags?: string[];
+  userId?: string;
+}

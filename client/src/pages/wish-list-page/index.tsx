@@ -1,22 +1,24 @@
-import { EmptyBlock } from '@/shared/components/empty-block';
+import { useState } from 'react';
+
+import { AddItemForm } from '@/entities/add-item-form';
+import { useGetMyWishlist } from '@/pages/wish-list-page/model';
 import { Registered } from '@/shared/components/registered-layout';
-import { useCurrentUser } from '@/shared/hooks/use-get-current-user';
+import { WishlistItems } from '@/widgets/wishlist-items';
 
 export const WishListPage = () => {
-  const currentUser = useCurrentUser();
+  const [isFromVisible, setIsFormVisible] = useState(false);
+  const wishlist = useGetMyWishlist();
 
   return (
     <Registered>
-      {currentUser.data?.wishes.length ? (
-        <div>
-          {currentUser.data.wishes.map((item) => (
-            <div key={item.id}>123</div>
-          ))}
-        </div>
+      {isFromVisible ? (
+        <AddItemForm onBack={() => setIsFormVisible(false)} />
       ) : (
-        <div className="h-full flex items-center justify-center">
-          <EmptyBlock />
-        </div>
+        <WishlistItems
+          items={wishlist.data}
+          isLoading={wishlist.isLoading}
+          handleShowForm={() => setIsFormVisible(true)}
+        />
       )}
     </Registered>
   );
