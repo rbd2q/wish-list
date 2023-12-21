@@ -14,6 +14,42 @@
   transition: background-color 0.1s ease-out;
 }
 
+.Button {
+  &[data-rounded="none"] {
+    @apply rounded-none;
+  }
+
+  &[data-rounded="sm"] {
+    @apply rounded-sm;
+  }
+
+  &[data-rounded="md"] {
+    @apply rounded-md;
+  }
+
+  &[data-rounded="lg"] {
+    @apply rounded-lg;
+  }
+}
+
+.Button {
+  &[data-size="tiny"] {
+    @apply px-3 py-1 text-xs leading-4 h-6;
+  }
+
+  &[data-size="sm"] {
+    @apply px-4 py-2 text-sm leading-4;
+  }
+
+  &[data-size="md"] {
+    @apply px-6 py-2 h-10 text-sm;
+  }
+
+  &[data-size="lg"] {
+    @apply px-6 py-3 h-[48px] text-sm;
+  }
+}
+
 .Button [data-loading=true] {
   background-image: linear-gradient(
                   -45deg,
@@ -51,5 +87,51 @@
   &:disabled:not([data-loading=true]),
   [disabled]:not([data-loading=true]) {
     @apply text-gray-400 bg-gray-100;
+  }
+}
+
+.Button[data-variant="outlined"] {
+  @apply border;
+  transition: .1s;
+
+  &[data-color="primary"] {
+    border: 2px solid #2F50C7;
+  }
+
+
+  &[data-loading=true] {
+    &[data-color="primary"] {
+      color: #FFFFFF;
+      opacity: 1;
+      cursor: wait;
+      --bg-loading-line: #2C2D37;
+    }
+  }
+
+  &:not(:disabled):not([disabled]):not([data-loading=true]) {
+    &[data-color="primary"] {
+      background: transparent;
+      color: #FFFFFF;
+
+      &:hover {
+        background: #2F50C7;
+      }
+
+      &:active {
+        background: #2F50C7;
+      }
+
+      &:focus-visible {
+        outline: 4px solid #373A47;
+        border-color: #69697B;
+      }
+    }
+  }
+
+  &:disabled,
+  &[disabled] {
+    @apply cursor-not-allowed opacity-20;
+    background-color: transparent;
+    color: #FFFFFF;
   }
 }
