@@ -1,6 +1,25 @@
 import { validationResult } from 'express-validator';
 import Wish from '../models/Wish.js';
 
+export const getFullWishesList = async (req, res) => {
+  try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array(),
+        message: 'Something went wrong while getting wishlist items',
+      });
+    }
+
+    const wishes = await Wish.find({ isHidden: false });
+
+    return res.status(200).json(wishes);
+  } catch (e) {
+    res.status(500).json({ message: 'Something went wrong. Try again' });
+  }
+};
+
 export const getAllMyWishes = async (req, res) => {
   try {
     const errors = validationResult(req);

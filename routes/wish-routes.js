@@ -7,6 +7,9 @@ const router = Router();
 // api/wish
 router.get('/', checkAuth, WishController.getAllMyWishes);
 
+// api/wish/ideas
+router.get('/ideas', WishController.getFullWishesList);
+
 // api/wish/:id
 router.get('/:id', WishController.getWishListItem);
 

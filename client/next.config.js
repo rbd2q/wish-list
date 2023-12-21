@@ -21,6 +21,10 @@ const nextConfig = {
         destination: 'http://localhost:8000/api/wish',
       },
       {
+        source: '/api/wish/ideas',
+        destination: 'http://localhost:8000/api/wish/ideas',
+      },
+      {
         source: '/api/wish/:id',
         destination: 'http://localhost:8000/api/wish/:id',
       },

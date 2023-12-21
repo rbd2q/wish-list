@@ -11,15 +11,16 @@ type ActiveItemsType = 'not_completed' | 'completed';
 interface Props {
   items: WishListItemType[] | undefined;
   isLoading: boolean;
-  handleShowForm: () => void;
+  isIdeasPage?: boolean;
+  handleShowForm?: () => void;
 }
 
-export const WishlistItems: FC<Props> = ({ items, isLoading, handleShowForm }) => {
+export const WishlistItems: FC<Props> = ({ items, isLoading, isIdeasPage, handleShowForm }) => {
   const [activeSection, setActiveSection] = useState<ActiveItemsType>('not_completed');
 
-  const displayedItems = items?.filter((item) =>
-    activeSection === 'not_completed' ? !item.isCompleted : item.isCompleted,
-  );
+  const displayedItems = isIdeasPage
+    ? items
+    : items?.filter((item) => (activeSection === 'not_completed' ? !item.isCompleted : item.isCompleted));
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -29,33 +30,42 @@ export const WishlistItems: FC<Props> = ({ items, isLoading, handleShowForm }) =
     <>
       {items?.length ? (
         <div className="w-full flex flex-col items-center">
-          <Button onClick={handleShowForm}>Add item</Button>
+          {!isIdeasPage ? (
+            <>
+              <Button onClick={handleShowForm}>Add item</Button>
 
-          <div className="flex gap-4 mt-8 text-start">
-            <button
-              className={clsx(
-                'font-semibold text-lg text-[#adadad]',
-                activeSection === 'not_completed' && 'text-black',
-              )}
-              onClick={() => setActiveSection('not_completed')}
-            >
-              Active
-            </button>
-            <button
-              className={clsx('font-semibold text-lg text-[#adadad]', activeSection === 'completed' && 'text-black')}
-              onClick={() => setActiveSection('completed')}
-            >
-              Completed
-            </button>
-          </div>
+              <div className="flex gap-4 mt-8 text-start">
+                <button
+                  className={clsx(
+                    'font-semibold text-lg text-[#adadad]',
+                    activeSection === 'not_completed' && 'text-black',
+                  )}
+                  onClick={() => setActiveSection('not_completed')}
+                >
+                  Active
+                </button>
+                <button
+                  className={clsx(
+                    'font-semibold text-lg text-[#adadad]',
+                    activeSection === 'completed' && 'text-black',
+                  )}
+                  onClick={() => setActiveSection('completed')}
+                >
+                  Completed
+                </button>
+              </div>
+            </>
+          ) : null}
 
           {displayedItems?.length ? (
             <div className="flex gap-3 w-full flex-wrap mt-6">
               {displayedItems?.map((item) => (
-                <ItemCard key={item._id} item={item} />
+                <ItemCard key={item._id} item={item} isIdeasPage={isIdeasPage} />
               ))}
             </div>
-          ) : null}
+          ) : (
+            <EmptyBlock />
+          )}
         </div>
       ) : (
         <div className="h-full max-w-md mx-auto flex flex-col items-center justify-center">
