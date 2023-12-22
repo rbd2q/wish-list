@@ -4,7 +4,6 @@ import { WishlistItems } from '@/widgets/wishlist-items';
 
 export const IdeasPage = () => {
   const { data, isLoading } = useGetAllItems();
-  console.log('data', data);
 
   return (
     <Registered>

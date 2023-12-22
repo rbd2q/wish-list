@@ -56,7 +56,7 @@ export const AddItemForm: FC<Props> = ({ onBack }) => {
 
       <FormField htmlFor="price" label="Price" required>
         <div className="flex gap-2">
-          <FormSelect name="currency" control={control} options={CURRENCY_OPTIONS} defaultValue="BYN" />
+          <FormSelect name="primaryCurrency" control={control} options={CURRENCY_OPTIONS} defaultValue="BYN" />
           <FormInput id="price" name="price" placeholder="0.00" control={control} />
         </div>
       </FormField>

@@ -21,7 +21,7 @@ export interface WishResource {
 }
 
 export interface UserResource {
-  id: string;
+  _id: string;
   email: string;
   wishes: WishResource[];
   preferredCurrency: CurrencyEnum;
@@ -45,7 +45,7 @@ export interface AddItemFormResource {
   description?: string;
   url?: string;
   price?: string;
-  currency?: string;
+  primaryCurrency?: string;
   imageUrl?: string;
   tags?: string[];
   isCompleted?: boolean;
@@ -59,6 +59,7 @@ export interface WishListItemType {
   primaryCurrency: CurrencyEnum;
   userId: string;
   isCompleted: boolean;
+  date: Date;
   description?: string;
   url?: string;
   imageUrl?: string;
