@@ -11,6 +11,6 @@ export const EmptyBlock: FC = () => (
         <TumbleweedIcon />
       </span>
     </span>
-    <span className="text-lg font-bold mt-3 mb-12">Тут пока пусто :(</span>
+    <span className="text-lg font-bold mt-3 mb-12">It is empty so far :(</span>
   </div>
 );
