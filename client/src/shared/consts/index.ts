@@ -1,5 +1,7 @@
-export const CURRENCY_OPTIONS = [
-  { value: 'USD', name: '$/USD' },
-  { value: 'BYN', name: 'Br/BYN' },
-  { value: 'RUB', name: '₽/RUB' },
+import { CurrencyType } from '@/shared/types';
+
+export const CURRENCY_OPTIONS: CurrencyType[] = [
+  { value: 'USD', name: '$/USD', sign: '$' },
+  { value: 'BYN', name: 'BYN', sign: 'BYN' },
+  { value: 'RUB', name: '₽/RUB', sign: '₽' },
 ];
