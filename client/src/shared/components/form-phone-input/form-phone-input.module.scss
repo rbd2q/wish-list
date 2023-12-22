@@ -1,0 +1,24 @@
+.PhoneInput {
+  input[type=tel] {
+    @apply outline-none;
+    width: 100%;
+    box-sizing: border-box;
+    color: #4D4E57;
+    font-weight: 500;
+    font-size: 16px;
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #d1d5db;
+    background: #FFFFFF;
+  }
+
+  input[type=tel]:hover {
+    transition: border-color .275s;
+    border-color: #a7b8d3;
+  }
+
+  input[type=tel]:focus {
+    border-color: #1f44cc;
+    box-shadow: 0 0 0 3px rgba(20, 60, 204, 0.25);
+  }
+}

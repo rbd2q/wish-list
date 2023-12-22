@@ -8,14 +8,9 @@ import { FormField } from '@/shared/components/form-field';
 import { FormInput } from '@/shared/components/form-input';
 import { FormSelect } from '@/shared/components/form-select';
 import { FormTextarea } from '@/shared/components/form-textarea';
+import { CURRENCY_OPTIONS } from '@/shared/consts';
 import { ArrowLeftIcon } from '@/shared/icons/ArrowLeftIcon';
 import { AddItemFormResource } from '@/shared/types';
-
-const options = [
-  { value: 'USD', name: '$/USD' },
-  { value: 'BYN', name: 'Br/BYN' },
-  { value: 'RUB', name: '₽/RUB' },
-];
 
 interface Props {
   onBack: () => void;
@@ -61,7 +56,7 @@ export const AddItemForm: FC<Props> = ({ onBack }) => {
 
       <FormField htmlFor="price" label="Price" required>
         <div className="flex gap-2">
-          <FormSelect name="currency" control={control} options={options} defaultValue="USD" />
+          <FormSelect name="currency" control={control} options={CURRENCY_OPTIONS} defaultValue="BYN" />
           <FormInput id="price" name="price" placeholder="0.00" control={control} />
         </div>
       </FormField>
