@@ -20,7 +20,10 @@ export interface UserResource {
 export interface AuthFormResource {
   email: string;
   password: string;
-  name?: string;
+  name: string;
+  currency: string;
+  birthDate?: string;
+  phone?: string;
 }
 
 export interface AddItemFormResource {

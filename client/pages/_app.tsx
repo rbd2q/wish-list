@@ -1,5 +1,6 @@
 import '../styles/globals.css';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-phone-number-input/style.css';
 
 import type { AppProps } from 'next/app';
 import { useRef } from 'react';
