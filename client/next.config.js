@@ -32,6 +32,10 @@ const nextConfig = {
         source: '/api/wish/create',
         destination: 'http://localhost:8000/api/wish/create',
       },
+      {
+        source: '/api/analytics',
+        destination: 'http://localhost:8000/api/analytics',
+      },
     ];
   },
 };
