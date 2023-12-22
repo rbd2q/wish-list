@@ -1,7 +1,9 @@
 import { useRouter } from 'next/router';
 
 import { PricesBlock } from '@/entities/prices-block';
-import { useGetMyWishItem } from '@/pages/wish-list-item-page/model';
+import { useAddToMyWishlist, useGetMyWishItem } from '@/pages/wish-list-item-page/model';
+import { useGetMyWishlist } from '@/pages/wish-list-page/model';
+import { Button } from '@/shared/components/button';
 import { Registered } from '@/shared/components/registered-layout';
 import { useCurrentUser } from '@/shared/hooks/use-get-current-user';
 import { ArrowLeftIcon } from '@/shared/icons/ArrowLeftIcon';
@@ -9,8 +11,19 @@ import { ArrowLeftIcon } from '@/shared/icons/ArrowLeftIcon';
 export const WishListItemPage = () => {
   const router = useRouter();
   const user = useCurrentUser();
+  const addItem = useAddToMyWishlist();
   const itemId = typeof router.query.id === 'string' ? router.query.id : null;
   const wish = useGetMyWishItem(itemId);
+  const wishlist = useGetMyWishlist();
+
+  const isInMyWishList =
+    user.data?._id === wish.data?.userId || wishlist.data?.filter((item) => item.title === wish.data?.title).length;
+
+  const handleAddToMyWishlist = async () => {
+    if (wish.data) {
+      await addItem.mutateAsync(wish.data);
+    }
+  };
 
   return (
     <Registered>
@@ -26,20 +39,26 @@ export const WishListItemPage = () => {
               src={wish.data.imageUrl || '/images/product-image-fallback.svg'}
               alt="Wish list item"
             />
+            <PricesBlock prices={wish.data.prices} preferredCurrency={user.data.preferredCurrency} />
             <a
               target="_blank"
-              className="block text-center w-full bg-amber-300 rounded-md px-6 py-2"
+              className="block text-center w-full bg-amber-300 rounded-md px-6 py-2 mt-8 mb-4"
               href={wish.data.url}
               rel="noreferrer"
             >
               View source
             </a>
+            {!isInMyWishList ? (
+              <Button onClick={handleAddToMyWishlist} rounded="md">
+                Add to my wishlist
+              </Button>
+            ) : null}
           </div>
 
           <div className="w-1/2 ml-12">
-            <h1 className="text-2xl font-semibold text-[#adadad]">{wish.data.title}</h1>
+            <h1 className="text-2xl font-semibold text-[#adadad] mb-4">{wish.data.title}</h1>
             {wish.data.description ? <p>{wish.data.description}</p> : null}
-            <PricesBlock prices={wish.data.prices} preferredCurrency={user.data.preferredCurrency} />
+            <div className="text-[#6c757d] mt-4">Added: {new Date(wish.data.date).toLocaleDateString()}</div>
           </div>
         </div>
       ) : null}
