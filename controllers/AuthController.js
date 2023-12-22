@@ -42,7 +42,7 @@ export const register = async (req, res) => {
         message: 'Something went wrong while creating user',
       });
     }
-    const { name, email, password } = req.body;
+    const { name, email, password, preferredCurrency, birthDate, phone } = req.body;
     const candidate = await User.findOne({ email });
 
     if (candidate) {
@@ -50,7 +50,7 @@ export const register = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const user = new User({ name, email, password: hashedPassword });
+    const user = new User({ name, email, password: hashedPassword, preferredCurrency, birthDate, phone });
     await user.save();
 
     res.status(201).json({ message: 'User has been created!' });

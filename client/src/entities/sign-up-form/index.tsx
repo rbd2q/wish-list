@@ -25,8 +25,7 @@ export const SignUpForm: FC = () => {
   const formFields = watch();
 
   const handleFormSubmit: SubmitHandler<AuthFormResource> = async (formData: AuthFormResource) => {
-    // await signUp.mutateAsync(formData);
-    console.log(formData);
+    await signUp.mutateAsync(formData);
   };
 
   return (
