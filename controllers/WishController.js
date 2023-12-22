@@ -76,16 +76,16 @@ export const create = async (req, res) => {
         message: 'Something went wrong while creating item',
       });
     }
-    const { title, isHidden, description, url, price, primaryCurrency, imageUrl, tags } = req.body;
+    const { title, isHidden, description, url, price, prices, primaryCurrency, imageUrl, tags } = req.body;
 
-    const prices = await getPrices(primaryCurrency, price);
+    const pricesObject = prices ?? (await getPrices(primaryCurrency, price));
 
     const wish = new Wish({
       title,
       isHidden,
       description,
       url,
-      prices,
+      prices: pricesObject,
       primaryCurrency,
       imageUrl,
       tags,
