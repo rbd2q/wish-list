@@ -1,5 +1,6 @@
 import { validationResult } from 'express-validator';
 import Wish from '../models/Wish.js';
+import { getPrices } from '../utils/get-prices.js';
 
 export const getFullWishesList = async (req, res) => {
   try {
@@ -75,7 +76,19 @@ export const create = async (req, res) => {
     }
     const { title, isHidden, description, url, price, currency, imageUrl, tags } = req.body;
 
-    const wish = new Wish({ title, isHidden, description, url, price, currency, imageUrl, tags, userId: req.userId });
+    const prices = await getPrices(currency, price);
+
+    const wish = new Wish({
+      title,
+      isHidden,
+      description,
+      url,
+      prices,
+      primaryCurrency: currency,
+      imageUrl,
+      tags,
+      userId: req.userId,
+    });
     await wish.save();
 
     // console.log('WISH', wish, typeof wish, wish.title);
@@ -84,6 +97,7 @@ export const create = async (req, res) => {
     // const { password, ...data } = user._doc;
     return res.status(201).json(wish);
   } catch (e) {
+    console.log('ERROR', e);
     res.status(500).json({ message: 'Something went wrong. Try again' });
   }
 };
@@ -121,7 +135,7 @@ export const deleteItem = async (req, res) => {
     }
 
     const { id } = req.params;
-    const deletedWish = await Wish.findOneAndDelete(id);
+    const deletedWish = await Wish.findByIdAndDelete(id);
 
     return res.status(201).json(deletedWish);
   } catch (e) {

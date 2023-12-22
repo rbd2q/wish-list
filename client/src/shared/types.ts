@@ -2,11 +2,21 @@ import { FC, PropsWithChildren } from 'react';
 
 export type FCWithChildren<P = {}> = FC<PropsWithChildren<P>>;
 
+export type CurrencyEnum = 'USD' | 'BYN' | 'RUB';
+export type CurrencySignEnum = '$' | 'BYN' | '₽';
+export type CurrencyType = {
+  value: CurrencyEnum;
+  name: string;
+  sign: CurrencySignEnum;
+};
+
+export type PriceType = Record<CurrencyEnum, number>;
+
 export interface WishResource {
   id: number;
   title: string;
   description: string;
-  price: string;
+  prices: PriceType;
   image?: string;
 }
 
@@ -14,7 +24,10 @@ export interface UserResource {
   id: string;
   email: string;
   wishes: WishResource[];
+  preferredCurrency: CurrencyEnum;
   name?: string;
+  birthDate?: string;
+  phone?: string;
 }
 
 export interface AuthFormResource {
@@ -42,8 +55,8 @@ export interface WishListItemType {
   _id: string;
   title: string;
   isHidden: boolean;
-  price: string;
-  currency: string;
+  prices: PriceType;
+  primaryCurrency: CurrencyEnum;
   userId: string;
   isCompleted: boolean;
   description?: string;
