@@ -14,8 +14,10 @@ export const getFullWishesList = async (req, res) => {
     }
 
     const wishes = await Wish.find({ isHidden: false });
+    //TODO find out if there is a better way for filtering array
+    const filteredArray = [...wishes].filter((item) => item.userId.toString() !== req.userId);
 
-    return res.status(200).json(wishes);
+    return res.status(200).json(filteredArray);
   } catch (e) {
     res.status(500).json({ message: 'Something went wrong. Try again' });
   }
