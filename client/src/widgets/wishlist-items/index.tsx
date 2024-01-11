@@ -29,7 +29,7 @@ export const WishlistItems: FC<Props> = ({ items, isLoading, isIdeasPage, handle
   return (
     <>
       {items?.length ? (
-        <div className="w-full flex flex-col items-center">
+        <div className="w-full flex flex-col flex-1 items-center">
           {!isIdeasPage ? (
             <>
               <Button onClick={handleShowForm}>Add item</Button>

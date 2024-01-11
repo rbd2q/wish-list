@@ -5,7 +5,7 @@ import { TumbleweedIcon } from '@/shared/icons/TumbleweedIcon';
 import styles from './empty-block.module.css';
 
 export const EmptyBlock: FC = () => (
-  <div className="mt-12 flex items-center flex-col text-[#858A9C]">
+  <div className="m-auto flex items-center flex-col text-[#858A9C]">
     <span className={styles.tumbleweedWrapper}>
       <span className={styles.tumbleweed}>
         <TumbleweedIcon />

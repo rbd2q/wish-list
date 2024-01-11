@@ -39,7 +39,7 @@ export const Header: FC = () => {
               href="/wish-list"
               className={clsx(
                 'flex gap-2 px-2 py-1 rounded-md text-sm items-center',
-                router.pathname.includes('/wish-list') && 'bg-[#edeef0]',
+                router.pathname === '/wish-list' && 'bg-[#edeef0]',
               )}
             >
               <WishListIcon />
