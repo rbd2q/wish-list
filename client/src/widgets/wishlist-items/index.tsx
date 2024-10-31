@@ -26,53 +26,46 @@ export const WishlistItems: FC<Props> = ({ items, isLoading, isIdeasPage, handle
     return <div>Loading...</div>;
   }
 
-  return (
-    <>
-      {items?.length ? (
-        <div className="w-full flex flex-col flex-1 items-center">
-          {!isIdeasPage ? (
-            <>
-              <Button onClick={handleShowForm}>Add item</Button>
+  return items?.length ? (
+    <div className="w-full flex flex-col flex-1 items-center">
+      {!isIdeasPage ? (
+        <>
+          <Button onClick={handleShowForm}>Add item</Button>
 
-              <div className="flex gap-4 mt-8 text-start">
-                <button
-                  className={clsx(
-                    'font-semibold text-lg text-[#adadad]',
-                    activeSection === 'not_completed' && 'text-black',
-                  )}
-                  onClick={() => setActiveSection('not_completed')}
-                >
-                  Active
-                </button>
-                <button
-                  className={clsx(
-                    'font-semibold text-lg text-[#adadad]',
-                    activeSection === 'completed' && 'text-black',
-                  )}
-                  onClick={() => setActiveSection('completed')}
-                >
-                  Completed
-                </button>
-              </div>
-            </>
-          ) : null}
+          <div className="flex gap-4 mt-8 text-start">
+            <button
+              className={clsx(
+                'font-semibold text-lg text-[#adadad]',
+                activeSection === 'not_completed' && 'text-black',
+              )}
+              onClick={() => setActiveSection('not_completed')}
+            >
+              Active
+            </button>
+            <button
+              className={clsx('font-semibold text-lg text-[#adadad]', activeSection === 'completed' && 'text-black')}
+              onClick={() => setActiveSection('completed')}
+            >
+              Completed
+            </button>
+          </div>
+        </>
+      ) : null}
 
-          {displayedItems?.length ? (
-            <div className="flex gap-3 w-full flex-wrap mt-6">
-              {displayedItems?.map((item) => (
-                <ItemCard key={item._id} item={item} isIdeasPage={isIdeasPage} />
-              ))}
-            </div>
-          ) : (
-            <EmptyBlock />
-          )}
+      {displayedItems?.length ? (
+        <div className="flex gap-3 w-full flex-wrap mt-6">
+          {displayedItems?.map((item) => (
+            <ItemCard key={item._id} item={item} isIdeasPage={isIdeasPage} />
+          ))}
         </div>
       ) : (
-        <div className="h-full max-w-md mx-auto flex flex-col items-center justify-center">
-          <EmptyBlock />
-          <Button onClick={handleShowForm}>Add item</Button>
-        </div>
+        <EmptyBlock />
       )}
-    </>
+    </div>
+  ) : (
+    <div className="h-full max-w-md mx-auto flex flex-col items-center justify-center">
+      <EmptyBlock />
+      <Button onClick={handleShowForm}>Add item</Button>
+    </div>
   );
 };
