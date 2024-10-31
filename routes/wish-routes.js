@@ -16,6 +16,9 @@ router.get('/:id', WishController.getWishListItem);
 // api/wish/create
 router.post('/create', checkAuth, WishController.create);
 
+// api/wish/parse
+router.post('/parse', WishController.parse);
+
 // api/wish/:id
 router.delete('/:id', WishController.deleteItem);
 
