@@ -40,6 +40,7 @@ export interface AuthFormResource {
 }
 
 export interface AddItemFormResource {
+  link?: string;
   title: string;
   isHidden: boolean;
   description?: string;
@@ -64,4 +65,13 @@ export interface WishListItemType {
   url?: string;
   imageUrl?: string;
   tags?: string[];
+}
+
+export interface ParsedWishListItem {
+  title: string;
+  price: string;
+  description?: string;
+  url?: string;
+  imageUrl?: string;
+  images?: Array<string>;
 }

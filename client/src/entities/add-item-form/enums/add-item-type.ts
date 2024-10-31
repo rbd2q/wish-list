@@ -1,0 +1,4 @@
+export enum AddItemType {
+  PARSE_ITEM = 'PARSE_ITEM',
+  MANUALLY_ADD_ITEM = 'MANUALLY_ADD_ITEM',
+}
