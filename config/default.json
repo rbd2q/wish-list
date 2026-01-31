@@ -1,5 +1,5 @@
 {
   "port": 8000,
-  "mongo_uri": "mongodb+srv://i-suveev:1234qwer@cluster0.jzcwpni.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+  "mongo_uri": "mongodb://i-suveev:1234qwer@ac-knjfbeu-shard-00-00.jzcwpni.mongodb.net:27017,ac-knjfbeu-shard-00-01.jzcwpni.mongodb.net:27017,ac-knjfbeu-shard-00-02.jzcwpni.mongodb.net:27017/?tls=true&retryWrites=true&w=majority&appName=Cluster0",
   "jwt_secret_key": "i-suveev-wish-list-app"
 }
