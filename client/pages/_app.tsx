@@ -4,8 +4,7 @@ import 'react-phone-number-input/style.css';
 
 import type { AppProps } from 'next/app';
 import { useRef } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { Hydrate } from 'react-query/hydration';
+import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { AuthContextProvider } from '@/entities/authorization/auth-context';
 import { PageTitle } from '@/shared/components/page-title';
@@ -26,10 +25,10 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <AuthContextProvider>
       <QueryClientProvider client={queryClientRef.current}>
-        <Hydrate state={pageProps?.dehydratedState}>
+        <HydrationBoundary state={pageProps?.dehydratedState}>
           <PageTitle />
           <Component {...pageProps} />
-        </Hydrate>
+        </HydrationBoundary>
       </QueryClientProvider>
     </AuthContextProvider>
   );

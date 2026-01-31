@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactNode, useState } from 'react';
+import { ComponentProps, ReactNode, useState } from 'react';
 import { Arrow, useLayer } from 'react-laag';
 
 import { FCWithChildren } from '../../types';
@@ -68,7 +68,7 @@ export const Dropdown: FCWithChildren<Props> = ({ children }) => {
                 </Link>
               </li>
 
-              <Arrow {...arrowProps} backgroundColor="var(--surface-two)" />
+              <Arrow {...(arrowProps as ComponentProps<typeof Arrow>)} backgroundColor="var(--surface-two)" />
             </motion.ul>
           )}
         </AnimatePresence>,

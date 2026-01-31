@@ -6,7 +6,7 @@ export const checkAuth = (req, res, next) => {
 
   if (token) {
     try {
-      const decodedToken = jwt.decode(token, config.get('jwt_secret_key'));
+      const decodedToken = jwt.verify(token, config.get('jwt_secret_key'));
 
       req.userId = decodedToken.userId;
       next();
