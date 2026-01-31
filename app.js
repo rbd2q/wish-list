@@ -1,3 +1,6 @@
+import dns from 'dns';
+dns.setDefaultResultOrder('ipv4first');
+
 import express from 'express';
 import config from 'config';
 import mongoose from 'mongoose';
@@ -20,7 +23,10 @@ const PORT = config.get('port') || 8000;
 
 async function start() {
   try {
-    await mongoose.connect(config.get('mongo_uri'));
+    await mongoose.connect(config.get('mongo_uri'), {
+      serverSelectionTimeoutMS: 15000,
+      connectTimeoutMS: 15000,
+    });
     app.listen(PORT, () => console.log(`APP HAS BEEN STARTED ON PORT ${PORT}`));
   } catch (e) {
     console.log('Server error', e.message);
