@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 import { ComponentProps, ReactNode, useState } from 'react';
 import { Arrow, useLayer } from 'react-laag';
 
@@ -14,17 +14,13 @@ interface Props {
 
 export const Dropdown: FCWithChildren<Props> = ({ children }) => {
   const [isOpen, setOpen] = useState(false);
-  const router = useRouter();
-
-  const handleToggle = () => {
-    setOpen((prev) => !prev);
-  };
+  const pathname = usePathname();
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const { renderLayer, triggerProps, layerProps, arrowProps } = useLayer({
+  const { renderLayer, layerProps, arrowProps } = useLayer({
     isOpen,
     onOutsideClick: handleClose,
     onDisappear: handleClose,
@@ -57,14 +53,12 @@ export const Dropdown: FCWithChildren<Props> = ({ children }) => {
                 <div className="flex items-center mr-14">{children}</div>
               </div>
               <li className={styles.dropdownLi}>
-                <Link href="/profile">
-                  <a className={styles.dropdownOption}>
-                    <div className={clsx(styles.menuItem, router.pathname === '/profile' && styles.menuItemActive)}>
-                      <span className="-profile-layout__menu-wrapper-link-title -profile-layout__menu-wrapper-link-title--dropdown m-l-8">
-                        Profile
-                      </span>
-                    </div>
-                  </a>
+                <Link href="/profile" className={styles.dropdownOption}>
+                  <div className={clsx(styles.menuItem, pathname === '/profile' && styles.menuItemActive)}>
+                    <span className="-profile-layout__menu-wrapper-link-title -profile-layout__menu-wrapper-link-title--dropdown m-l-8">
+                      Profile
+                    </span>
+                  </div>
                 </Link>
               </li>
 

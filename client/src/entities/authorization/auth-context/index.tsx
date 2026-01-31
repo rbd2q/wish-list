@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router';
-import { createContext, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { createContext, useEffect, useMemo } from 'react';
 import { useAuth } from '@/shared/hooks/use-auth';
 import { FCWithChildren } from '@/shared/types';
 
@@ -24,11 +24,13 @@ export const AuthContextProvider: FCWithChildren = ({ children }) => {
   const { token, login, logout, isReady } = useAuth();
   const isAuthenticated = !!token;
 
+  const value = useMemo(() => ({ token, login, logout, isAuthenticated }), [token, login, logout, isAuthenticated]);
+
   useEffect(() => {
     if (isReady && !isAuthenticated) {
       router.replace('/auth');
     }
   }, [isAuthenticated, isReady]);
 
-  return <AuthContext.Provider value={{ token, login, logout, isAuthenticated }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
