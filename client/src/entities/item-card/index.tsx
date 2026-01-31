@@ -1,6 +1,5 @@
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { FC, MouseEvent } from 'react';
-
 import { useDeleteItem, useMarkAsCompleted } from '@/entities/item-card/model';
 import { Button } from '@/shared/components/button';
 import { DeleteIcon } from '@/shared/icons/DeleteIcon';
@@ -17,7 +16,7 @@ export const ItemCard: FC<Props> = ({ item, isIdeasPage }) => {
   const completeItem = useMarkAsCompleted();
 
   const handleClickItem = async () => {
-    await router.push(`wish-list/${item._id}`);
+    await router.push(`/wish-list/${item._id}`);
   };
 
   const handleDeleteItem = async (event: MouseEvent<HTMLButtonElement>) => {

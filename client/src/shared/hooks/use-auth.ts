@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
 const DEFAULT_URL_AFTER_AUTH = '/';
@@ -11,17 +11,20 @@ export const useAuth = () => {
   const [token, setToken] = useState<string | null>(null);
   const [isReady, setIsReady] = useState<boolean>(false);
 
-  const login = useCallback((jwtToken: string) => {
-    setToken(jwtToken);
-    localStorage.setItem(storageName, jwtToken);
-    router.replace(DEFAULT_URL_AFTER_AUTH);
-  }, []);
+  const login = useCallback(
+    (jwtToken: string) => {
+      setToken(jwtToken);
+      localStorage.setItem(storageName, jwtToken);
+      router.replace(DEFAULT_URL_AFTER_AUTH);
+    },
+    [router],
+  );
 
   const logout = useCallback(() => {
     setToken(null);
     localStorage.removeItem(storageName);
     router.replace('/auth');
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (localStorage.getItem(storageName)) {

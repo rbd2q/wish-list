@@ -1,5 +1,4 @@
-import { useRouter } from 'next/router';
-
+import { useParams, useRouter } from 'next/navigation';
 import { PricesBlock } from '@/entities/prices-block';
 import { useAddToMyWishlist, useGetMyWishItem } from '@/pages/wish-list-item-page/model';
 import { useGetMyWishlist } from '@/pages/wish-list-page/model';
@@ -10,9 +9,10 @@ import { ArrowLeftIcon } from '@/shared/icons/ArrowLeftIcon';
 
 export const WishListItemPage = () => {
   const router = useRouter();
+  const params = useParams();
   const user = useCurrentUser();
   const addItem = useAddToMyWishlist();
-  const itemId = typeof router.query.id === 'string' ? router.query.id : null;
+  const itemId = typeof params?.id === 'string' ? params.id : null;
   const wish = useGetMyWishItem(itemId);
   const wishlist = useGetMyWishlist();
 

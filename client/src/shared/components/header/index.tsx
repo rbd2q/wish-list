@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 import { FC, useContext, useMemo } from 'react';
 
 import { AuthContext } from '../../../entities/authorization/auth-context';
@@ -12,7 +12,7 @@ import { Dropdown } from '../dropdown';
 import styles from './Header.module.css';
 
 export const Header: FC = () => {
-  const router = useRouter();
+  const pathname = usePathname();
   const auth = useContext(AuthContext);
 
   const avatarStyle = useMemo(
@@ -39,7 +39,7 @@ export const Header: FC = () => {
               href="/wish-list"
               className={clsx(
                 'flex gap-2 px-2 py-1 rounded-md text-sm items-center',
-                router.pathname === '/wish-list' && 'bg-[#edeef0]',
+                pathname === '/wish-list' && 'bg-[#edeef0]',
               )}
             >
               <WishListIcon />
@@ -49,7 +49,7 @@ export const Header: FC = () => {
               href="/profile"
               className={clsx(
                 'flex gap-2 px-2 py-1 rounded-md text-sm items-center',
-                router.pathname === '/profile' && 'bg-[#edeef0]',
+                pathname === '/profile' && 'bg-[#edeef0]',
               )}
             >
               <ProfileIcon />
@@ -59,7 +59,7 @@ export const Header: FC = () => {
               href="/budget"
               className={clsx(
                 'flex gap-2 px-2 py-1 rounded-md text-sm items-center',
-                router.pathname === '/budget' && 'bg-[#edeef0]',
+                pathname === '/budget' && 'bg-[#edeef0]',
               )}
             >
               <WalletIcon />
@@ -69,7 +69,7 @@ export const Header: FC = () => {
               href="/ideas"
               className={clsx(
                 'flex gap-2 px-2 py-1 rounded-md text-sm items-center',
-                router.pathname === '/ideas' && 'bg-[#edeef0]',
+                pathname === '/ideas' && 'bg-[#edeef0]',
               )}
             >
               <WalletIcon />
