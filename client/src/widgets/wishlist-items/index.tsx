@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import { FC, useState } from 'react';
-
 import { ItemCard } from '@/entities/item-card';
 import { Button } from '@/shared/components/button';
 import { EmptyBlock } from '@/shared/components/empty-block';

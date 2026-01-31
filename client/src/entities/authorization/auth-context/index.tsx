@@ -1,7 +1,5 @@
-import noop from 'lodash';
 import { useRouter } from 'next/router';
 import { createContext, useEffect } from 'react';
-
 import { useAuth } from '@/shared/hooks/use-auth';
 import { FCWithChildren } from '@/shared/types';
 
@@ -12,12 +10,14 @@ interface AuthContextType {
   isAuthenticated: boolean;
 }
 
-export const AuthContext = createContext<AuthContextType>({
+const defaultContext: AuthContextType = {
   token: null,
-  login: noop,
-  logout: noop,
+  login: () => {},
+  logout: () => {},
   isAuthenticated: false,
-});
+};
+
+export const AuthContext = createContext<AuthContextType>(defaultContext);
 
 export const AuthContextProvider: FCWithChildren = ({ children }) => {
   const router = useRouter();

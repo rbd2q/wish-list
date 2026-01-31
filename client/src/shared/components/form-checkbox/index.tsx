@@ -1,7 +1,7 @@
 import { InputHTMLAttributes, ReactNode } from 'react';
 import { Controller, ControllerProps, FieldValues } from 'react-hook-form';
 
-type Props<T extends FieldValues> = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> &
+type Props<T extends FieldValues> = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'defaultValue'> &
   Omit<ControllerProps<T>, 'render'> & {
     label?: ReactNode;
   };
