@@ -8,9 +8,6 @@ dependencies:
   bcryptjs:
     specifier: ^3.0.3
     version: 3.0.3
-  cheerio:
-    specifier: ^1.2.0
-    version: 1.2.0
   config:
     specifier: ^4.2.0
     version: 4.2.0
@@ -32,6 +29,9 @@ dependencies:
   mongoose:
     specifier: ^8.22.0
     version: 8.22.0
+  open-graph-scraper:
+    specifier: ^6.11.0
+    version: 6.11.0
 
 devDependencies:
   concurrently:
@@ -236,6 +236,10 @@ packages:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
     dev: true
+
+  /chardet@2.1.1:
+    resolution: {integrity: sha512-PsezH1rqdV9VvyNhxxOW32/d75r01NY7TQCmOqomRo15ZSOKbpTFVsfjghxo6JloQUCGnH4k1LGu0R4yCLlWQQ==}
+    dev: false
 
   /cheerio-select@2.1.0:
     resolution: {integrity: sha512-9v9kG0LvzrlcungtnJtpGNxY+fzECQKhK4EGJX2vByejiMX84MFNQw4UxPJl3bFbTMw+Dfs37XaIkCwTZfLh4g==}
@@ -784,6 +788,13 @@ packages:
       safer-buffer: 2.1.2
     dev: false
 
+  /iconv-lite@0.7.2:
+    resolution: {integrity: sha512-im9DjEDQ55s9fL4EYzOAv0yMqmMBSZp6G0VvFyTMPKWxiSBHUj9NW/qqLmXUwXrrM7AvqSlTCfvqRb0cM8yYqw==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      safer-buffer: 2.1.2
+    dev: false
+
   /ignore-by-default@1.0.1:
     resolution: {integrity: sha512-Ius2VYcGNk7T90CppJqcIkS5ooHUZyIQK+ClZfMfMNFEF9VSE73Fq+906u/CWu92x4gzZMWOwfFYckPObzdEbA==}
     dev: true
@@ -1150,6 +1161,16 @@ packages:
     engines: {node: '>= 0.8'}
     dependencies:
       ee-first: 1.1.1
+    dev: false
+
+  /open-graph-scraper@6.11.0:
+    resolution: {integrity: sha512-KkO3qMMzJj9KYGtCl19dRtncb+RuBiG/P9BgukcAG4p2w9wSAWTE90vL6/xqth1K9ThkYF/+xfTGrVvU79TJtQ==}
+    engines: {node: '>=20.0.0'}
+    dependencies:
+      chardet: 2.1.1
+      cheerio: 1.2.0
+      iconv-lite: 0.7.2
+      undici: 7.19.2
     dev: false
 
   /parse5-htmlparser2-tree-adapter@7.1.0:
