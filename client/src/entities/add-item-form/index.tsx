@@ -1,6 +1,5 @@
 import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
-
 import { useAddWish, useParseLink } from '@/entities/add-item-form/model';
 import { Button } from '@/shared/components/button';
 import { FormCheckbox } from '@/shared/components/form-checkbox';
@@ -12,7 +11,6 @@ import { CURRENCY_OPTIONS } from '@/shared/consts';
 import { ArrowLeftIcon } from '@/shared/icons/ArrowLeftIcon';
 import { DeleteIcon } from '@/shared/icons/DeleteIcon';
 import { AddItemFormResource } from '@/shared/types';
-
 import { AddItemType } from './enums';
 
 interface Props {
@@ -83,9 +81,9 @@ export const AddItemForm: FC<Props> = ({ onBack }) => {
       {step === AddItemType.PARSE_ITEM ? (
         <div className="flex flex-col gap-4">
           <div className="px-4 py-2 bg-[#fff3e0] rounded-lg">
-            You can add an item by entering the link to the product page on <b>Onliner</b>
+            You can add an item by entering the link to the product page
           </div>
-          <FormField htmlFor="link" label="Onliner link">
+          <FormField htmlFor="link" label="Link">
             <FormInput id="link" name="link" type="url" placeholder="https://..." control={control} />
           </FormField>
         </div>
@@ -124,7 +122,7 @@ export const AddItemForm: FC<Props> = ({ onBack }) => {
                   >
                     <DeleteIcon />
                   </button>
-                  <img src={image} className="w-full h-full" alt="Item photo" />
+                  <img src={image} className="w-full h-full" alt="Item" />
                 </div>
               ))}
             </div>
