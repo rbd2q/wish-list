@@ -1,14 +1,15 @@
+'use client';
+
 import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FC, useContext, useMemo } from 'react';
-
-import { AuthContext } from '../../../entities/authorization/auth-context';
-import { ProfileIcon } from '../../icons/ProfileIcon';
-import { WalletIcon } from '../../icons/WalletIcon';
-import { WishListIcon } from '../../icons/WishListIcon';
-import { AVATAR_EMPTY } from '../../utils/constants';
-import { Dropdown } from '../dropdown';
+import { AuthContext } from '@/entities/authorization/auth-context';
+import { Dropdown } from '@/shared/components/dropdown';
+import { ProfileIcon } from '@/shared/icons/ProfileIcon';
+import { WalletIcon } from '@/shared/icons/WalletIcon';
+import { WishListIcon } from '@/shared/icons/WishListIcon';
+import { AVATAR_EMPTY } from '@/shared/utils/constants';
 import styles from './Header.module.css';
 
 export const Header: FC = () => {
