@@ -2,38 +2,19 @@
   "name": "wish-list",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
-  "type": "module",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
-    "server": "nodemon app.js",
-    "client": "cd ./client && pnpm run dev",
+    "start": "cd server && node app.js",
+    "server": "cd server && pnpm run dev",
+    "client": "cd client && pnpm run dev",
     "dev": "concurrently \"pnpm run server\" \"pnpm run client\""
   },
-  "keywords": [
-    "react",
-    "wish-list"
-  ],
+  "keywords": ["react", "wish-list"],
   "author": "Ivan vania-suveev@mail.ru",
   "license": "ISC",
-  "dependencies": {
-    "bcryptjs": "^3.0.3",
-    "cloudinary": "^2.9.0",
-    "config": "^4.2.0",
-    "currency-converter-lt": "^2.0.1",
-    "dotenv": "^17.2.3",
-    "express": "^4.22.1",
-    "express-validator": "^7.3.1",
-    "jsonwebtoken": "^9.0.3",
-    "mongodb": "^7.0.0",
-    "mongoose": "^8.22.0",
-    "open-graph-scraper": "^6.11.0",
-    "sharp": "^0.33.5"
-  },
   "devDependencies": {
     "concurrently": "^9.2.1",
-    "nodemon": "^3.1.11",
     "prettier": "^3.8.1"
   }
 }
