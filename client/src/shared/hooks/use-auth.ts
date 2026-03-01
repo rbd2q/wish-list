@@ -27,14 +27,10 @@ export const useAuth = () => {
   }, [router]);
 
   useEffect(() => {
-    if (localStorage.getItem(storageName)) {
-      const token = localStorage.getItem(storageName);
-      if (token) {
-        login(token);
-      }
-      setIsReady(true);
-    }
-  }, [login]);
+    const stored = localStorage.getItem(storageName);
+    if (stored) setToken(stored);
+    setIsReady(true);
+  }, []);
 
   return { login, logout, token, isReady };
 };

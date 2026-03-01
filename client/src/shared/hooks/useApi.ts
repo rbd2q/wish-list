@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig } from 'axios';
-
 import { storageName } from '@/shared/hooks/use-auth';
 
 const config: AxiosRequestConfig = {

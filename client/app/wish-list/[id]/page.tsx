@@ -1,7 +1,5 @@
-'use client';
-
 import { WishListItemPage } from '@/pages/wish-list-item-page';
 
-export default function WishListItemRoute() {
-  return <WishListItemPage />;
-}
+const WishListItemRoute = async ({ params }: { params: { id: string } }) => <WishListItemPage id={params.id} />;
+
+export default WishListItemRoute;

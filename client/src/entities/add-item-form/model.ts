@@ -1,7 +1,6 @@
-import { AxiosError } from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { UseMutationResult } from '@tanstack/react-query';
-
+import { AxiosError } from 'axios';
 import { useApi } from '@/shared/hooks/useApi';
 import { AddItemFormResource, ParsedWishListItem, WishListItemType } from '@/shared/types';
 import { showErrorToast } from '@/utils';
@@ -12,18 +11,18 @@ export const useAddWish = (): UseMutationResult<WishListItemType, unknown, AddIt
 
   return useMutation({
     mutationFn: async (formData: AddItemFormResource) => {
-    try {
-      const { data } = await api.post('/api/wish/create', formData);
-      if (data) {
-        // TODO Replace with constant
-        await queryClient.refetchQueries({ queryKey: ['current-user-wish-list'] });
+      try {
+        const { data } = await api.post('/api/wish/create', formData);
+        if (data) {
+          // TODO Replace with constant
+          await queryClient.refetchQueries({ queryKey: ['current-user-wish-list'] });
+        }
+        return data;
+      } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+          showErrorToast(error.response?.data.message);
+        }
       }
-      return data;
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        showErrorToast(error.response?.data.message);
-      }
-    }
     },
   });
 };

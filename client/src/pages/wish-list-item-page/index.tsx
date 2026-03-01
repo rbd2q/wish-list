@@ -1,4 +1,6 @@
-import { useParams, useRouter } from 'next/navigation';
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { PricesBlock } from '@/entities/prices-block';
 import { useAddToMyWishlist, useGetMyWishItem } from '@/pages/wish-list-item-page/model';
 import { useGetMyWishlist } from '@/pages/wish-list-page/model';
@@ -7,13 +9,15 @@ import { Registered } from '@/shared/components/registered-layout';
 import { useCurrentUser } from '@/shared/hooks/use-get-current-user';
 import { ArrowLeftIcon } from '@/shared/icons/ArrowLeftIcon';
 
-export const WishListItemPage = () => {
+interface WishListItemPageProps {
+  id: string;
+}
+
+export const WishListItemPage = ({ id }: WishListItemPageProps) => {
   const router = useRouter();
-  const params = useParams();
   const user = useCurrentUser();
   const addItem = useAddToMyWishlist();
-  const itemId = typeof params?.id === 'string' ? params.id : null;
-  const wish = useGetMyWishItem(itemId);
+  const wish = useGetMyWishItem(id);
   const wishlist = useGetMyWishlist();
 
   const isInMyWishList =
