@@ -1,1 +1,7 @@
-{"port":8000,"mongo_uri":"REMOVED_SECRET","jwt_secret_key":"REMOVED_SECRET","webpQuality":82,"cloudinary":{"folder":"wish-list"}}
+{
+  "port": 8000,
+  "mongo_uri": "REMOVED_SECRET",
+  "jwt_secret_key": "REMOVED_SECRET",
+  "webpQuality": 82,
+  "cloudinary": { "folder": "wish-list" }
+}

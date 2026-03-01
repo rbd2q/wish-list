@@ -1,1 +1,5 @@
-{"port":8000,"mongo_uri":"REMOVED_SECRET","jwt_secret_key":"REMOVED_SECRET"}
+{
+  "port": 8000,
+  "mongo_uri": "REMOVED_SECRET",
+  "jwt_secret_key": "REMOVED_SECRET"
+}
