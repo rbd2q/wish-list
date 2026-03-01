@@ -1,4 +1,4 @@
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { FC, MouseEvent } from 'react';
 import { useDeleteItem, useMarkAsCompleted } from '@/entities/item-card/model';
 import { Button } from '@/shared/components/button';
@@ -11,14 +11,8 @@ interface Props {
 }
 
 export const ItemCard: FC<Props> = ({ item, isIdeasPage }) => {
-  const router = useRouter();
   const deleteItem = useDeleteItem();
   const completeItem = useMarkAsCompleted();
-
-  const handleClickItem = async () => {
-    await router.push(`/wish-list/${item._id}`);
-  };
-
   const handleDeleteItem = async (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     await deleteItem.mutateAsync(item._id);
@@ -30,8 +24,8 @@ export const ItemCard: FC<Props> = ({ item, isIdeasPage }) => {
   };
 
   return (
-    <button
-      onClick={handleClickItem}
+    <Link
+      href={`/wish-list/${item._id}`}
       className="relative flex items-center justify-center w-[calc(33.3%-12px)] aspect-square border border-gray-300 rounded-lg bg-white bg-contain bg-no-repeat bg-center group"
       style={{
         backgroundImage: item.imageUrl ? `url(${item?.imageUrl})` : 'url("/images/product-image-fallback.svg")',
@@ -55,6 +49,6 @@ export const ItemCard: FC<Props> = ({ item, isIdeasPage }) => {
           </Button>
         </div>
       ) : null}
-    </button>
+    </Link>
   );
 };

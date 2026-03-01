@@ -2,6 +2,7 @@ import { validationResult } from 'express-validator';
 import Wish from '../models/Wish.js';
 import { getPrices } from '../utils/get-prices.js';
 import { parseProduct } from '../utils/parse-product.js';
+import { uploadImageByUrl } from '../utils/upload-image.js';
 
 const FETCH_OPTIONS = {
   headers: {
@@ -87,6 +88,7 @@ export const create = async (req, res) => {
     const { title, isHidden, description, url, price, prices, primaryCurrency, imageUrl, tags } = req.body;
 
     const pricesObject = prices ?? (await getPrices(primaryCurrency, price));
+    const storedImageUrl = imageUrl ? await uploadImageByUrl(imageUrl) : undefined;
 
     const wish = new Wish({
       title,
@@ -95,7 +97,7 @@ export const create = async (req, res) => {
       url,
       prices: pricesObject,
       primaryCurrency,
-      imageUrl,
+      imageUrl: storedImageUrl,
       tags,
       userId: req.userId,
     });
