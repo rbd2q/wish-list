@@ -18,7 +18,7 @@ export const Button: FCWithChildren<ButtonProps> = ({
   variant = 'primary',
   color = 'primary',
   size = 'md',
-  rounded = 'sm',
+  rounded = 'xl',
   isLoading,
   disabled,
   onClick,
