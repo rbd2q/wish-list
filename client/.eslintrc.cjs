@@ -12,9 +12,11 @@ module.exports = {
 
   settings: {
     'import/resolver': {
-      typescript: {},
-      alias: {
-        extensions: ['.ts', '.js', '.jsx', '.tsx'],
+      typescript: {
+        project: './tsconfig.json',
+      },
+      node: {
+        extensions: ['.ts', '.tsx', '.js', '.jsx'],
       },
     },
   },
