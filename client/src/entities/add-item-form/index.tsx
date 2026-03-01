@@ -30,7 +30,7 @@ export const AddItemForm: FC<Props> = ({ onBack }) => {
     setValue,
     formState: { isSubmitting },
     watch,
-  } = useForm<AddItemFormResource>();
+  } = useForm<AddItemFormResource>({ defaultValues: { primaryCurrency: 'BYN', isHidden: false } });
   const formFields = watch();
 
   const handleParseLink = async () => {
@@ -62,7 +62,6 @@ export const AddItemForm: FC<Props> = ({ onBack }) => {
       }
     }
   };
-
   const handleDeleteImage = (index: number) => () => {
     const newImages = [...images];
     newImages.splice(index, 1);
@@ -103,7 +102,7 @@ export const AddItemForm: FC<Props> = ({ onBack }) => {
 
           <FormField htmlFor="price" label="Price" required>
             <div className="flex gap-2">
-              <FormSelect name="primaryCurrency" control={control} options={CURRENCY_OPTIONS} defaultValue="BYN" />
+              <FormSelect name="primaryCurrency" control={control} options={CURRENCY_OPTIONS} />
               <FormInput id="price" name="price" placeholder="0.00" control={control} />
             </div>
           </FormField>
@@ -129,13 +128,7 @@ export const AddItemForm: FC<Props> = ({ onBack }) => {
           ) : null}
 
           <FormField htmlFor="hidden_from_others">
-            <FormCheckbox
-              id="hidden_from_others"
-              name="isHidden"
-              control={control}
-              label="Hide from others"
-              defaultValue={false}
-            />
+            <FormCheckbox id="hidden_from_others" name="isHidden" control={control} label="Hide from others" />
           </FormField>
         </>
       )}
