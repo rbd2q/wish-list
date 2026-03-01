@@ -5,7 +5,6 @@ import { PricesBlock } from '@/entities/prices-block';
 import { useAddToMyWishlist, useGetMyWishItem } from '@/pages/wish-list-item-page/model';
 import { useGetMyWishlist } from '@/pages/wish-list-page/model';
 import { Button } from '@/shared/components/button';
-import { Registered } from '@/shared/components/registered-layout';
 import { useCurrentUser } from '@/shared/hooks/use-get-current-user';
 import { ArrowLeftIcon } from '@/shared/icons/ArrowLeftIcon';
 
@@ -30,7 +29,7 @@ export const WishListItemPage = ({ id }: WishListItemPageProps) => {
   };
 
   return (
-    <Registered>
+    <>
       <button onClick={() => router.back()} className="flex gap-2 mb-2">
         <ArrowLeftIcon />
         Back
@@ -66,6 +65,6 @@ export const WishListItemPage = ({ id }: WishListItemPageProps) => {
           </div>
         </div>
       ) : null}
-    </Registered>
+    </>
   );
 };

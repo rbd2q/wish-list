@@ -1,3 +1,1 @@
-import { Registered } from '@/shared/components/registered-layout';
-
-export const BudgetPage = () => <Registered>Budget Page</Registered>;
+export const BudgetPage = () => <div>Budget Page</div>;
