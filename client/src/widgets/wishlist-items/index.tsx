@@ -29,7 +29,7 @@ export const WishlistItems: FC<Props> = ({ items, isLoading, isIdeasPage, handle
     <div className="w-full flex flex-col flex-1 items-center">
       {!isIdeasPage ? (
         <>
-          <Button onClick={handleShowForm}>Add item</Button>
+          <Button onPress={handleShowForm}>Add item</Button>
 
           <div className="flex gap-4 mt-8 text-start">
             <button
@@ -64,7 +64,7 @@ export const WishlistItems: FC<Props> = ({ items, isLoading, isIdeasPage, handle
   ) : (
     <div className="h-full max-w-md mx-auto flex flex-col items-center justify-center">
       <EmptyBlock />
-      <Button onClick={handleShowForm}>Add item</Button>
+      <Button onPress={handleShowForm}>Add item</Button>
     </div>
   );
 };

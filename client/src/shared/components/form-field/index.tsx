@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import clsx from 'clsx';
 
 import { FCWithChildren } from '@/shared/types';
 
@@ -8,10 +9,11 @@ interface Props {
   htmlFor?: string;
   required?: boolean;
   notes?: ReactNode;
+  className?: string;
 }
 
-export const FormField: FCWithChildren<Props> = ({ htmlFor, label, labelId, notes, required, children }) => (
-  <div className="mb-4">
+export const FormField: FCWithChildren<Props> = ({ htmlFor, label, labelId, notes, required, className, children }) => (
+  <div className={clsx('mb-4', className)}>
     {label ? (
       <label id={labelId} className="font-semibold text-sm text-gray-700 mb-2 block" htmlFor={htmlFor}>
         {label}

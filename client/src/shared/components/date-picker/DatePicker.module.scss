@@ -1,0 +1,35 @@
+// TODO: Refactor styles
+.datePicker {
+  self: &;
+  width: 100%;
+
+  &__value {
+    color: var(--foreground);
+  }
+
+  &__group {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    border-radius: 12px;
+    box-sizing: border-box;
+    background: var(--background);
+    border: 1px solid var(--input-border);
+
+    &[data-placeholder] {
+      color: var(--input-placeholder);
+    }
+
+    &:focus-within {
+      border-color: var(--input-border-focus);
+    }
+  }
+
+  &__triggerIndicator {
+    color: var(--foreground);
+  }
+
+  &[data-invalid='true'] &_group {
+    border-color: var(--destructive);
+  }
+}

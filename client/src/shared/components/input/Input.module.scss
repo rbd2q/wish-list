@@ -1,0 +1,68 @@
+// TODO: Refactor styles
+.wrapper {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  background: var(--background);
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &_fullWidth {
+    width: 100%;
+  }
+
+  &:hover {
+    border-color: var(--input-border-hover);
+  }
+
+  &:focus-within,
+  &[data-focus-visible='true'] {
+    border-color: var(--input-border-focus);
+    box-shadow: 0 0 0 2px var(--input-focus-ring);
+  }
+
+  &[data-invalid='true'] {
+    border-color: var(--destructive);
+  }
+}
+
+.prefix,
+.suffix {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--muted-foreground);
+}
+
+.prefix {
+  margin-right: 10px;
+}
+
+.suffix {
+  margin-left: 10px;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  outline: none;
+  outline-offset: 0;
+  box-shadow: none;
+
+  &::placeholder {
+    color: var(--input-placeholder);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}

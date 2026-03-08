@@ -1,7 +1,7 @@
 import { InputHTMLAttributes } from 'react';
 import { Controller, ControllerProps, FieldValues } from 'react-hook-form';
 
-import styles from './form-textarea.module.css';
+import styles from './form-textarea.module.scss';
 
 type Props<T extends FieldValues> = InputHTMLAttributes<HTMLTextAreaElement> & Omit<ControllerProps<T>, 'render'>;
 
@@ -17,7 +17,7 @@ export function FormTextarea<TFieldValues extends FieldValues>(props: Props<TFie
       shouldUnregister={shouldUnregister}
       render={({ field }) => (
         <textarea
-          className={styles.Textarea}
+          className={styles.textarea}
           rows={4}
           {...rest}
           {...field}

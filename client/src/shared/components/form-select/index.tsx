@@ -1,45 +1,29 @@
-import { InputHTMLAttributes } from 'react';
-import { Controller, ControllerProps, FieldValues } from 'react-hook-form';
+'use client';
 
-import styles from './form-select.module.css';
+import { ControllerProps, FieldValues, useController } from 'react-hook-form';
 
-export interface SelectProps {
-  id?: string;
-  value?: string;
-  onChange?: (value?: string) => void;
-  options: any[];
+import { Select, type SelectOption } from '../select';
+
+type FormSelectProps<T extends FieldValues> = Omit<ControllerProps<T>, 'render'> & {
+  options: SelectOption[];
   placeholder?: string;
-  disabled?: boolean;
-  deletable?: boolean;
-}
+  id?: string;
+};
 
-type Props<T extends FieldValues> = InputHTMLAttributes<HTMLSelectElement> &
-  SelectProps &
-  Omit<ControllerProps<T>, 'render'>;
-
-export function FormSelect<TFieldValues extends FieldValues>(props: Props<TFieldValues>): JSX.Element {
-  const { name, defaultValue, rules, shouldUnregister, control, options, ...rest } = props;
+export function FormSelect<T extends FieldValues>(props: FormSelectProps<T>): JSX.Element {
+  const { name, control, defaultValue, rules, shouldUnregister, options, placeholder, id, ...rest } = props;
+  const { field, fieldState } = useController({ name, control, defaultValue, rules, shouldUnregister });
 
   return (
-    <Controller
-      name={name}
-      control={control}
-      defaultValue={defaultValue}
-      rules={rules}
-      shouldUnregister={shouldUnregister}
-      render={({ field }) => (
-        <select
-          className={styles.Select}
-          defaultValue={defaultValue}
-          {...rest}
-          {...field}
-          value={typeof field.value === 'undefined' ? '' : field.value}
-        >
-          {options.map((option) => (
-            <option key={option.value} value={option.value} label={option.name} />
-          ))}
-        </select>
-      )}
+    <Select
+      id={id}
+      options={options}
+      placeholder={placeholder}
+      value={field.value ?? null}
+      onChange={(value) => field.onChange(value ?? '')}
+      isInvalid={!!fieldState.error}
+      name={field.name}
+      {...rest}
     />
   );
 }
