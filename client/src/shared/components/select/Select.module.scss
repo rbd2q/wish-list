@@ -1,0 +1,95 @@
+// TODO: Refactor styles
+.select {
+  width: 100%;
+
+  &[data-invalid='true'] .selectTrigger {
+    border-color: var(--destructive);
+  }
+}
+
+.selectTrigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 14px;
+  background: var(--background);
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
+  box-sizing: border-box;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  justify-content: space-between;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  [data-slot='select-value'] {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+  }
+
+  [data-slot='select-default-indicator'],
+  [data-slot='select-indicator'] {
+    flex-shrink: 0;
+    color: var(--foreground);
+
+    svg {
+      color: inherit;
+    }
+  }
+
+  &:hover,
+  &[data-hovered='true'] {
+    border-color: var(--input-border-hover);
+  }
+
+  &:focus-visible,
+  &[data-focus-visible='true'] {
+    border-color: var(--input-border-focus);
+    box-shadow: 0 0 0 2px var(--input-focus-ring);
+    outline: none;
+  }
+
+  &[data-disabled='true'] {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.popover {
+  background: var(--background);
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
+  box-shadow: var(--popover-shadow);
+}
+
+.listBox {
+  outline: none;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.option {
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover,
+  &[data-hovered='true'] {
+    background: var(--select-option-hover);
+  }
+
+  &[data-selected='true'] {
+    background: var(--select-option-selected-bg);
+    color: var(--select-option-selected-text);
+  }
+
+  &[data-focus-visible='true'] {
+    outline: none;
+  }
+}

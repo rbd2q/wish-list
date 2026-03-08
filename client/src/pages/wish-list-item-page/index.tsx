@@ -52,7 +52,7 @@ export const WishListItemPage = ({ id }: WishListItemPageProps) => {
               View source
             </a>
             {!isInMyWishList ? (
-              <Button onClick={handleAddToMyWishlist} rounded="md">
+              <Button onPress={handleAddToMyWishlist}>
                 Add to my wishlist
               </Button>
             ) : null}

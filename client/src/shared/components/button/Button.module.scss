@@ -1,137 +1,129 @@
-@keyframes linear-progress-bar-stripes {
-  0% {
-    background-position: 0 0;
-  }
+$radius: 12px;
+$radius-sm: 8px;
+$radius-full: 9999px;
 
-  100% {
-    background-position: 30px 0;
-  }
-}
-
-.Button {
-  @apply max-w-lg py-3 px-6 rounded-md w-full justify-center items-center focus-visible:outline-none focus-visible:ring-4 relative font-semibold;
+.button {
+  font-weight: 600;
+  border-radius: $radius;
   box-sizing: border-box;
-  transition: background-color 0.1s ease-out;
-}
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
 
-.Button {
-  &[data-rounded="none"] {
-    @apply rounded-none;
+  &_icon {
+    padding: 0;
+    aspect-ratio: 1;
   }
 
-  &[data-rounded="sm"] {
-    @apply rounded-sm;
+  &[data-hovered='true'] {
+    opacity: 1;
   }
 
-  &[data-rounded="md"] {
-    @apply rounded-md;
+  &[data-focus-visible='true'] {
+    outline: none;
   }
 
-  &[data-rounded="lg"] {
-    @apply rounded-lg;
-  }
-}
-
-.Button {
-  &[data-size="tiny"] {
-    @apply px-3 py-1 text-xs leading-4 h-6;
+  &_radius_sm {
+    border-radius: $radius-sm;
   }
 
-  &[data-size="sm"] {
-    @apply px-4 py-2 text-sm leading-4;
+  &_radius_md {
+    border-radius: $radius;
   }
 
-  &[data-size="md"] {
-    @apply px-6 py-2 h-10 text-sm;
+  &_radius_full {
+    border-radius: $radius-full;
   }
 
-  &[data-size="lg"] {
-    @apply px-6 py-3 h-[48px] text-sm;
-  }
-}
+  &_sm {
+    font-size: 0.875rem;
+    min-height: 36px;
+    padding: 8px 16px;
+    border-radius: $radius-sm;
 
-.Button [data-loading=true] {
-  background-image: linear-gradient(
-                  -45deg,
-                  hsla(0, 0%, 100%, 0.2) 25%,
-                  transparent 0,
-                  transparent 50%,
-                  hsla(0, 0%, 100%, 0.2) 0,
-                  hsla(0, 0%, 100%, 0.2) 75%,
-                  transparent 0
-  );
-  background-size: 30px 30px;
-  animation: linear-progress-bar-stripes 0.35s linear infinite reverse;
-  transition: width 0.1s cubic-bezier(0.4, 1, 0.75, 0.9);
-  cursor: wait;
-  box-shadow: none;
-}
-
-.Button[data-variant="primary"] {
-  @apply border border-transparent shadow-sm;
-
-  &:not(:disabled):not([disabled]), &[data-loading=true] {
-    &[data-color="primary"] {
-      @apply text-white bg-[#1F44CC] focus-visible:ring-[#94A4DF];
-      background-color: rgb(31, 68, 204);
+    &:not(.button_icon) {
+      padding: 8px 16px;
     }
   }
 
-  &:not(:disabled):not([disabled]) {
-    &[data-color="primary"] {
-      @apply hover:bg-[#1A348F] active:bg-[#102263];
-      box-shadow: 0 16px 24px rgba(20, 60, 204, 0.2), 0 2px 6px rgba(20, 60, 204, 0.1), 0 0 1px rgba(0, 0, 0, 0.04);
+  &_md {
+    min-height: 44px;
+    padding: 10px 20px;
+  }
+
+  &_lg {
+    min-height: 56px;
+    font-size: 1rem;
+    padding: 0 32px;
+  }
+
+  &_xl {
+    min-height: 64px;
+    font-size: 1.125rem;
+    padding: 0 32px;
+  }
+
+  &_primary {
+    background: linear-gradient(90deg, #7c3aed 0%, #db2777 100%);
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+
+    &[data-hovered='true'] {
+      background: linear-gradient(90deg, #6d28d9 0%, #be185d 100%);
+      box-shadow: 0 6px 18px rgba(124, 58, 237, 0.4);
+    }
+
+    &[data-pressed='true'] {
+      background: linear-gradient(90deg, #5b21b6 0%, #9d174d 100%);
+    }
+
+    &:disabled,
+    &[aria-disabled='true'] {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
   }
 
-  &:disabled:not([data-loading=true]),
-  [disabled]:not([data-loading=true]) {
-    @apply text-gray-400 bg-gray-100;
-  }
-}
+  &_ghost {
+    background: transparent;
+    color: #7c3aed;
+    border: none;
 
-.Button[data-variant="outlined"] {
-  @apply border;
-  transition: .1s;
+    &[data-hovered='true'] {
+      background: rgba(124, 58, 237, 0.12);
+    }
 
-  &[data-color="primary"] {
-    border: 2px solid #2F50C7;
-  }
+    &[data-pressed='true'] {
+      background: rgba(124, 58, 237, 0.2);
+    }
 
-
-  &[data-loading=true] {
-    &[data-color="primary"] {
-      color: #FFFFFF;
-      opacity: 1;
-      cursor: wait;
-      --bg-loading-line: #2C2D37;
+    &:disabled,
+    &[aria-disabled='true'] {
+      color: #9ca3af;
+      cursor: not-allowed;
     }
   }
 
-  &:not(:disabled):not([disabled]):not([data-loading=true]) {
-    &[data-color="primary"] {
-      background: transparent;
-      color: #FFFFFF;
+  &_secondary {
+    background: #fff;
+    color: #1f2937;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 
-      &:hover {
-        background: #2F50C7;
-      }
-
-      &:active {
-        background: #2F50C7;
-      }
-
-      &:focus-visible {
-        outline: 4px solid #373A47;
-        border-color: #69697B;
-      }
+    &[data-hovered='true'] {
+      background: #f9fafb;
+      border-color: #d1d5db;
     }
-  }
 
-  &:disabled,
-  &[disabled] {
-    @apply cursor-not-allowed opacity-20;
-    background-color: transparent;
-    color: #FFFFFF;
+    &[data-pressed='true'] {
+      background: #f3f4f6;
+    }
+
+    &:disabled,
+    &[aria-disabled='true'] {
+      background: #f3f4f6;
+      color: #9ca3af;
+      border-color: #e5e7eb;
+      cursor: not-allowed;
+    }
   }
 }

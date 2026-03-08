@@ -134,10 +134,11 @@ export const AddItemForm: FC<Props> = ({ onBack }) => {
       )}
 
       <Button
-        disabled={
+        type="submit"
+        isDisabled={
           step === AddItemType.MANUALLY_ADD_ITEM ? isSubmitting || !formFields.title || !formFields.price : false
         }
-        isLoading={isSubmitting || isLoading}
+        isPending={isSubmitting || isLoading}
       >
         {step === AddItemType.PARSE_ITEM ? 'Continue' : 'Add item'}
       </Button>

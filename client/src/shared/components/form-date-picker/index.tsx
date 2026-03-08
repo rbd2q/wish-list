@@ -1,29 +1,26 @@
-import { InputHTMLAttributes } from 'react';
-import { Controller, ControllerProps, FieldValues } from 'react-hook-form';
+'use client';
 
-import styles from './form-date-picker.module.css';
+import { ControllerProps, FieldValues, useController } from 'react-hook-form';
 
-type Props<T extends FieldValues> = InputHTMLAttributes<HTMLInputElement> & Omit<ControllerProps<T>, 'render'>;
+import { DatePicker } from '../date-picker';
 
-export function FormDatePicker<TFieldValues extends FieldValues>(props: Props<TFieldValues>): JSX.Element {
-  const { name, defaultValue, rules, shouldUnregister, control, ...rest } = props;
+type FormDatePickerProps<T extends FieldValues> = Omit<ControllerProps<T>, 'render'> & {
+  id?: string;
+};
+
+export function FormDatePicker<T extends FieldValues>(props: FormDatePickerProps<T>): JSX.Element {
+  const { name, control, defaultValue, rules, shouldUnregister, id, ...rest } = props;
+  const { field, fieldState } = useController({ name, control, defaultValue, rules, shouldUnregister });
 
   return (
-    <Controller
-      name={name}
-      control={control}
-      defaultValue={defaultValue}
-      rules={rules}
-      shouldUnregister={shouldUnregister}
-      render={({ field }) => (
-        <input
-          className={styles.DatePicker}
-          type="date"
-          {...rest}
-          {...field}
-          value={typeof field.value === 'undefined' ? '' : field.value}
-        />
-      )}
+    <DatePicker
+      id={id}
+      value={field.value ?? null}
+      onChange={(value) => field.onChange(value ?? '')}
+      isInvalid={!!fieldState.error}
+      name={field.name}
+      aria-label={field.name}
+      {...rest}
     />
   );
 }

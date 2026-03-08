@@ -44,7 +44,7 @@ export const ItemCard: FC<Props> = ({ item, isIdeasPage }) => {
       <span className="hidden group-hover:block text-white z-10">{item.title}</span>
       {!item.isCompleted && !isIdeasPage ? (
         <div className="hidden group-hover:block absolute bottom-3 right-6 left-6">
-          <Button onClick={handleMarkAsCompleted} size="sm" rounded="md">
+          <Button onPress={handleMarkAsCompleted} size="sm">
             Completed
           </Button>
         </div>

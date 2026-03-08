@@ -1,3 +1,4 @@
+import { ArrowRightIcon, Lock, Mail, User } from 'lucide-react';
 import { FC } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useSignUp } from '@/entities/sign-up-form/model';
@@ -30,25 +31,47 @@ export const SignUpForm: FC = () => {
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
       <ToastContainer />
-      <h1 className="text-3xl font-semibold mb-4">Sign Up</h1>
+      <div className="flex flex-col gap-2 mb-4">
+        <h1 className="text-3xl font-bold">Create account</h1>
+        <p className="text-sm text-gray-500">Start organizing your wishlist today</p>
+      </div>
 
       <FormField htmlFor="email" label="Email" required>
-        <FormInput id="email" name="email" type="email" placeholder="E-mail" control={control} />
+        <FormInput
+          id="email"
+          name="email"
+          type="email"
+          placeholder="E-mail"
+          control={control}
+          startContent={<Mail className="text-gray-400" />}
+        />
       </FormField>
-
       <FormField htmlFor="password" label="Password" required>
-        <FormInput id="password" name="password" type="password" placeholder="Password" control={control} />
+        <FormInput
+          id="password"
+          name="password"
+          type="password"
+          placeholder="Password"
+          control={control}
+          startContent={<Lock className="text-gray-400" />}
+        />
       </FormField>
 
       <FormField htmlFor="name" label="Name" required>
-        <FormInput id="name" name="name" placeholder="Name" control={control} />
+        <FormInput
+          id="name"
+          name="name"
+          control={control}
+          placeholder="Enter your name"
+          startContent={<User className="text-gray-400" />}
+        />
       </FormField>
 
-      <div className="flex gap-16">
-        <FormField htmlFor="currency" label="Preferred currency" required>
+      <div className="flex gap-4">
+        <FormField className="flex-1 min-w-0" htmlFor="currency" label="Preferred currency" required>
           <FormSelect name="currency" control={control} options={CURRENCY_OPTIONS} />
         </FormField>
-        <FormField htmlFor="birthDate" label="Date of Birth">
+        <FormField className="flex-1 min-w-0" htmlFor="birthDate" label="Date of Birth">
           <FormDatePicker id="birthDate" name="birthDate" control={control} />
         </FormField>
       </div>
@@ -57,8 +80,9 @@ export const SignUpForm: FC = () => {
         <FormPhoneInput id="phone" name="phone" control={control} />
       </FormField>
 
-      <Button disabled={!formFields.password || !formFields.email} isLoading={isSubmitting}>
-        Submit
+      <Button isDisabled={!formFields.password || !formFields.email} isPending={isSubmitting} fullWidth type="submit">
+        Sign Up
+        <ArrowRightIcon />
       </Button>
     </form>
   );

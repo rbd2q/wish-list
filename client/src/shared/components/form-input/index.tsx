@@ -1,28 +1,28 @@
+'use client';
+
 import { InputHTMLAttributes } from 'react';
-import { Controller, ControllerProps, FieldValues } from 'react-hook-form';
+import { ControllerProps, FieldValues, useController } from 'react-hook-form';
 
-import styles from './form-input.module.css';
+import { Input } from '../input';
 
-type Props<T extends FieldValues> = InputHTMLAttributes<HTMLInputElement> & Omit<ControllerProps<T>, 'render'>;
+type FormInputProps<T extends FieldValues> = Omit<ControllerProps<T>, 'render'> &
+  Omit<InputHTMLAttributes<HTMLInputElement>, 'name'> & {
+    startContent?: React.ReactNode;
+    endContent?: React.ReactNode;
+  };
 
-export function FormInput<TFieldValues extends FieldValues>(props: Props<TFieldValues>): JSX.Element {
-  const { name, defaultValue, rules, shouldUnregister, control, ...rest } = props;
+export function FormInput<T extends FieldValues>(props: FormInputProps<T>): JSX.Element {
+  const { name, control, defaultValue, rules, shouldUnregister, startContent, endContent, ...rest } = props;
+  const { field, fieldState } = useController({ name, control, defaultValue, rules, shouldUnregister });
 
   return (
-    <Controller
-      name={name}
-      control={control}
-      defaultValue={defaultValue}
-      rules={rules}
-      shouldUnregister={shouldUnregister}
-      render={({ field }) => (
-        <input
-          className={styles.Input}
-          {...rest}
-          {...field}
-          value={typeof field.value === 'undefined' ? '' : field.value}
-        />
-      )}
+    <Input
+      {...rest}
+      {...field}
+      startContent={startContent}
+      endContent={endContent}
+      value={field.value ?? ''}
+      isInvalid={!!fieldState.error}
     />
   );
 }
