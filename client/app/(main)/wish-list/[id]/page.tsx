@@ -1,5 +1,7 @@
-import { WishListItemPage } from '@/pages/wish-list-item-page';
+import { WishListItemPage } from '@/_pages/wish-list-item-page';
 
-const WishListItemRoute = async ({ params }: { params: { id: string } }) => <WishListItemPage id={params.id} />;
+export default async function WishListItemRoute({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
-export default WishListItemRoute;
+  return <WishListItemPage id={id} />;
+}

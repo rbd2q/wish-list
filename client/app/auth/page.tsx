@@ -1,6 +1,6 @@
 'use client';
 
-import { AuthPage } from '@/pages/auth-page';
+import { AuthPage } from '@/_pages/auth-page';
 
 export default function AuthRoute() {
   return <AuthPage />;

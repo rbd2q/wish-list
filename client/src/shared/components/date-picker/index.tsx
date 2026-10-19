@@ -37,7 +37,7 @@ export function DatePicker({
   name,
   className,
   ...restProps
-}: DatePickerProps): JSX.Element {
+}: DatePickerProps): React.JSX.Element {
   const dateValue = toDateValue(value ?? null);
 
   return (

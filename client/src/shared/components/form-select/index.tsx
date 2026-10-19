@@ -10,7 +10,7 @@ type FormSelectProps<T extends FieldValues> = Omit<ControllerProps<T>, 'render'>
   id?: string;
 };
 
-export function FormSelect<T extends FieldValues>(props: FormSelectProps<T>): JSX.Element {
+export function FormSelect<T extends FieldValues>(props: FormSelectProps<T>): React.JSX.Element {
   const { name, control, defaultValue, rules, shouldUnregister, options, placeholder, id, ...rest } = props;
   const { field, fieldState } = useController({ name, control, defaultValue, rules, shouldUnregister });
 

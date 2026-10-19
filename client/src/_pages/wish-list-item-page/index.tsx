@@ -1,9 +1,10 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+
+import { useAddToMyWishlist, useGetMyWishItem } from '@/_pages/wish-list-item-page/model';
+import { useGetMyWishlist } from '@/_pages/wish-list-page/model';
 import { PricesBlock } from '@/entities/prices-block';
-import { useAddToMyWishlist, useGetMyWishItem } from '@/pages/wish-list-item-page/model';
-import { useGetMyWishlist } from '@/pages/wish-list-page/model';
 import { Button } from '@/shared/components/button';
 import { useCurrentUser } from '@/shared/hooks/use-get-current-user';
 import { ArrowLeftIcon } from '@/shared/icons/ArrowLeftIcon';
@@ -51,11 +52,7 @@ export const WishListItemPage = ({ id }: WishListItemPageProps) => {
             >
               View source
             </a>
-            {!isInMyWishList ? (
-              <Button onPress={handleAddToMyWishlist}>
-                Add to my wishlist
-              </Button>
-            ) : null}
+            {!isInMyWishList ? <Button onPress={handleAddToMyWishlist}>Add to my wishlist</Button> : null}
           </div>
 
           <div className="w-1/2 ml-12">

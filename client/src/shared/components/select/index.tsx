@@ -36,7 +36,7 @@ export const Select = ({
   id,
   name,
   className,
-}: SelectProps): JSX.Element => {
+}: SelectProps): React.JSX.Element => {
   const items = useMemo(
     () =>
       options.map((option) => (

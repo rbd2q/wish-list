@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { FC, MouseEvent } from 'react';
+
 import { useDeleteItem, useMarkAsCompleted } from '@/entities/item-card/model';
-import { Button } from '@/shared/components/button';
+import { Button, type ButtonProps } from '@/shared/components/button';
 import { DeleteIcon } from '@/shared/icons/DeleteIcon';
 import { WishListItemType } from '@/shared/types';
 
@@ -18,7 +19,8 @@ export const ItemCard: FC<Props> = ({ item, isIdeasPage }) => {
     await deleteItem.mutateAsync(item._id);
   };
 
-  const handleMarkAsCompleted = async (event: MouseEvent<HTMLButtonElement>) => {
+  const handleMarkAsCompleted: ButtonProps['onClick'] = async (event) => {
+    event.preventDefault();
     event.stopPropagation();
     await completeItem.mutateAsync(item._id);
   };
@@ -44,7 +46,7 @@ export const ItemCard: FC<Props> = ({ item, isIdeasPage }) => {
       <span className="hidden group-hover:block text-white z-10">{item.title}</span>
       {!item.isCompleted && !isIdeasPage ? (
         <div className="hidden group-hover:block absolute bottom-3 right-6 left-6">
-          <Button onPress={handleMarkAsCompleted} size="sm">
+          <Button onClick={handleMarkAsCompleted} size="sm">
             Completed
           </Button>
         </div>
