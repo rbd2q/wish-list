@@ -1,34 +1,33 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Wish List client
 
-## Getting Started
-
-First, run the development server:
+The client uses Next.js 16 (App Router), React 19, and Tailwind CSS 4.
+Run workspace commands from the repository root with Node.js 22.13 or newer and pnpm 8.15.9.
 
 ```bash
-npm run dev
-# or
-yarn dev
+pnpm install --frozen-lockfile
+pnpm --filter client dev
+pnpm --filter client typecheck
+pnpm --filter client lint
+pnpm --filter client build
+pnpm --filter client start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The API runs separately with `pnpm run server` on port 8000 and requires access to the configured MongoDB instance.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## TypeScript 7 and tooling compatibility
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+`@typescript/native` aliases TypeScript 7.0.2 and provides the `tsc` executable.
+`pnpm --filter client exec tsc --version` verifies the compiler version.
+The build script runs TypeScript 7 before building Next.js, including generated route types.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+The `typescript` dependency aliases `@typescript/typescript6` to provide the compiler API still required by typescript-eslint and Next.js tooling. This compatibility package provides `tsc6`, so it does not replace TypeScript 7's `tsc` executable. Next.js also runs its own type check using this API.
 
-## Learn More
+This setup follows [Microsoft's side-by-side migration guidance](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6.0).
 
-To learn more about Next.js, take a look at the following resources:
+ESLint uses `eslint.config.mjs`; `next lint` was removed in Next.js 16. The legacy Airbnb configuration was removed because it requires ESLint 7 or 8. Import sorting uses simple-import-sort because eslint-plugin-import's ordering rule still uses an API removed in ESLint 10.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Screen components live in `src/_pages` so Next.js does not interpret them as Pages Router routes.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Remaining dependency limitations
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+The latest react-laag release still declares React 16–18 support. Some plugins bundled with eslint-config-next still declare ESLint 9 as their maximum supported version. These cause peer dependency warnings during installation.

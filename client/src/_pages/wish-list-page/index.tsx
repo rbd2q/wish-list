@@ -1,6 +1,7 @@
 import { useState } from 'react';
+
+import { useGetMyWishlist } from '@/_pages/wish-list-page/model';
 import { AddItemForm } from '@/entities/add-item-form';
-import { useGetMyWishlist } from '@/pages/wish-list-page/model';
 import { WishlistItems } from '@/widgets/wishlist-items';
 
 export const WishListPage = () => {

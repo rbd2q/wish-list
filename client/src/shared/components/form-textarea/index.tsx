@@ -5,7 +5,7 @@ import styles from './form-textarea.module.scss';
 
 type Props<T extends FieldValues> = InputHTMLAttributes<HTMLTextAreaElement> & Omit<ControllerProps<T>, 'render'>;
 
-export function FormTextarea<TFieldValues extends FieldValues>(props: Props<TFieldValues>): JSX.Element {
+export function FormTextarea<TFieldValues extends FieldValues>(props: Props<TFieldValues>): React.JSX.Element {
   const { name, defaultValue, rules, shouldUnregister, control, ...rest } = props;
 
   return (

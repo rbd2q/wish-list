@@ -1,6 +1,7 @@
 import { ArrowRightIcon, Lock, Mail, User } from 'lucide-react';
 import { FC } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+
 import { useSignUp } from '@/entities/sign-up-form/model';
 import { Button } from '@/shared/components/button';
 import { FormDatePicker } from '@/shared/components/form-date-picker';
