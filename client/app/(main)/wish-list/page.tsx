@@ -1,6 +1,6 @@
 'use client';
 
-import { WishListPage } from '@/pages/wish-list-page';
+import { WishListPage } from '@/_pages/wish-list-page';
 
 export default function WishListRoute() {
   return <WishListPage />;

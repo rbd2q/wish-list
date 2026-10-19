@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from 'react';
 
-export type FCWithChildren<P = {}> = FC<PropsWithChildren<P>>;
+export type FCWithChildren<P = object> = FC<PropsWithChildren<P>>;
 
 export type CurrencyEnum = 'USD' | 'BYN' | 'RUB';
 export type CurrencySignEnum = '$' | 'BYN' | '₽';

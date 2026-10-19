@@ -4,7 +4,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ComponentProps, ReactNode, useState } from 'react';
 import { Arrow, useLayer } from 'react-laag';
+
 import { FCWithChildren } from '@/shared/types';
+
 import styles from './Dropdown.module.scss';
 
 interface Props {

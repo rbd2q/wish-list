@@ -1,5 +1,6 @@
 import { useRouter } from 'next/navigation';
 import { createContext, useEffect, useMemo } from 'react';
+
 import { useAuth } from '@/shared/hooks/use-auth';
 import { FCWithChildren } from '@/shared/types';
 

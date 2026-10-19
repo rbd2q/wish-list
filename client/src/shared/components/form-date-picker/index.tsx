@@ -8,7 +8,7 @@ type FormDatePickerProps<T extends FieldValues> = Omit<ControllerProps<T>, 'rend
   id?: string;
 };
 
-export function FormDatePicker<T extends FieldValues>(props: FormDatePickerProps<T>): JSX.Element {
+export function FormDatePicker<T extends FieldValues>(props: FormDatePickerProps<T>): React.JSX.Element {
   const { name, control, defaultValue, rules, shouldUnregister, id, ...rest } = props;
   const { field, fieldState } = useController({ name, control, defaultValue, rules, shouldUnregister });
 
