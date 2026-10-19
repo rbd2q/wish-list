@@ -6,7 +6,7 @@ type Props<T extends FieldValues> = Omit<InputHTMLAttributes<HTMLInputElement>, 
     label?: ReactNode;
   };
 
-export function FormCheckbox<TFieldValues extends FieldValues>(props: Props<TFieldValues>): JSX.Element {
+export function FormCheckbox<TFieldValues extends FieldValues>(props: Props<TFieldValues>): React.JSX.Element {
   const { name, defaultValue, rules, shouldUnregister, control, label, ...rest } = props;
 
   return (

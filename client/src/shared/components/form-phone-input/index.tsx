@@ -12,7 +12,7 @@ import styles from './form-phone-input.module.scss';
 
 type Props<T extends FieldValues> = InputHTMLAttributes<HTMLInputElement> & Omit<ControllerProps<T>, 'render'>;
 
-export function FormPhoneInput<TFieldValues extends FieldValues>(props: Props<TFieldValues>): JSX.Element {
+export function FormPhoneInput<TFieldValues extends FieldValues>(props: Props<TFieldValues>): React.JSX.Element {
   const { name, defaultValue, rules, shouldUnregister, control, disabled, ...rest } = props;
 
   return (

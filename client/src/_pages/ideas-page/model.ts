@@ -1,18 +1,19 @@
-import { useQuery } from '@tanstack/react-query';
 import type { UseQueryResult } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+
 import { useApi } from '@/shared/hooks/useApi';
 import { WishListItemType } from '@/shared/types';
 import { showErrorToast } from '@/utils';
 
-export const useGetMyWishlist = (): UseQueryResult<WishListItemType[]> => {
+export const useGetAllItems = (): UseQueryResult<WishListItemType[]> => {
   const api = useApi();
 
   return useQuery({
-    queryKey: ['current-user-wish-list'],
+    queryKey: ['all-wishes'],
     queryFn: async () => {
       try {
-        const { data } = await api.get('/api/wish');
+        const { data } = await api.get('/api/wish/ideas');
         return data;
       } catch (error: unknown) {
         if (error instanceof AxiosError) {

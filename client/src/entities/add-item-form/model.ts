@@ -1,6 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { UseMutationResult } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+
 import { useApi } from '@/shared/hooks/useApi';
 import { AddItemFormResource, ParsedWishListItem, WishListItemType } from '@/shared/types';
 import { showErrorToast } from '@/utils';

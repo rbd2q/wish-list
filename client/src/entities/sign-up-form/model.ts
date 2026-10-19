@@ -1,7 +1,7 @@
+import type { UseMutationResult } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useContext } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import type { UseMutationResult } from '@tanstack/react-query';
 
 import { AuthContext } from '@/entities/authorization/auth-context';
 import { useApi } from '@/shared/hooks/useApi';

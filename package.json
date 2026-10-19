@@ -11,11 +11,17 @@
     "client": "cd client && pnpm run dev",
     "dev": "concurrently \"pnpm run server\" \"pnpm run client\""
   },
-  "keywords": ["react", "wish-list"],
+  "keywords": [
+    "react",
+    "wish-list"
+  ],
   "author": "Ivan vania-suveev@mail.ru",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^9.2.1",
-    "prettier": "^3.8.1"
+    "concurrently": "^10.0.6",
+    "prettier": "^3.9.10"
+  },
+  "engines": {
+    "node": ">=22.13.0"
   }
 }

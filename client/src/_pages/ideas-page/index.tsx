@@ -1,4 +1,4 @@
-import { useGetAllItems } from '@/pages/ideas-page/model';
+import { useGetAllItems } from '@/_pages/ideas-page/model';
 import { WishlistItems } from '@/widgets/wishlist-items';
 
 export const IdeasPage = () => {

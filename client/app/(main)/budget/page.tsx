@@ -1,6 +1,6 @@
 'use client';
 
-import { BudgetPage } from '@/pages/budget-page';
+import { BudgetPage } from '@/_pages/budget-page';
 
 export default function BudgetRoute() {
   return <BudgetPage />;

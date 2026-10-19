@@ -11,7 +11,7 @@ type FormInputProps<T extends FieldValues> = Omit<ControllerProps<T>, 'render'> 
     endContent?: React.ReactNode;
   };
 
-export function FormInput<T extends FieldValues>(props: FormInputProps<T>): JSX.Element {
+export function FormInput<T extends FieldValues>(props: FormInputProps<T>): React.JSX.Element {
   const { name, control, defaultValue, rules, shouldUnregister, startContent, endContent, ...rest } = props;
   const { field, fieldState } = useController({ name, control, defaultValue, rules, shouldUnregister });
 
