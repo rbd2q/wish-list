@@ -3,6 +3,8 @@ import { validationResult } from 'express-validator';
 import Wish from '../models/Wish.js';
 import { serializeWish } from '../serializers/wish.js';
 import { getPrices } from '../utils/get-prices.js';
+import { ExchangeRateError } from '../errors/exchange-rate-error.js';
+import { InvalidPriceError } from '../utils/normalize-price.js';
 import { parseProduct } from '../utils/parse-product.js';
 import { uploadImageByUrl } from '../utils/upload-image.js';
 import { createWish } from '../services/create-wish.js';
@@ -93,7 +95,15 @@ export const create = async (req, res) => {
     const wish = await createWish({ userId: req.userId, data: req.body });
     return res.status(201).json(serializeWish(wish));
   } catch (e) {
+    if (e instanceof InvalidPriceError) {
+      return res.status(400).json({ message: e.message });
+    }
+
     console.error('Failed to create wish', e);
+    if (e instanceof ExchangeRateError) {
+      return res.status(503).json({ message: e.message });
+    }
+
     return res.status(500).json({ message: 'Something went wrong. Try again' });
   }
 };
@@ -112,6 +122,13 @@ export const copy = async (req, res) => {
     return res.status(201).json(serializeWish(wish));
   } catch (error) {
     console.error('Failed to copy wish', error);
+    if (error instanceof ExchangeRateError) {
+      return res.status(503).json({ message: error.message });
+    }
+    if (error instanceof InvalidPriceError) {
+      return res.status(400).json({ message: error.message });
+    }
+
     return res.status(500).json({ message: 'Something went wrong. Try again' });
   }
 };
@@ -162,6 +179,13 @@ export const parse = async (req, res) => {
       primaryCurrency,
     });
   } catch (e) {
+    if (e instanceof ExchangeRateError) {
+      return res.status(503).json({ message: e.message });
+    }
+    if (e instanceof InvalidPriceError) {
+      return res.status(400).json({ message: e.message });
+    }
+
     return res.status(500).json({
       message: 'Something went wrong while parsing the website',
     });
