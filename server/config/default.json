@@ -1,6 +1,6 @@
 {
   "port": 8000,
-  "mongo_uri": "mongodb://i-suveev:1234qwer@ac-knjfbeu-shard-00-00.jzcwpni.mongodb.net:27017,ac-knjfbeu-shard-00-01.jzcwpni.mongodb.net:27017,ac-knjfbeu-shard-00-02.jzcwpni.mongodb.net:27017/?tls=true&retryWrites=true&w=majority&appName=Cluster0",
+  "mongo_uri": "mongodb://admin:admin@ac-7huhhte-shard-00-00.xdlv4ue.mongodb.net:27017,ac-7huhhte-shard-00-01.xdlv4ue.mongodb.net:27017,ac-7huhhte-shard-00-02.xdlv4ue.mongodb.net:27017/?ssl=true&replicaSet=atlas-5z9vh7-shard-0&authSource=admin",
   "jwt_secret_key": "i-suveev-wish-list-app",
   "webpQuality": 82,
   "cloudinary": { "folder": "wish-list" }
