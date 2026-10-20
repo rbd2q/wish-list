@@ -6,6 +6,6 @@ export const registerValidator = [
 ];
 
 export const loginValidator = [
-  check('email', 'Enter correct e-mail').normalizeEmail().isEmail(),
+  check('email', 'Enter correct e-mail').isEmail(),
   check('password', 'Enter password').exists(),
 ];
