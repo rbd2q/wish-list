@@ -26,14 +26,14 @@ export const useGetMyWishItem = (itemId: string | null): UseQueryResult<WishList
   });
 };
 
-export const useAddToMyWishlist = (): UseMutationResult<WishListItemType, unknown, WishListItemType> => {
+export const useAddToMyWishlist = (): UseMutationResult<WishListItemType, unknown, string> => {
   const api = useApi();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (item: WishListItemType) => {
+    mutationFn: async (itemId: string) => {
       try {
-        const { data } = await api.post('/api/wish/create', item);
+        const { data } = await api.post(`/api/wish/${itemId}/copy`);
         if (data) {
           await queryClient.refetchQueries({ queryKey: ['current-user-wish-list'] });
         }

@@ -9,7 +9,7 @@ const schema = new mongoose.Schema({
   primaryCurrency: { type: String, required: true },
   imageUrl: { type: String },
   tags: [{ type: String }],
-  date: { type: Date, default: Date.now() },
+  date: { type: Date, default: Date.now },
   userId: { type: mongoose.Types.ObjectId, ref: 'User' },
   isCompleted: { type: Boolean, default: false },
 });
