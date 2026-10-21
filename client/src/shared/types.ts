@@ -13,7 +13,7 @@ export type CurrencyType = {
 export type PriceType = Record<CurrencyEnum, number>;
 
 export interface WishResource {
-  id: number;
+  id: string;
   title: string;
   description: string;
   prices: PriceType;
@@ -21,9 +21,9 @@ export interface WishResource {
 }
 
 export interface UserResource {
-  _id: string;
+  id: string;
   email: string;
-  wishes: WishResource[];
+  wishes: string[];
   preferredCurrency: CurrencyEnum;
   name?: string;
   birthDate?: string;
@@ -53,7 +53,7 @@ export interface AddItemFormResource {
 }
 
 export interface WishListItemType {
-  _id: string;
+  id: string;
   title: string;
   isHidden: boolean;
   prices: PriceType;

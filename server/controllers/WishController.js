@@ -1,8 +1,14 @@
+import { isObjectIdOrHexString } from 'mongoose';
 import { validationResult } from 'express-validator';
 import Wish from '../models/Wish.js';
+import { serializeWish } from '../serializers/wish.js';
 import { getPrices } from '../utils/get-prices.js';
+import { ExchangeRateError } from '../errors/exchange-rate-error.js';
+import { InvalidPriceError } from '../utils/normalize-price.js';
 import { parseProduct } from '../utils/parse-product.js';
 import { uploadImageByUrl } from '../utils/upload-image.js';
+import { createWish } from '../services/create-wish.js';
+import { copyWish } from '../services/copy-wish.js';
 
 const FETCH_OPTIONS = {
   headers: {
@@ -26,7 +32,7 @@ export const getFullWishesList = async (req, res) => {
     //TODO find out if there is a better way for filtering array
     const filteredArray = wishes.filter((item) => item.userId && item.userId.toString() !== req.userId);
 
-    return res.status(200).json(filteredArray);
+    return res.status(200).json(filteredArray.map(serializeWish));
   } catch (e) {
     res.status(500).json({ message: 'Something went wrong. Try again' });
   }
@@ -45,7 +51,7 @@ export const getAllMyWishes = async (req, res) => {
 
     const wishes = await Wish.find({ userId: req.userId });
 
-    return res.status(200).json(wishes);
+    return res.status(200).json(wishes.map(serializeWish));
   } catch (e) {
     res.status(500).json({ message: 'Something went wrong. Try again' });
   }
@@ -69,7 +75,7 @@ export const getWishListItem = async (req, res) => {
       return res.status(404).json({ message: 'This item does not exist' });
     }
 
-    return res.status(200).json(wish);
+    return res.status(200).json(serializeWish(wish));
   } catch (e) {
     res.status(500).json({ message: 'Something went wrong. Try again' });
   }
@@ -85,32 +91,45 @@ export const create = async (req, res) => {
         message: 'Something went wrong while creating item',
       });
     }
-    const { title, isHidden, description, url, price, prices, primaryCurrency, imageUrl, tags } = req.body;
 
-    const pricesObject = prices ?? (await getPrices(primaryCurrency, price));
-    const storedImageUrl = imageUrl ? await uploadImageByUrl(imageUrl) : undefined;
-
-    const wish = new Wish({
-      title,
-      isHidden,
-      description,
-      url,
-      prices: pricesObject,
-      primaryCurrency,
-      imageUrl: storedImageUrl,
-      tags,
-      userId: req.userId,
-    });
-    await wish.save();
-
-    // console.log('WISH', wish, typeof wish, wish.title);
-    // const user = await User.findByIdAndUpdate(req.userId, { $push: { wishes: wish } }, { new: true });
-    // console.log('USER', user, user._doc);
-    // const { password, ...data } = user._doc;
-    return res.status(201).json(wish);
+    const wish = await createWish({ userId: req.userId, data: req.body });
+    return res.status(201).json(serializeWish(wish));
   } catch (e) {
-    console.log('ERROR', e);
-    res.status(500).json({ message: 'Something went wrong. Try again' });
+    if (e instanceof InvalidPriceError) {
+      return res.status(400).json({ message: e.message });
+    }
+
+    console.error('Failed to create wish', e);
+    if (e instanceof ExchangeRateError) {
+      return res.status(503).json({ message: e.message });
+    }
+
+    return res.status(500).json({ message: 'Something went wrong. Try again' });
+  }
+};
+
+export const copy = async (req, res) => {
+  if (!isObjectIdOrHexString(req.params.id)) {
+    return res.status(400).json({ message: 'Invalid wish ID' });
+  }
+
+  try {
+    const wish = await copyWish({ userId: req.userId, wishId: req.params.id });
+    if (!wish) {
+      return res.status(404).json({ message: 'This item does not exist' });
+    }
+
+    return res.status(201).json(serializeWish(wish));
+  } catch (error) {
+    console.error('Failed to copy wish', error);
+    if (error instanceof ExchangeRateError) {
+      return res.status(503).json({ message: error.message });
+    }
+    if (error instanceof InvalidPriceError) {
+      return res.status(400).json({ message: error.message });
+    }
+
+    return res.status(500).json({ message: 'Something went wrong. Try again' });
   }
 };
 
@@ -147,9 +166,7 @@ export const parse = async (req, res) => {
 
     const primaryCurrency = parsed.primaryCurrency ?? 'USD';
     const pricesObject =
-      parsed.price != null && Number.isFinite(parsed.price)
-        ? await getPrices(primaryCurrency, parsed.price)
-        : {};
+      parsed.price != null && Number.isFinite(parsed.price) ? await getPrices(primaryCurrency, parsed.price) : {};
 
     return res.status(200).json({
       title: parsed.title,
@@ -162,6 +179,13 @@ export const parse = async (req, res) => {
       primaryCurrency,
     });
   } catch (e) {
+    if (e instanceof ExchangeRateError) {
+      return res.status(503).json({ message: e.message });
+    }
+    if (e instanceof InvalidPriceError) {
+      return res.status(400).json({ message: e.message });
+    }
+
     return res.status(500).json({
       message: 'Something went wrong while parsing the website',
     });
@@ -183,7 +207,7 @@ export const update = async (req, res) => {
     const updatedWish = await Wish.findByIdAndUpdate(id, { isCompleted: true });
     await updatedWish.save();
 
-    return res.status(201).json(updatedWish);
+    return res.status(201).json(serializeWish(updatedWish));
   } catch (e) {
     res.status(500).json({ message: 'Something went wrong. Try again' });
   }
@@ -203,7 +227,7 @@ export const deleteItem = async (req, res) => {
     const { id } = req.params;
     const deletedWish = await Wish.findByIdAndDelete(id);
 
-    return res.status(201).json(deletedWish);
+    return res.status(201).json(serializeWish(deletedWish));
   } catch (e) {
     res.status(500).json({ message: 'Something went wrong. Try again' });
   }

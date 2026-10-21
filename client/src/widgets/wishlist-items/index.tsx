@@ -55,7 +55,7 @@ export const WishlistItems: FC<Props> = ({ items, isLoading, isIdeasPage, handle
       {displayedItems?.length ? (
         <div className="flex gap-3 w-full flex-wrap mt-6">
           {displayedItems?.map((item) => (
-            <ItemCard key={item._id} item={item} isIdeasPage={isIdeasPage} />
+            <ItemCard key={item.id} item={item} isIdeasPage={isIdeasPage} />
           ))}
         </div>
       ) : (

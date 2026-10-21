@@ -16,18 +16,18 @@ export const ItemCard: FC<Props> = ({ item, isIdeasPage }) => {
   const completeItem = useMarkAsCompleted();
   const handleDeleteItem = async (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-    await deleteItem.mutateAsync(item._id);
+    await deleteItem.mutateAsync(item.id);
   };
 
   const handleMarkAsCompleted: ButtonProps['onClick'] = async (event) => {
     event.preventDefault();
     event.stopPropagation();
-    await completeItem.mutateAsync(item._id);
+    await completeItem.mutateAsync(item.id);
   };
 
   return (
     <Link
-      href={`/wish-list/${item._id}`}
+      href={`/wish-list/${item.id}`}
       className="relative flex items-center justify-center w-[calc(33.3%-12px)] aspect-square border border-gray-300 rounded-lg bg-white bg-contain bg-no-repeat bg-center group"
       style={{
         backgroundImage: item.imageUrl ? `url(${item?.imageUrl})` : 'url("/images/product-image-fallback.svg")',

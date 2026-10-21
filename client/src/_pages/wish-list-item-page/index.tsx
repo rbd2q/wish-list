@@ -21,11 +21,11 @@ export const WishListItemPage = ({ id }: WishListItemPageProps) => {
   const wishlist = useGetMyWishlist();
 
   const isInMyWishList =
-    user.data?._id === wish.data?.userId || wishlist.data?.filter((item) => item.title === wish.data?.title).length;
+    user.data?.id === wish.data?.userId || wishlist.data?.filter((item) => item.title === wish.data?.title).length;
 
   const handleAddToMyWishlist = async () => {
     if (wish.data) {
-      await addItem.mutateAsync(wish.data);
+      await addItem.mutateAsync(wish.data.id);
     }
   };
 
