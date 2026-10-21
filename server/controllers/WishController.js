@@ -1,14 +1,17 @@
-import { isObjectIdOrHexString } from 'mongoose';
 import { validationResult } from 'express-validator';
+import { isObjectIdOrHexString } from 'mongoose';
+
+import { ExchangeRateError } from '../errors/exchange-rate-error.js';
+import { HttpError } from '../errors/http-error.js';
 import Wish from '../models/Wish.js';
 import { serializeWish } from '../serializers/wish.js';
+import { requireOwnCollection, setWishCollections } from '../services/collections.js';
+import { copyWish } from '../services/copy-wish.js';
+import { createWish } from '../services/create-wish.js';
 import { getPrices } from '../utils/get-prices.js';
-import { ExchangeRateError } from '../errors/exchange-rate-error.js';
 import { InvalidPriceError } from '../utils/normalize-price.js';
 import { parseProduct } from '../utils/parse-product.js';
-import { uploadImageByUrl } from '../utils/upload-image.js';
-import { createWish } from '../services/create-wish.js';
-import { copyWish } from '../services/copy-wish.js';
+import { validateCollectionIds, validateId } from '../validators/collection-validator.js';
 
 const FETCH_OPTIONS = {
   headers: {
@@ -32,79 +35,62 @@ export const getFullWishesList = async (req, res) => {
     //TODO find out if there is a better way for filtering array
     const filteredArray = wishes.filter((item) => item.userId && item.userId.toString() !== req.userId);
 
-    return res.status(200).json(filteredArray.map(serializeWish));
-  } catch (e) {
+    return res.status(200).json(filteredArray.map((wish) => serializeWish(wish)));
+  } catch {
     res.status(500).json({ message: 'Something went wrong. Try again' });
   }
 };
 
 export const getAllMyWishes = async (req, res) => {
-  try {
-    const errors = validationResult(req);
+  const filter = { userId: req.userId };
+  const { collectionId, withoutCollection } = req.query;
 
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array(),
-        message: 'Something went wrong while getting wishlist items',
-      });
-    }
-
-    const wishes = await Wish.find({ userId: req.userId });
-
-    return res.status(200).json(wishes.map(serializeWish));
-  } catch (e) {
-    res.status(500).json({ message: 'Something went wrong. Try again' });
+  if (collectionId !== undefined && withoutCollection !== undefined) {
+    throw new HttpError(400, 'Use either collectionId or withoutCollection');
   }
+  if (collectionId !== undefined) {
+    const collection = await requireOwnCollection(req.userId, collectionId);
+    filter.collectionIds = collection._id;
+  }
+  if (withoutCollection !== undefined) {
+    if (withoutCollection !== 'true') throw new HttpError(400, 'withoutCollection must be true');
+    filter['collectionIds.0'] = { $exists: false };
+  }
+
+  const wishes = await Wish.find(filter);
+  return res.json(wishes.map((wish) => serializeWish(wish, req.userId)));
 };
 
 export const getWishListItem = async (req, res) => {
-  try {
-    const errors = validationResult(req);
+  const wish = await Wish.findById(validateId(req.params.id));
+  if (!wish) throw new HttpError(404, 'This item does not exist');
 
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array(),
-        message: 'Something went wrong while getting wishlist item',
-      });
-    }
-
-    const { id } = req.params;
-    const wish = await Wish.findById(id);
-
-    if (!wish) {
-      return res.status(404).json({ message: 'This item does not exist' });
-    }
-
-    return res.status(200).json(serializeWish(wish));
-  } catch (e) {
-    res.status(500).json({ message: 'Something went wrong. Try again' });
+  const isOwner = req.userId && wish.userId?.toString() === req.userId;
+  if (wish.isHidden !== false && !isOwner) {
+    throw new HttpError(404, 'This item does not exist');
   }
+
+  return res.json(serializeWish(wish, req.userId));
 };
 
-export const create = async (req, res) => {
+export const create = async (req, res, next) => {
   try {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array(),
-        message: 'Something went wrong while creating item',
-      });
+    if (!req.body || typeof req.body !== 'object' || Array.isArray(req.body)) {
+      throw new HttpError(400, 'Expected a JSON object');
     }
-
     const wish = await createWish({ userId: req.userId, data: req.body });
-    return res.status(201).json(serializeWish(wish));
+    return res.status(201).json(serializeWish(wish, req.userId));
   } catch (e) {
+    if (e instanceof HttpError) return next(e);
     if (e instanceof InvalidPriceError) {
       return res.status(400).json({ message: e.message });
     }
 
-    console.error('Failed to create wish', e);
     if (e instanceof ExchangeRateError) {
       return res.status(503).json({ message: e.message });
     }
 
-    return res.status(500).json({ message: 'Something went wrong. Try again' });
+    return next(e);
   }
 };
 
@@ -119,7 +105,7 @@ export const copy = async (req, res) => {
       return res.status(404).json({ message: 'This item does not exist' });
     }
 
-    return res.status(201).json(serializeWish(wish));
+    return res.status(201).json(serializeWish(wish, req.userId));
   } catch (error) {
     console.error('Failed to copy wish', error);
     if (error instanceof ExchangeRateError) {
@@ -193,42 +179,29 @@ export const parse = async (req, res) => {
 };
 
 export const update = async (req, res) => {
-  try {
-    const errors = validationResult(req);
+  const wish = await Wish.findOneAndUpdate(
+    { _id: validateId(req.params.id), userId: req.userId },
+    { $set: { isCompleted: true } },
+    { new: true },
+  );
+  if (!wish) throw new HttpError(404, 'Wish not found');
+  return res.status(201).json(serializeWish(wish, req.userId));
+};
 
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array(),
-        message: 'Something went wrong while updating item',
-      });
-    }
-
-    const { id } = req.params;
-    const updatedWish = await Wish.findByIdAndUpdate(id, { isCompleted: true });
-    await updatedWish.save();
-
-    return res.status(201).json(serializeWish(updatedWish));
-  } catch (e) {
-    res.status(500).json({ message: 'Something went wrong. Try again' });
+export const updateCollections = async (req, res) => {
+  if (!req.body || Object.keys(req.body).length !== 1 || !Object.hasOwn(req.body, 'collectionIds')) {
+    throw new HttpError(400, 'Expected collectionIds only');
   }
+  const collectionIds = validateCollectionIds(req.body.collectionIds);
+  const wish = await setWishCollections(req.userId, req.params.id, collectionIds);
+  return res.json(serializeWish(wish, req.userId));
 };
 
 export const deleteItem = async (req, res) => {
-  try {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array(),
-        message: 'Something went wrong while updating item',
-      });
-    }
-
-    const { id } = req.params;
-    const deletedWish = await Wish.findByIdAndDelete(id);
-
-    return res.status(201).json(serializeWish(deletedWish));
-  } catch (e) {
-    res.status(500).json({ message: 'Something went wrong. Try again' });
-  }
+  const wish = await Wish.findOneAndDelete({
+    _id: validateId(req.params.id),
+    userId: req.userId,
+  });
+  if (!wish) throw new HttpError(404, 'Wish not found');
+  return res.status(201).json(serializeWish(wish, req.userId));
 };

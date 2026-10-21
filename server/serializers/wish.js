@@ -1,7 +1,7 @@
-export const serializeWish = (wish) => {
+export const serializeWish = (wish, viewerId) => {
   if (!wish) return null;
 
-  return {
+  const data = {
     id: wish._id.toString(),
     title: wish.title,
     isHidden: wish.isHidden,
@@ -15,4 +15,10 @@ export const serializeWish = (wish) => {
     userId: wish.userId?.toString(),
     isCompleted: wish.isCompleted,
   };
+
+  if (viewerId && wish.userId?.toString() === viewerId) {
+    data.collectionIds = (wish.collectionIds ?? []).map((id) => id.toString());
+  }
+
+  return data;
 };

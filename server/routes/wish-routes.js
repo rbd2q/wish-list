@@ -1,6 +1,7 @@
 import { Router } from 'express';
+
 import * as WishController from '../controllers/WishController.js';
-import { checkAuth } from '../utils/check-auth.js';
+import { checkAuth, optionalAuth } from '../utils/check-auth.js';
 
 const router = Router();
 
@@ -11,7 +12,7 @@ router.get('/', checkAuth, WishController.getAllMyWishes);
 router.get('/ideas', checkAuth, WishController.getFullWishesList);
 
 // api/wish/:id
-router.get('/:id', WishController.getWishListItem);
+router.get('/:id', optionalAuth, WishController.getWishListItem);
 
 // api/wish/create
 router.post('/create', checkAuth, WishController.create);
@@ -23,9 +24,11 @@ router.post('/:id/copy', checkAuth, WishController.copy);
 router.post('/parse', WishController.parse);
 
 // api/wish/:id
-router.delete('/:id', WishController.deleteItem);
+router.delete('/:id', checkAuth, WishController.deleteItem);
+
+router.patch('/:id/collections', checkAuth, WishController.updateCollections);
 
 // api/wish/:id
-router.patch('/:id', WishController.update);
+router.patch('/:id', checkAuth, WishController.update);
 
 export default router;

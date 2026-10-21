@@ -8,12 +8,20 @@ export const checkAuth = (req, res, next) => {
     try {
       const decodedToken = jwt.verify(token, config.get('jwt_secret_key'));
 
-      req.userId = decodedToken.userId;
+      if (typeof decodedToken.userId !== 'string' || !/^[a-f0-9]{24}$/i.test(decodedToken.userId)) {
+        return res.status(403).json({ message: 'Invalid token' });
+      }
+      req.userId = decodedToken.userId.toLowerCase();
       next();
-    } catch (e) {
+    } catch {
       return res.status(403).json({ message: 'Нет доступа' });
     }
   } else {
     return res.status(403).json({ message: 'Нет доступа' });
   }
+};
+
+export const optionalAuth = (req, res, next) => {
+  if (req.headers.authorization) return checkAuth(req, res, next);
+  return next();
 };

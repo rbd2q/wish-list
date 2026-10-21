@@ -9,9 +9,12 @@ const schema = new mongoose.Schema({
   primaryCurrency: { type: String, required: true },
   imageUrl: { type: String },
   tags: [{ type: String }],
+  collectionIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Collection' }],
   date: { type: Date, default: Date.now },
   userId: { type: mongoose.Types.ObjectId, ref: 'User' },
   isCompleted: { type: Boolean, default: false },
 });
+
+schema.index({ userId: 1, collectionIds: 1 });
 
 export default mongoose.model('Wish', schema);
