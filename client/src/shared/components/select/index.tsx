@@ -2,7 +2,7 @@
 
 import { ListBox, Select as HeroUISelect } from '@heroui/react';
 import clsx from 'clsx';
-import { useMemo } from 'react';
+import { type AriaAttributes, useMemo } from 'react';
 
 import styles from './select.module.scss';
 
@@ -11,7 +11,7 @@ export interface SelectOption {
   name: string;
 }
 
-export interface SelectProps {
+export interface SelectProps extends Pick<AriaAttributes, 'aria-describedby' | 'aria-labelledby'> {
   options: SelectOption[];
   value?: string | null;
   onChange?: (value: string | null) => void;
@@ -36,6 +36,7 @@ export const Select = ({
   id,
   name,
   className,
+  ...ariaProps
 }: SelectProps): React.JSX.Element => {
   const items = useMemo(
     () =>
@@ -58,7 +59,8 @@ export const Select = ({
       onSelectionChange={(key) => onChange?.(key != null ? String(key) : null)}
       isDisabled={isDisabled}
       fullWidth={fullWidth}
-      aria-label={value ?? undefined}
+      aria-label={ariaProps['aria-labelledby'] ? undefined : (value ?? undefined)}
+      {...ariaProps}
     >
       <HeroUISelect.Trigger className={styles.selectTrigger}>
         <HeroUISelect.Value />

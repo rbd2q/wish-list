@@ -1,27 +1,27 @@
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 import { useContext } from 'react';
 
 import { AuthContext } from '@/entities/authorization/auth-context';
+import { AUTH_MUTATION_KEYS } from '@/shared/config/mutation-keys';
 import { useApi } from '@/shared/hooks/useApi';
-import { AuthFormResource } from '@/shared/types';
+import { SignInResource } from '@/shared/types';
 import { showErrorToast } from '@/utils';
 
-export const useSignIn = (): UseMutationResult<void, unknown, AuthFormResource> => {
+export const useSignIn = (): UseMutationResult<void, unknown, SignInResource> => {
   const auth = useContext(AuthContext);
   const api = useApi();
 
   return useMutation({
-    mutationFn: async (formData: AuthFormResource) => {
-      try {
-        const { data } = await api.post('/api/auth/login', formData);
-        auth.login(data.token, data.userId);
-      } catch (error: unknown) {
-        if (error instanceof AxiosError) {
-          showErrorToast(error.response?.data.message);
-        }
-      }
+    mutationKey: AUTH_MUTATION_KEYS.signIn,
+    mutationFn: async (formData: SignInResource) => {
+      const { data } = await api.post('/api/auth/login', formData);
+      auth.login(data.token, data.userId);
+    },
+    onError: (error) => {
+      const message = isAxiosError(error) ? error.response?.data?.message : undefined;
+      showErrorToast(message || 'Unable to sign in. Please try again.');
     },
   });
 };

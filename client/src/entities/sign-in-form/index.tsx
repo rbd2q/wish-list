@@ -1,62 +1,55 @@
-import { ArrowRightIcon, Lock, Mail } from 'lucide-react';
-import { FC } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Mail } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
-import { useSignIn } from '@/entities/sign-in-form/model';
 import { Button } from '@/shared/components/button';
 import { FormField } from '@/shared/components/form-field';
 import { FormInput } from '@/shared/components/form-input';
-import { ToastContainer } from '@/shared/components/toast';
-import { AuthFormResource } from '@/shared/types';
+import { FormPasswordInput } from '@/shared/components/form-password-input';
+import { SignInResource } from '@/shared/types';
 
-export const SignInForm: FC = () => {
+import { useSignIn } from './model';
+import { signInSchema } from './validation';
+
+export const SignInForm = () => {
   const signIn = useSignIn();
-
-  const {
-    control,
-    handleSubmit,
-    formState: { isSubmitting },
-    watch,
-  } = useForm<AuthFormResource>();
-  const formFields = watch();
-
-  const handleFormSubmit = async (formData: AuthFormResource) => {
-    await signIn.mutateAsync(formData);
-  };
+  const { control, handleSubmit } = useForm<SignInResource>({
+    disabled: signIn.isPending,
+    resolver: yupResolver(signInSchema),
+  });
+  const handleFormSubmit = (formData: SignInResource) => signIn.mutate(formData);
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)}>
-      <ToastContainer />
-      <div className="flex flex-col gap-2 mb-4">
-        <h1 className="text-3xl font-bold">Welcome back</h1>
-        <p className="text-sm text-gray-500">Enter your email and password to continue</p>
+    <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
+      <div className="mb-7">
+        <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
+        <p className="mt-2 text-sm text-muted-foreground">Sign in to continue to your wishlist</p>
       </div>
-      <FormField htmlFor="email" label="Email">
-        <FormInput
-          id="email"
-          name="email"
-          type="email"
-          placeholder="E-mail"
-          control={control}
-          startContent={<Mail className="text-gray-400" />}
-        />
-      </FormField>
-
-      <FormField htmlFor="password" label="Password">
-        <FormInput
-          id="password"
-          name="password"
-          type="password"
-          placeholder="Password"
-          control={control}
-          startContent={<Lock className="text-gray-400" />}
-        />
-      </FormField>
-
-      <Button isDisabled={!formFields.password || !formFields.email} isPending={isSubmitting} fullWidth type="submit">
-        Sign In
-        <ArrowRightIcon />
-      </Button>
+      <fieldset disabled={signIn.isPending} className="min-w-0">
+        <FormField htmlFor="email" label="Email" required>
+          <FormInput
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            placeholder="you@example.com"
+            control={control}
+            startContent={<Mail className="size-4" aria-hidden="true" />}
+          />
+        </FormField>
+        <FormField htmlFor="password" label="Password" required>
+          <FormPasswordInput
+            id="password"
+            name="password"
+            autoComplete="current-password"
+            placeholder="Your password"
+            control={control}
+          />
+        </FormField>
+        <Button isDisabled={signIn.isPending} isPending={signIn.isPending} fullWidth type="submit">
+          {signIn.isPending ? 'Signing in…' : 'Sign in'}
+        </Button>
+      </fieldset>
     </form>
   );
 };

@@ -4,10 +4,11 @@ import { Calendar, DateField, DatePicker as HeroUIDatePicker } from '@heroui/rea
 import type { CalendarDate } from '@internationalized/date';
 import { parseDate } from '@internationalized/date';
 import clsx from 'clsx';
+import { type AriaAttributes } from 'react';
 
 import styles from './date-picker.module.scss';
 
-export interface DatePickerProps {
+export interface DatePickerProps extends Pick<AriaAttributes, 'aria-describedby' | 'aria-labelledby'> {
   value?: string | null;
   onChange?: (value: string | null) => void;
   isDisabled?: boolean;

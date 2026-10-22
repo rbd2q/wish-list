@@ -1,90 +1,88 @@
-import { ArrowRightIcon, Lock, Mail, User } from 'lucide-react';
-import { FC } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Mail, User } from 'lucide-react';
+import { useForm } from 'react-hook-form';
 
-import { useSignUp } from '@/entities/sign-up-form/model';
 import { Button } from '@/shared/components/button';
 import { FormDatePicker } from '@/shared/components/form-date-picker';
 import { FormField } from '@/shared/components/form-field';
 import { FormInput } from '@/shared/components/form-input';
+import { FormPasswordInput } from '@/shared/components/form-password-input';
 import { FormPhoneInput } from '@/shared/components/form-phone-input';
 import { FormSelect } from '@/shared/components/form-select';
-import { ToastContainer } from '@/shared/components/toast';
 import { CURRENCY_OPTIONS } from '@/shared/consts';
-import { AuthFormResource } from '@/shared/types';
+import { SignUpResource } from '@/shared/types';
 
-export const SignUpForm: FC = () => {
+import { useSignUp } from './model';
+import { signUpSchema } from './validation';
+
+export const SignUpForm = () => {
   const signUp = useSignUp();
-
-  const {
-    control,
-    handleSubmit,
-    formState: { isSubmitting },
-    watch,
-  } = useForm<AuthFormResource>({ defaultValues: { currency: 'BYN' } });
-
-  const formFields = watch();
-
-  const handleFormSubmit: SubmitHandler<AuthFormResource> = async (formData: AuthFormResource) => {
-    await signUp.mutateAsync(formData);
-  };
+  const { control, handleSubmit } = useForm<SignUpResource>({
+    disabled: signUp.isPending,
+    resolver: yupResolver(signUpSchema),
+    defaultValues: { preferredCurrency: 'BYN' },
+  });
+  const handleFormSubmit = (formData: SignUpResource) => signUp.mutate(formData);
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)}>
-      <ToastContainer />
-      <div className="flex flex-col gap-2 mb-4">
-        <h1 className="text-3xl font-bold">Create account</h1>
-        <p className="text-sm text-gray-500">Start organizing your wishlist today</p>
+    <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
+      <div className="mb-7">
+        <h1 className="text-2xl font-semibold tracking-tight">Create account</h1>
+        <p className="mt-2 text-sm text-muted-foreground">Start organizing what you love</p>
       </div>
-
-      <FormField htmlFor="email" label="Email" required>
-        <FormInput
-          id="email"
-          name="email"
-          type="email"
-          placeholder="E-mail"
-          control={control}
-          startContent={<Mail className="text-gray-400" />}
-        />
-      </FormField>
-      <FormField htmlFor="password" label="Password" required>
-        <FormInput
-          id="password"
-          name="password"
-          type="password"
-          placeholder="Password"
-          control={control}
-          startContent={<Lock className="text-gray-400" />}
-        />
-      </FormField>
-
-      <FormField htmlFor="name" label="Name" required>
-        <FormInput
-          id="name"
-          name="name"
-          control={control}
-          placeholder="Enter your name"
-          startContent={<User className="text-gray-400" />}
-        />
-      </FormField>
-
-      <div className="flex gap-4">
-        <FormField className="flex-1 min-w-0" htmlFor="currency" label="Preferred currency" required>
-          <FormSelect name="currency" control={control} options={CURRENCY_OPTIONS} />
+      <fieldset disabled={signUp.isPending} className="min-w-0">
+        <FormField htmlFor="name" label="Full name" required>
+          <FormInput
+            id="name"
+            name="name"
+            autoComplete="name"
+            placeholder="Your full name"
+            control={control}
+            startContent={<User className="size-4" aria-hidden="true" />}
+          />
         </FormField>
-        <FormField className="flex-1 min-w-0" htmlFor="birthDate" label="Date of Birth">
-          <FormDatePicker id="birthDate" name="birthDate" control={control} />
+        <FormField htmlFor="email" label="Email" required>
+          <FormInput
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            placeholder="you@example.com"
+            control={control}
+            startContent={<Mail className="size-4" aria-hidden="true" />}
+          />
         </FormField>
-      </div>
-
-      <FormField htmlFor="phone" label="Phone">
-        <FormPhoneInput id="phone" name="phone" control={control} />
-      </FormField>
-
-      <Button isDisabled={!formFields.password || !formFields.email} isPending={isSubmitting} fullWidth type="submit">
-        Sign Up
-        <ArrowRightIcon />
-      </Button>
+        <FormField htmlFor="password" label="Password" required>
+          <FormPasswordInput
+            id="password"
+            name="password"
+            autoComplete="new-password"
+            placeholder="Minimum 6 characters"
+            control={control}
+          />
+        </FormField>
+        <div className="grid gap-x-4 sm:grid-cols-2">
+          <FormField htmlFor="preferredCurrency" label="Currency" required>
+            <FormSelect id="preferredCurrency" name="preferredCurrency" control={control} options={CURRENCY_OPTIONS} />
+          </FormField>
+          <FormField htmlFor="birthDate" label="Date of birth (optional)">
+            <FormDatePicker id="birthDate" name="birthDate" control={control} />
+          </FormField>
+        </div>
+        <FormField htmlFor="phone" label="Phone (optional)">
+          <FormPhoneInput
+            id="phone"
+            name="phone"
+            control={control}
+            defaultCountry="BY"
+            autoComplete="tel"
+            placeholder="Phone number"
+          />
+        </FormField>
+        <Button isDisabled={signUp.isPending} isPending={signUp.isPending} fullWidth type="submit">
+          {signUp.isPending ? 'Creating account…' : 'Sign up'}
+        </Button>
+      </fieldset>
     </form>
   );
 };

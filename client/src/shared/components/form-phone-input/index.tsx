@@ -1,7 +1,8 @@
 import { InputHTMLAttributes } from 'react';
 import { Controller, ControllerProps, FieldValues } from 'react-hook-form';
-import ReactPhoneInput from 'react-phone-number-input';
+import ReactPhoneInput, { type Country } from 'react-phone-number-input';
 
+import { FormError } from '../form-error';
 import styles from './form-phone-input.module.scss';
 
 // interface Props {
@@ -10,10 +11,13 @@ import styles from './form-phone-input.module.scss';
 //   validate?: FieldValidator<string>;
 // }
 
-type Props<T extends FieldValues> = InputHTMLAttributes<HTMLInputElement> & Omit<ControllerProps<T>, 'render'>;
+type Props<T extends FieldValues> = InputHTMLAttributes<HTMLInputElement> &
+  Omit<ControllerProps<T>, 'render'> & { defaultCountry?: Country };
 
 export function FormPhoneInput<TFieldValues extends FieldValues>(props: Props<TFieldValues>): React.JSX.Element {
   const { name, defaultValue, rules, shouldUnregister, control, disabled, ...rest } = props;
+
+  const errorId = `${rest.id ?? name}-error`;
 
   return (
     <Controller
@@ -22,16 +26,21 @@ export function FormPhoneInput<TFieldValues extends FieldValues>(props: Props<TF
       defaultValue={defaultValue}
       rules={rules}
       shouldUnregister={shouldUnregister}
-      render={({ field }) => (
-        <ReactPhoneInput
-          placeholder="+"
-          disabled={disabled}
-          international
-          {...rest}
-          {...field}
-          flagUrl="/images/flags/cfi/3x2/{XX}.svg"
-          className={styles.PhoneInput}
-        />
+      render={({ field, fieldState }) => (
+        <>
+          <ReactPhoneInput
+            placeholder="+"
+            disabled={disabled}
+            international
+            {...rest}
+            {...field}
+            aria-invalid={!!fieldState.error}
+            aria-describedby={fieldState.error ? errorId : rest['aria-describedby']}
+            flagUrl="/images/flags/cfi/3x2/{XX}.svg"
+            className={styles.PhoneInput}
+          />
+          {fieldState.error && <FormError id={errorId}>{fieldState.error.message}</FormError>}
+        </>
       )}
     />
   );

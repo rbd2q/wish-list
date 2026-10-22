@@ -15,7 +15,11 @@ interface Props {
 export const FormField: FCWithChildren<Props> = ({ htmlFor, label, labelId, notes, required, className, children }) => (
   <div className={clsx('mb-4', className)}>
     {label ? (
-      <label id={labelId} className="font-semibold text-sm text-foreground mb-2 block" htmlFor={htmlFor}>
+      <label
+        id={labelId ?? (htmlFor ? `${htmlFor}-label` : undefined)}
+        className="font-semibold text-sm text-foreground mb-2 block"
+        htmlFor={htmlFor}
+      >
         {label}
         {required ? (
           <span

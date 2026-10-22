@@ -13,6 +13,7 @@
   "dependencies": {
     "@heroui/react": "^3.2.6",
     "@heroui/styles": "^3.2.6",
+    "@hookform/resolvers": "^6.0.0",
     "@internationalized/date": "^3.12.4",
     "@tanstack/react-query": "^5.104.4",
     "axios": "^1.20.0",
@@ -27,7 +28,8 @@
     "react-laag": "^2.0.5",
     "react-phone-number-input": "^3.4.18",
     "react-toastify": "^11.1.0",
-    "sass": "^1.105.2"
+    "sass": "^1.105.2",
+    "yup": "^1.7.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",

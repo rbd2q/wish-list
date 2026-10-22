@@ -30,11 +30,14 @@ export interface UserResource {
   phone?: string;
 }
 
-export interface AuthFormResource {
+export interface SignInResource {
   email: string;
   password: string;
+}
+
+export interface SignUpResource extends SignInResource {
   name: string;
-  currency: string;
+  preferredCurrency: CurrencyEnum;
   birthDate?: string;
   phone?: string;
 }
