@@ -1,7 +1,7 @@
-import { FCWithChildren } from '@/shared/types';
+import { PropsWithChildren } from 'react';
 
-export const Container: FCWithChildren = ({ children }) => (
-  <div className="w-full max-w-4xl min-h-[calc(100%-56px)] flex flex-col items-center mx-auto px-12 py-8">
+export const Container = ({ children }: PropsWithChildren) => (
+  <div className="mx-auto flex min-h-full w-full min-w-0 max-w-[1200px] flex-col items-center px-5 py-8 md:px-8">
     {children}
   </div>
 );

@@ -31,13 +31,13 @@ export const WishListItemPage = ({ id }: WishListItemPageProps) => {
 
   return (
     <>
-      <button onClick={() => router.back()} className="flex gap-2 mb-2">
+      <button type="button" onClick={() => router.back()} className="flex gap-2 mb-2">
         <ArrowLeftIcon />
         Back
       </button>
       {wish.data && user.data ? (
-        <div className="flex w-full max-w-6xl bg-white rounded-md px-12 py-8">
-          <div className="w-1/2">
+        <div className="grid w-full grid-cols-1 gap-6 rounded-2xl border border-border bg-surface p-5 md:grid-cols-2 md:gap-8 md:p-8">
+          <div className="min-w-0">
             <img
               className="w-full aspect-auto mb-6"
               src={wish.data.imageUrl || '/images/product-image-fallback.svg'}
@@ -55,8 +55,8 @@ export const WishListItemPage = ({ id }: WishListItemPageProps) => {
             {!isInMyWishList ? <Button onPress={handleAddToMyWishlist}>Add to my wishlist</Button> : null}
           </div>
 
-          <div className="w-1/2 ml-12">
-            <h1 className="text-2xl font-semibold text-[#adadad] mb-4">{wish.data.title}</h1>
+          <div className="min-w-0">
+            <h1 className="text-2xl font-semibold mb-4">{wish.data.title}</h1>
             {wish.data.description ? <p>{wish.data.description}</p> : null}
             <div className="text-[#6c757d] mt-4">Added: {new Date(wish.data.date).toLocaleDateString()}</div>
           </div>

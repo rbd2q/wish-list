@@ -10,11 +10,11 @@ export const AuthorizationForm: FC = () => {
   return (
     <div className="rounded-xl bg-white px-8 py-6 w-full mx-auto max-w-lg">
       {hasAccount ? <SignInForm /> : <SignUpForm />}
-      <div className="flex gap-2 items-center justify-center mt-4">
+      <div className="flex flex-wrap gap-2 items-center justify-center mt-4">
         <span>{hasAccount ? "Don't have an account?" : 'Already have an account?'}</span>
         <button
           type="button"
-          className="text-purple-600 hover:text-purple-700 font-medium"
+          className="text-primary hover:text-primary-hover font-medium"
           onClick={() => setHasAccount(!hasAccount)}
         >
           {hasAccount ? 'Create account' : 'Sign in'}

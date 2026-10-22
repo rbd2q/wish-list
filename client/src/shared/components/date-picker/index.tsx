@@ -5,7 +5,7 @@ import type { CalendarDate } from '@internationalized/date';
 import { parseDate } from '@internationalized/date';
 import clsx from 'clsx';
 
-import styles from './DatePicker.module.scss';
+import styles from './date-picker.module.scss';
 
 export interface DatePickerProps {
   value?: string | null;

@@ -1,0 +1,112 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  max-width: 100%;
+  height: auto;
+  box-sizing: border-box;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-align: center;
+  transition:
+    background-color 150ms,
+    color 150ms,
+    border-color 150ms,
+    opacity 150ms;
+
+  &:focus-visible,
+  &[data-focus-visible='true'] {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  &:disabled,
+  &[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  &_sm {
+    min-height: 40px;
+    padding: 8px 16px;
+    border-radius: 8px;
+  }
+
+  &_md {
+    min-height: 48px;
+    padding: 12px 20px;
+  }
+
+  &_lg {
+    min-height: 56px;
+    padding: 16px 32px;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  &_icon {
+    padding: 0;
+    width: 48px;
+    aspect-ratio: 1;
+  }
+
+  &_primary {
+    color: var(--primary-foreground);
+    background: var(--primary);
+    border: 1px solid transparent;
+    box-shadow: none;
+
+    &:hover,
+    &[data-hovered='true'] {
+      background: var(--primary-hover);
+    }
+
+    &:active,
+    &[data-pressed='true'] {
+      background: var(--primary-pressed);
+    }
+  }
+
+  &_secondary {
+    color: var(--foreground);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--surface-shadow);
+
+    &:hover,
+    &[data-hovered='true'] {
+      background: var(--surface-secondary);
+      border-color: var(--input-border-hover);
+    }
+
+    &:active,
+    &[data-pressed='true'] {
+      background: var(--surface-tertiary);
+    }
+  }
+
+  &_ghost {
+    color: var(--primary);
+    background: transparent;
+    border: 1px solid transparent;
+
+    &:hover,
+    &[data-hovered='true'] {
+      background: var(--secondary);
+    }
+
+    &:active,
+    &[data-pressed='true'] {
+      background: var(--accent-soft-hover);
+    }
+  }
+}

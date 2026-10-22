@@ -7,7 +7,7 @@ import { Arrow, useLayer } from 'react-laag';
 
 import { FCWithChildren } from '@/shared/types';
 
-import styles from './Dropdown.module.scss';
+import styles from './dropdown.module.scss';
 
 interface Props {
   children: ReactNode;

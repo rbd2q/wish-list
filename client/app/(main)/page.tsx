@@ -1,5 +1,7 @@
 'use client';
 
-export default function Home() {
-  return <div>Hello</div>;
-}
+import { WishListPage } from '@/_pages/wish-list-page';
+
+const Home = () => <WishListPage />;
+
+export default Home;

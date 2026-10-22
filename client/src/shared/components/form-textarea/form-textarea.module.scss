@@ -5,12 +5,14 @@
   font: inherit;
   color: inherit;
   line-height: 1.5;
-  background: var(--background);
+  background: var(--surface);
   border: 1px solid var(--input-border);
   border-radius: 12px;
   outline: none;
   box-sizing: border-box;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &::placeholder {
     color: var(--input-placeholder);

@@ -4,7 +4,7 @@ import { Input as HeroUIInput, type InputRootProps } from '@heroui/react';
 import clsx from 'clsx';
 import { forwardRef, ReactNode } from 'react';
 
-import styles from './Input.module.scss';
+import styles from './input.module.scss';
 
 export interface InputProps extends InputRootProps {
   startContent?: ReactNode;

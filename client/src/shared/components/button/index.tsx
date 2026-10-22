@@ -4,7 +4,7 @@ import { Button as HeroUIButton, type ButtonRootProps } from '@heroui/react';
 import clsx from 'clsx';
 
 import { FCWithChildren } from '../../types';
-import styles from './Button.module.scss';
+import styles from './button.module.scss';
 
 // TODO: Refactor component, add more variants
 export type ButtonProps = ButtonRootProps;

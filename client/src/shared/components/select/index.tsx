@@ -4,7 +4,7 @@ import { ListBox, Select as HeroUISelect } from '@heroui/react';
 import clsx from 'clsx';
 import { useMemo } from 'react';
 
-import styles from './Select.module.scss';
+import styles from './select.module.scss';
 
 export interface SelectOption {
   value: string;

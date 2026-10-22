@@ -6,7 +6,7 @@
   transition: border 250ms;
 
   &--opened {
-    border: 1px solid #D5DADF;
+    border: 1px solid var(--border);
     .accordion__header {
       background-color: transparent;
     }
@@ -20,19 +20,21 @@
     padding: 4px;
 
     user-select: none;
-    color: #101014;
+    color: var(--foreground);
 
     display: flex;
     justify-content: flex-start;
     align-items: center;
 
-    background: #F5F6F8;
+    background: var(--surface-secondary);
 
     box-sizing: border-box;
 
     cursor: pointer;
 
-    transition: opacity 200ms, background-color 250ms;
+    transition:
+      opacity 200ms,
+      background-color 250ms;
 
     &:hover {
       opacity: 0.75;
@@ -46,20 +48,20 @@
   }
 
   &__title {
-    color: var(--text-primary);
+    color: var(--foreground);
     flex-grow: 1;
   }
 
   &__icon {
     svg {
       display: block;
-      color: var(--text-primary);
+      color: var(--foreground);
     }
   }
 
   &__arrow {
     transition: transform 300ms;
-    color: #D5DADF;
+    color: var(--border);
   }
 
   &__content {
@@ -83,7 +85,7 @@
 }
 
 .button--cancel {
-  color: #060C38;
+  color: var(--foreground);
   opacity: 0.5;
   font-family: Proxima Nova;
   font-style: normal;

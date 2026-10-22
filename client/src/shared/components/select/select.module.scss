@@ -1,6 +1,7 @@
 // TODO: Refactor styles
 .select {
   width: 100%;
+  min-width: 0;
 
   &[data-invalid='true'] .selectTrigger {
     border-color: var(--destructive);
@@ -11,9 +12,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  min-height: 44px;
+  min-height: 48px;
   padding: 0 14px;
-  background: var(--background);
+  background: var(--surface);
   border: 1px solid var(--input-border);
   border-radius: 12px;
   box-sizing: border-box;
@@ -22,7 +23,9 @@
   color: inherit;
   text-align: left;
   justify-content: space-between;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   [data-slot='select-value'] {
     flex: 1;
@@ -61,7 +64,7 @@
 }
 
 .popover {
-  background: var(--background);
+  background: var(--surface);
   border: 1px solid var(--input-border);
   border-radius: 12px;
   box-shadow: var(--popover-shadow);
@@ -90,6 +93,8 @@
   }
 
   &[data-focus-visible='true'] {
-    outline: none;
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+    background: var(--select-option-hover);
   }
 }

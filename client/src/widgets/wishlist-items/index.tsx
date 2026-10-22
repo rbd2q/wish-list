@@ -2,8 +2,9 @@ import clsx from 'clsx';
 import { FC, useState } from 'react';
 
 import { ItemCard } from '@/entities/item-card';
-import { Button } from '@/shared/components/button';
+import { ButtonLink } from '@/shared/components/button-link';
 import { EmptyBlock } from '@/shared/components/empty-block';
+import { navigationConfig } from '@/shared/config/navigation';
 import { WishListItemType } from '@/shared/types';
 
 type ActiveItemsType = 'not_completed' | 'completed';
@@ -12,10 +13,9 @@ interface Props {
   items: WishListItemType[] | undefined;
   isLoading: boolean;
   isIdeasPage?: boolean;
-  handleShowForm?: () => void;
 }
 
-export const WishlistItems: FC<Props> = ({ items, isLoading, isIdeasPage, handleShowForm }) => {
+export const WishlistItems: FC<Props> = ({ items, isLoading, isIdeasPage }) => {
   const [activeSection, setActiveSection] = useState<ActiveItemsType>('not_completed');
 
   const displayedItems = isIdeasPage
@@ -30,10 +30,11 @@ export const WishlistItems: FC<Props> = ({ items, isLoading, isIdeasPage, handle
     <div className="w-full flex flex-col flex-1 items-center">
       {!isIdeasPage ? (
         <>
-          <Button onPress={handleShowForm}>Add item</Button>
+          <ButtonLink href={navigationConfig.addWish}>Add item</ButtonLink>
 
           <div className="flex gap-4 mt-8 text-start">
             <button
+              type="button"
               className={clsx(
                 'font-semibold text-lg text-[#adadad]',
                 activeSection === 'not_completed' && 'text-black',
@@ -43,6 +44,7 @@ export const WishlistItems: FC<Props> = ({ items, isLoading, isIdeasPage, handle
               Active
             </button>
             <button
+              type="button"
               className={clsx('font-semibold text-lg text-[#adadad]', activeSection === 'completed' && 'text-black')}
               onClick={() => setActiveSection('completed')}
             >
@@ -65,7 +67,7 @@ export const WishlistItems: FC<Props> = ({ items, isLoading, isIdeasPage, handle
   ) : (
     <div className="h-full max-w-md mx-auto flex flex-col items-center justify-center">
       <EmptyBlock />
-      <Button onPress={handleShowForm}>Add item</Button>
+      {!isIdeasPage ? <ButtonLink href={navigationConfig.addWish}>Add item</ButtonLink> : null}
     </div>
   );
 };
