@@ -2,6 +2,7 @@ import type { UseMutationResult } from '@tanstack/react-query';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
+import { WISHLIST_QUERY_KEYS } from '@/shared/config/query-keys';
 import { useApi } from '@/shared/hooks/useApi';
 import { AddItemFormResource, ParsedWishListItem, WishListItemType } from '@/shared/types';
 import { showErrorToast } from '@/utils';
@@ -14,9 +15,10 @@ export const useAddWish = (): UseMutationResult<WishListItemType, unknown, AddIt
     mutationFn: async (formData: AddItemFormResource) => {
       try {
         const { data } = await api.post('/api/wish/create', formData);
+
         if (data) {
           // TODO Replace with constant
-          await queryClient.refetchQueries({ queryKey: ['current-user-wish-list'] });
+          await queryClient.refetchQueries({ queryKey: WISHLIST_QUERY_KEYS.currentUser });
         }
         return data;
       } catch (error: unknown) {

@@ -1,13 +1,13 @@
 import { useGetAllItems } from '@/_pages/ideas-page/model';
-import { WishlistItems } from '@/widgets/wishlist-items';
+import { WishlistItems, WishlistItemsSkeleton } from '@/widgets/wishlist-items';
 
 export const IdeasPage = () => {
   const { data, isLoading } = useGetAllItems();
 
-  return data ? (
+  return data || isLoading ? (
     <div className="w-full">
       <h1 className="text-lg font-semibold">Ideas</h1>
-      <WishlistItems items={data} isLoading={isLoading} isIdeasPage />
+      {isLoading ? <WishlistItemsSkeleton /> : data ? <WishlistItems items={data} isIdeasPage /> : null}
     </div>
   ) : null;
 };

@@ -12,6 +12,7 @@ const config: AxiosRequestConfig = {
 
 export const useApi = () => {
   let impersonationToken = '';
+
   if (typeof window !== 'undefined' && localStorage.getItem(storageName)) {
     impersonationToken = localStorage.getItem(storageName) ?? '';
   }

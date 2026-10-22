@@ -8,6 +8,7 @@ interface Props {
 export const PageTitle: FC<Props> = ({ title }) => {
   const completeTitle = useMemo(() => {
     const parts: string[] = [];
+
     if (title) {
       parts.push(title);
     }

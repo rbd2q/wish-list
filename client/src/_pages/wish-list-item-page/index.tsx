@@ -2,10 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 
-import { useAddToMyWishlist, useGetMyWishItem } from '@/_pages/wish-list-item-page/model';
+import { useGetMyWishItem } from '@/_pages/wish-list-item-page/model';
 import { useGetMyWishlist } from '@/_pages/wish-list-page/model';
 import { PricesBlock } from '@/entities/prices-block';
-import { Button } from '@/shared/components/button';
+import { AddToWishlistButton } from '@/features/add-to-wishlist';
 import { useCurrentUser } from '@/shared/hooks/use-get-current-user';
 import { ArrowLeftIcon } from '@/shared/icons/ArrowLeftIcon';
 
@@ -16,18 +16,11 @@ interface WishListItemPageProps {
 export const WishListItemPage = ({ id }: WishListItemPageProps) => {
   const router = useRouter();
   const user = useCurrentUser();
-  const addItem = useAddToMyWishlist();
   const wish = useGetMyWishItem(id);
   const wishlist = useGetMyWishlist();
 
   const isInMyWishList =
     user.data?.id === wish.data?.userId || wishlist.data?.filter((item) => item.title === wish.data?.title).length;
-
-  const handleAddToMyWishlist = async () => {
-    if (wish.data) {
-      await addItem.mutateAsync(wish.data.id);
-    }
-  };
 
   return (
     <>
@@ -52,7 +45,7 @@ export const WishListItemPage = ({ id }: WishListItemPageProps) => {
             >
               View source
             </a>
-            {!isInMyWishList ? <Button onPress={handleAddToMyWishlist}>Add to my wishlist</Button> : null}
+            {!isInMyWishList ? <AddToWishlistButton wish={wish.data} /> : null}
           </div>
 
           <div className="min-w-0">

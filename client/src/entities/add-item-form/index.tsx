@@ -59,6 +59,7 @@ export const AddItemForm: FC<Props> = ({ onBack }) => {
       }
     } else {
       const response = await addItem.mutateAsync(formData);
+
       if (response) {
         onBack();
       }
