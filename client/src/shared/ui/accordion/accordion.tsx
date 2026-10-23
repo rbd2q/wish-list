@@ -5,6 +5,8 @@ import { ReactNode, useState } from 'react';
 
 import { FCWithChildren } from '@/shared/lib/react';
 
+import styles from './accordion.module.scss';
+
 interface Props {
   title: ReactNode;
   icon?: ReactNode;
@@ -19,18 +21,20 @@ export const Accordion: FCWithChildren<Props> = ({ defaultOpened, title, icon, c
   };
 
   return (
-    <div className={clsx('accordion', isOpen && 'accordion--opened')}>
-      <button onClick={handleToggle} className={clsx('accordion__header', icon && 'accordion__header--has-icon')}>
-        {icon ? <div className="accordion__icon">{icon}</div> : null}
-        <div className="accordion__title">{title}</div>
-        <div className="accordion__arrow">
+    <div className={clsx(styles.accordion, isOpen && styles['accordion--opened'])}>
+      <button
+        onClick={handleToggle}
+        className={clsx(styles.accordion__header, icon && styles['accordion__header--has-icon'])}>
+        {icon ? <div className={styles.accordion__icon}>{icon}</div> : null}
+        <div className={styles.accordion__title}>{title}</div>
+        <div className={styles.accordion__arrow}>
           <ChevronDown size={24} aria-hidden="true" />
         </div>
       </button>
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.section
-            className="accordion__content"
+            className={styles.accordion__content}
             initial="collapsed"
             animate="open"
             exit="collapsed"
@@ -39,9 +43,9 @@ export const Accordion: FCWithChildren<Props> = ({ defaultOpened, title, icon, c
               collapsed: { opacity: 0, height: 0 },
             }}
             transition={{ duration: 0.3 }}>
-            <div className="accordion__content--before" />
+            <div className={styles['accordion__content--before']} />
             {children}
-            <div className="accordion__content--after" />
+            <div className={styles['accordion__content--after']} />
           </motion.section>
         )}
       </AnimatePresence>

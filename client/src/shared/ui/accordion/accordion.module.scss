@@ -79,28 +79,3 @@
     }
   }
 }
-
-.accordion__buttons {
-  display: flex;
-}
-
-.button--cancel {
-  color: var(--foreground);
-  opacity: 0.5;
-  font-family: Proxima Nova;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 12px;
-  line-height: 16px;
-  padding: 0 4px;
-}
-
-@media (max-width: 1080px) {
-  .accordion__buttons {
-    flex-direction: column;
-  }
-
-  .button--cancel {
-    margin-top: 16px;
-  }
-}
