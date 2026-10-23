@@ -10,7 +10,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         Skip to content
       </a>
       <Navigation />
-      <main id="main-content" className="min-w-0 flex-1 wrap-anywhere" tabIndex={-1}>
+      <main id="main-content" className="flex min-w-0 flex-1 flex-col wrap-anywhere" tabIndex={-1}>
         <Container>{children}</Container>
       </main>
     </div>

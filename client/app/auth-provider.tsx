@@ -1,5 +1,6 @@
 'use client';
 
+import { LoaderCircle } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 
@@ -26,7 +27,14 @@ export const AuthContextProvider: FCWithChildren = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {canRenderPage ? children : <p role="status">Loading session…</p>}
+      {canRenderPage ? (
+        children
+      ) : (
+        <div role="status" className="flex min-h-dvh items-center justify-center bg-background">
+          <LoaderCircle aria-hidden="true" className="size-10 animate-spin text-primary motion-reduce:animate-none" />
+          <span className="sr-only">Loading session…</span>
+        </div>
+      )}
     </AuthContext.Provider>
   );
 };

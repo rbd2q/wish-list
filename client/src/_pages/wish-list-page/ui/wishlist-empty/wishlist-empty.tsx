@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const WishlistEmpty = ({ hasFilters, hasWishes, section }: Props) => (
-  <div className="rounded-2xl border border-border bg-surface px-4 py-10 text-center">
+  <div className="grid flex-1 content-center justify-items-center px-4 py-10 text-center">
     {hasFilters ? (
       <Fragment>
         <p className="font-medium">No matching wishes</p>
