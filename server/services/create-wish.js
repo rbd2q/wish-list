@@ -6,7 +6,7 @@ import { uploadImageByUrl } from '../utils/upload-image.js';
 import { validateCollectionIds } from '../validators/collection-validator.js';
 import { lockOwnCollections, validateOwnCollections } from './collections.js';
 
-export async function createWish({ userId, data }) {
+export async function createWish({ userId, data, sourceWishId }) {
   const { title, isHidden, description, url, price, primaryCurrency, imageUrl, tags } = data;
 
   const collectionIds = data.collectionIds === undefined ? [] : validateCollectionIds(data.collectionIds);
@@ -27,6 +27,7 @@ export async function createWish({ userId, data }) {
     imageUrl: storedImageUrl,
     tags,
     userId,
+    sourceWishId,
     collectionIds,
   };
 

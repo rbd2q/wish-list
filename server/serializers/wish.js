@@ -13,6 +13,7 @@ export const serializeWish = (wish, viewerId) => {
     tags: wish.tags,
     date: wish.date,
     userId: wish.userId?.toString(),
+    sourceWishId: wish.sourceWishId?.toString(),
     isCompleted: wish.isCompleted,
   };
 

@@ -16,6 +16,7 @@ export async function copyWish({ userId, wishId }) {
 
   return createWish({
     userId,
+    sourceWishId: source.sourceWishId ?? source._id,
     data: {
       title: source.title,
       description: source.description,

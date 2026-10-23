@@ -12,6 +12,7 @@ const schema = new mongoose.Schema({
   collectionIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Collection' }],
   date: { type: Date, default: Date.now },
   userId: { type: mongoose.Types.ObjectId, ref: 'User' },
+  sourceWishId: { type: mongoose.Schema.Types.ObjectId, ref: 'Wish' },
   isCompleted: { type: Boolean, default: false },
 });
 
