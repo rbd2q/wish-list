@@ -118,6 +118,7 @@ export const AddItemForm: FC<Props> = ({ onBack }) => {
               {images.map((image, index) => (
                 <div key={image} className="relative bg-white w-fit flex-none">
                   <button
+                    type="button"
                     onClick={handleDeleteImage(index)}
                     className="absolute top-2 right-2 text-black border border-black rounded-md p-1 hover:bg-red-600 hover:text-white hover:border-white">
                     <Trash2 size={16} aria-hidden="true" />
