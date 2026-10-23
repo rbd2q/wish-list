@@ -11,7 +11,9 @@ import { createWish } from '../services/create-wish.js';
 import { getPrices } from '../utils/get-prices.js';
 import { InvalidPriceError } from '../utils/normalize-price.js';
 import { parseProduct } from '../utils/parse-product.js';
+import { uploadImageByUrl } from '../utils/upload-image.js';
 import { validateCollectionIds, validateId } from '../validators/collection-validator.js';
+import { validateWishUpdate } from '../validators/wish-validator.js';
 
 const FETCH_OPTIONS = {
   headers: {
@@ -178,14 +180,36 @@ export const parse = async (req, res) => {
   }
 };
 
-export const update = async (req, res) => {
-  const wish = await Wish.findOneAndUpdate(
-    { _id: validateId(req.params.id), userId: req.userId },
-    { $set: { isCompleted: true } },
-    { new: true },
-  );
-  if (!wish) throw new HttpError(404, 'Wish not found');
-  return res.status(201).json(serializeWish(wish, req.userId));
+export const update = async (req, res, next) => {
+  try {
+    const filter = { _id: validateId(req.params.id), userId: req.userId };
+    const body = req.headers['content-length'] === '0' ? undefined : req.body;
+    const data = validateWishUpdate(body);
+    const existingWish = await Wish.findOne(filter);
+    if (!existingWish) throw new HttpError(404, 'Wish not found');
+
+    const { price, ...updates } = data;
+
+    if (Object.hasOwn(data, 'price') || Object.hasOwn(data, 'primaryCurrency')) {
+      const primaryCurrency = data.primaryCurrency ?? existingWish.primaryCurrency;
+      const amount = price ?? existingWish.prices?.[existingWish.primaryCurrency];
+      updates.prices = await getPrices(primaryCurrency, amount);
+      updates.primaryCurrency = primaryCurrency;
+    }
+    if (data.imageUrl && data.imageUrl !== existingWish.imageUrl) {
+      updates.imageUrl = await uploadImageByUrl(data.imageUrl);
+    }
+
+    const wish = await Wish.findOneAndUpdate(filter, { $set: updates }, { new: true, runValidators: true });
+    if (!wish) throw new HttpError(404, 'Wish not found');
+
+    return res.status(201).json(serializeWish(wish, req.userId));
+  } catch (error) {
+    if (error instanceof InvalidPriceError) return res.status(400).json({ message: error.message });
+    if (error instanceof ExchangeRateError) return res.status(503).json({ message: error.message });
+
+    return next(error);
+  }
 };
 
 export const updateCollections = async (req, res) => {

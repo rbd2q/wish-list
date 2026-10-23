@@ -1,3 +1,5 @@
+import { DEFAULT_WISH_PRIORITY } from '../constants/wishes.js';
+
 export const serializeWish = (wish, viewerId) => {
   if (!wish) return null;
 
@@ -15,6 +17,7 @@ export const serializeWish = (wish, viewerId) => {
     userId: wish.userId?.toString(),
     sourceWishId: wish.sourceWishId?.toString(),
     isCompleted: wish.isCompleted,
+    priority: wish.priority ?? DEFAULT_WISH_PRIORITY,
   };
 
   if (viewerId && wish.userId?.toString() === viewerId) {

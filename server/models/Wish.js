@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import { DEFAULT_WISH_PRIORITY, WISH_PRIORITIES } from '../constants/wishes.js';
+
 const schema = new mongoose.Schema({
   title: { type: String, required: true },
   isHidden: { type: Boolean, required: true },
@@ -13,6 +15,7 @@ const schema = new mongoose.Schema({
   date: { type: Date, default: Date.now },
   userId: { type: mongoose.Types.ObjectId, ref: 'User' },
   sourceWishId: { type: mongoose.Schema.Types.ObjectId, ref: 'Wish' },
+  priority: { type: String, enum: WISH_PRIORITIES, default: DEFAULT_WISH_PRIORITY },
   isCompleted: { type: Boolean, default: false },
 });
 
