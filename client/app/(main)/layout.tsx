@@ -1,4 +1,4 @@
-import { Container } from '@/shared/components/container';
+import { Container } from '@/shared/ui/container';
 import { Navigation } from '@/widgets/navigation';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
@@ -6,8 +6,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     <div className="flex min-h-dvh flex-col md:grid md:grid-cols-[248px_minmax(0,1fr)]">
       <a
         className="fixed top-3 left-3 z-20 -translate-y-[calc(100%+16px)] rounded-xl bg-primary px-4 py-3 text-primary-foreground focus:translate-y-0"
-        href="#main-content"
-      >
+        href="#main-content">
         Skip to content
       </a>
       <Navigation />

@@ -1,34 +1,10 @@
-import type { UseQueryResult } from '@tanstack/react-query';
-import { useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import { useState } from 'react';
 
-import { WISHLIST_QUERY_KEYS } from '@/shared/config/query-keys';
-import { useCurrentUser } from '@/shared/hooks/use-get-current-user';
-import { useApi } from '@/shared/hooks/useApi';
-import { CurrencyEnum, WishListItemType } from '@/shared/types';
-import { showErrorToast } from '@/utils';
+import { useCurrentUser } from '@/entities/session';
+import { WishListItemType } from '@/entities/wish';
+import { CurrencyEnum } from '@/shared/lib/currency';
 
 import { WishlistSection, WishlistSort } from './enums';
-
-export const useGetMyWishlist = (): UseQueryResult<WishListItemType[]> => {
-  const api = useApi();
-
-  return useQuery({
-    queryKey: WISHLIST_QUERY_KEYS.currentUser,
-    queryFn: async () => {
-      try {
-        const { data } = await api.get('/api/wish');
-        return data;
-      } catch (error: unknown) {
-        if (error instanceof AxiosError) {
-          showErrorToast(error.response?.data?.message || 'Could not load your wishlist.');
-        }
-        throw error;
-      }
-    },
-  });
-};
 
 const compareWishlistItems = (a: WishListItemType, b: WishListItemType, sort: WishlistSort, currency: CurrencyEnum) => {
   if (sort === WishlistSort.NEWEST) {
@@ -57,6 +33,7 @@ const compareWishlistItems = (a: WishListItemType, b: WishListItemType, sort: Wi
   if (sort === WishlistSort.PRICE_ASC) {
     return aPrice - bPrice;
   }
+
   return bPrice - aPrice;
 };
 
@@ -67,7 +44,8 @@ export const useWishlistFilters = (items: WishListItemType[] | undefined) => {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<WishlistSort>(WishlistSort.NEWEST);
   const user = useCurrentUser();
-  const currency = user.data?.preferredCurrency ?? 'USD';
+
+  const currency = user.data?.preferredCurrency ?? CurrencyEnum.USD;
   const wishes = items ?? [];
   const completedCount = wishes.filter((item) => item.isCompleted).length;
   const normalizedSearch = search.trim().toLocaleLowerCase();
@@ -77,6 +55,7 @@ export const useWishlistFilters = (items: WishListItemType[] | undefined) => {
     if (Boolean(item.isCompleted) !== showCompleted) {
       return false;
     }
+
     return item.title.toLocaleLowerCase().includes(normalizedSearch);
   });
   const displayedItems = filteredItems.sort((a, b) => compareWishlistItems(a, b, sort, currency));

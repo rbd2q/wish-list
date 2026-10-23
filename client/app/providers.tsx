@@ -6,7 +6,9 @@ import 'react-phone-number-input/style.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import { AuthContextProvider } from '@/entities/authorization/auth-context';
+import { ToastContainer } from '@/shared/ui/toast';
+
+import { AuthContextProvider } from './auth-provider';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -20,7 +22,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContextProvider>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        {children}
+        <ToastContainer />
+      </QueryClientProvider>
     </AuthContextProvider>
   );
 }

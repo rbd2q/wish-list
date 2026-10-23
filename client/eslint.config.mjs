@@ -13,7 +13,11 @@ export default defineConfig([
     plugins: { prettier: prettierPlugin, 'simple-import-sort': simpleImportSort },
     rules: {
       'prettier/prettier': 'error',
-      'padding-line-between-statements': ['error', { blankLine: 'always', prev: '*', next: 'if' }],
+      'padding-line-between-statements': [
+        'error',
+        { blankLine: 'always', prev: '*', next: 'if' },
+        { blankLine: 'always', prev: '*', next: 'return' },
+      ],
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
       'react-hooks/rules-of-hooks': 'error',

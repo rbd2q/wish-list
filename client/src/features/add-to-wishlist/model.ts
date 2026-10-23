@@ -1,21 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-import { WISHLIST_QUERY_KEYS } from '@/shared/config/query-keys';
-import { useApi } from '@/shared/hooks/useApi';
-import { WishListItemType } from '@/shared/types';
-import { showErrorToast } from '@/utils';
-
-export const useWishlistMembership = () => {
-  const api = useApi();
-  return useQuery({
-    queryKey: WISHLIST_QUERY_KEYS.currentUser,
-    queryFn: async () => {
-      const { data } = await api.get<WishListItemType[]>('/api/wish');
-      return data;
-    },
-  });
-};
+import { WISHLIST_QUERY_KEYS, WishListItemType } from '@/entities/wish';
+import { useApi } from '@/shared/api';
+import { showErrorToast } from '@/shared/lib/notifications';
 
 export const useAddToMyWishlist = () => {
   const api = useApi();
@@ -24,6 +12,7 @@ export const useAddToMyWishlist = () => {
   return useMutation({
     mutationFn: async (itemId: string) => {
       const { data } = await api.post<WishListItemType>(`/api/wish/${itemId}/copy`);
+
       return data;
     },
     onSuccess: (wish) => {
@@ -31,8 +20,10 @@ export const useAddToMyWishlist = () => {
         if (!items) {
           return [wish];
         }
+
         return [...items, wish];
       });
+
       return queryClient.invalidateQueries({ queryKey: WISHLIST_QUERY_KEYS.currentUser });
     },
     onError: (error) => {
