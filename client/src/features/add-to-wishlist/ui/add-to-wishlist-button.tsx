@@ -1,6 +1,6 @@
 import { Check, Plus } from 'lucide-react';
 
-import { useGetMyWishlist, WishListItemType } from '@/entities/wish';
+import { isWishInWishlist, useGetMyWishlist, type WishListItemType } from '@/entities/wish';
 import { Button } from '@/shared/ui/button';
 
 import { useAddToMyWishlist } from '../model';
@@ -11,9 +11,9 @@ interface Props {
 
 export const AddToWishlistButton = ({ wish }: Props) => {
   const { data: wishlist, isPending: isLoadingWishlist, isError: isWishlistError } = useGetMyWishlist();
-  const { mutate: addWish, isPending: isAdding, isSuccess: isAddedSuccessfully } = useAddToMyWishlist();
+  const { mutate: addWish, isPending: isAdding } = useAddToMyWishlist();
 
-  const isAdded = isAddedSuccessfully || wishlist?.some((item) => item.title === wish.title);
+  const isAdded = isWishInWishlist(wish, wishlist ?? []);
   const isDisabled = isLoadingWishlist || isWishlistError || isAdding || isAdded;
   let label = 'Add to my wishlist';
 

@@ -2,6 +2,7 @@ import { CurrencyEnum, PriceType } from '@/shared/lib/currency';
 
 export interface WishListItemType {
   id: string;
+  sourceWishId?: string;
   title: string;
   isHidden: boolean;
   prices: PriceType;

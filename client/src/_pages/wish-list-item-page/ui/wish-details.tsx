@@ -1,7 +1,7 @@
 import { isAxiosError } from 'axios';
 
 import { useCurrentUser } from '@/entities/session';
-import { PricesBlock, useGetMyWishItem, useGetMyWishlist } from '@/entities/wish';
+import { isWishInWishlist, PricesBlock, useGetMyWishItem, useGetMyWishlist } from '@/entities/wish';
 import { AddToWishlistButton } from '@/features/add-to-wishlist';
 import { RequestError } from '@/shared/ui/request-error';
 
@@ -26,7 +26,7 @@ export const WishDetails = ({ id }: WishDetailsProps) => {
   const errorMessage = isNotFound
     ? 'This wish does not exist or is unavailable.'
     : 'Could not load the wish and your profile.';
-  const isInMyWishList = user?.id === wish?.userId || wishlist?.some((item) => item.title === wish?.title);
+  const isInMyWishList = user?.id === wish?.userId || (!!wish && isWishInWishlist(wish, wishlist ?? []));
 
   const handleRetry = () => {
     void refetchWish();
