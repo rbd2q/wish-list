@@ -1,8 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 
 import { WISHLIST_QUERY_KEYS, WishListItemType } from '@/entities/wish';
-import { useApi } from '@/shared/api';
+import { getApiErrorMessage, useApi } from '@/shared/api';
 import { showErrorToast } from '@/shared/lib/notifications';
 
 export const useAddToMyWishlist = () => {
@@ -27,11 +26,7 @@ export const useAddToMyWishlist = () => {
       return queryClient.invalidateQueries({ queryKey: WISHLIST_QUERY_KEYS.currentUser });
     },
     onError: (error) => {
-      showErrorToast(
-        error instanceof AxiosError
-          ? error.response?.data?.message || 'Could not add the wish. Try again.'
-          : 'Could not add the wish. Try again.',
-      );
+      showErrorToast(getApiErrorMessage(error, 'Could not add the wish. Try again.'));
     },
   });
 };

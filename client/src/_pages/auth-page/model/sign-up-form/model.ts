@@ -1,11 +1,10 @@
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
 
 import { AuthContext } from '@/entities/session';
-import { useApi } from '@/shared/api';
+import { getApiErrorMessage, useApi } from '@/shared/api';
 import { navigationConfig } from '@/shared/config/navigation';
 import { showErrorToast, showSuccessToast } from '@/shared/lib/notifications';
 
@@ -31,8 +30,7 @@ export const useSignUp = (): UseMutationResult<void, unknown, SignUpResource> =>
       }
     },
     onError: (error) => {
-      const message = isAxiosError(error) ? error.response?.data?.message : undefined;
-      showErrorToast(message || 'Unable to create your account. Please try again.');
+      showErrorToast(getApiErrorMessage(error, 'Unable to create your account. Please try again.'));
     },
   });
 };

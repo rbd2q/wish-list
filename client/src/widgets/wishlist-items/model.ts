@@ -1,9 +1,8 @@
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 
 import { WISHLIST_QUERY_KEYS, WishListItemType } from '@/entities/wish';
-import { useApi } from '@/shared/api';
+import { getApiErrorMessage, useApi } from '@/shared/api';
 import { showErrorToast } from '@/shared/lib/notifications';
 
 const useWishMutation = (action: 'delete' | 'complete'): UseMutationResult<WishListItemType, unknown, string> => {
@@ -28,11 +27,7 @@ const useWishMutation = (action: 'delete' | 'complete'): UseMutationResult<WishL
       return queryClient.invalidateQueries({ queryKey: WISHLIST_QUERY_KEYS.currentUser });
     },
     onError: (error) => {
-      showErrorToast(
-        error instanceof AxiosError
-          ? error.response?.data?.message || 'Could not save changes. Try again.'
-          : 'Could not save changes. Try again.',
-      );
+      showErrorToast(getApiErrorMessage(error, 'Could not save changes. Try again.'));
     },
   });
 };

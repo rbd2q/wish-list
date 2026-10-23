@@ -17,11 +17,10 @@ interface Props {
 }
 
 export const AddItemForm: FC<Props> = ({ onBack }) => {
-  const addItem = useAddWish();
-  const parseLink = useParseLink();
+  const { mutateAsync: addWish, isPending: isAdding } = useAddWish();
+  const { mutateAsync: parseLink, isPending: isParsing } = useParseLink();
   const [step, setStep] = useState<AddItemType>(AddItemType.PARSE_ITEM);
   const [images, setImages] = useState<Array<string>>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   const {
     control,
@@ -35,38 +34,41 @@ export const AddItemForm: FC<Props> = ({ onBack }) => {
   const handleParseLink = async () => {
     if (!formFields.link) return;
 
-    setIsLoading(true);
-    const data = await parseLink.mutateAsync(formFields.link);
+    const data = await parseLink(formFields.link);
     setValue('title', data.title);
     setValue('price', data.price);
     setValue('description', data.description);
     setValue('imageUrl', data.imageUrl);
     setValue('url', data.url);
     setImages(data.images ?? []);
-    setIsLoading(false);
     setStep(AddItemType.MANUALLY_ADD_ITEM);
   };
 
   const handleContinue = async (formData: AddItemFormResource) => {
-    if (step === AddItemType.PARSE_ITEM) {
-      if (!formFields.link) {
-        setStep(AddItemType.MANUALLY_ADD_ITEM);
+    try {
+      if (step === AddItemType.PARSE_ITEM) {
+        if (formData.link) {
+          await handleParseLink();
+        } else {
+          setStep(AddItemType.MANUALLY_ADD_ITEM);
+        }
       } else {
-        handleParseLink();
-      }
-    } else {
-      const response = await addItem.mutateAsync(formData);
-
-      if (response) {
+        await addWish(formData);
         onBack();
       }
+    } catch {
+      // Mutation hooks show request errors; preserve the current form and step.
+      return;
     }
   };
+
   const handleDeleteImage = (index: number) => () => {
     const newImages = [...images];
     newImages.splice(index, 1);
     setImages(newImages);
   };
+
+  const isPending = isSubmitting || isAdding || isParsing;
 
   return (
     <form className="w-full max-w-lg" onSubmit={handleSubmit(handleContinue)}>
@@ -134,10 +136,8 @@ export const AddItemForm: FC<Props> = ({ onBack }) => {
 
       <Button
         type="submit"
-        isDisabled={
-          step === AddItemType.MANUALLY_ADD_ITEM ? isSubmitting || !formFields.title || !formFields.price : false
-        }
-        isPending={isSubmitting || isLoading}>
+        isDisabled={isPending || (step === AddItemType.MANUALLY_ADD_ITEM && (!formFields.title || !formFields.price))}
+        isPending={isPending}>
         {step === AddItemType.PARSE_ITEM ? 'Continue' : 'Add item'}
       </Button>
     </form>

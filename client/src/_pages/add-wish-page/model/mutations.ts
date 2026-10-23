@@ -1,9 +1,7 @@
-import type { UseMutationResult } from '@tanstack/react-query';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useMutation, type UseMutationResult, useQueryClient } from '@tanstack/react-query';
 
 import { WISHLIST_QUERY_KEYS, WishListItemType } from '@/entities/wish';
-import { useApi } from '@/shared/api';
+import { getApiErrorMessage, useApi } from '@/shared/api';
 import { showErrorToast } from '@/shared/lib/notifications';
 
 import { AddItemFormResource, ParsedWishListItem } from './types';
@@ -14,39 +12,28 @@ export const useAddWish = (): UseMutationResult<WishListItemType, unknown, AddIt
 
   return useMutation({
     mutationFn: async (formData: AddItemFormResource) => {
-      try {
-        const { data } = await api.post('/api/wish/create', formData);
+      const { data } = await api.post<WishListItemType>('/api/wish/create', formData);
 
-        if (data) {
-          await queryClient.refetchQueries({ queryKey: WISHLIST_QUERY_KEYS.currentUser });
-        }
-
-        return data;
-      } catch (error: unknown) {
-        if (error instanceof AxiosError) {
-          showErrorToast(error.response?.data.message);
-        }
-      }
+      return data;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: WISHLIST_QUERY_KEYS.currentUser }),
+    onError: (error) => {
+      showErrorToast(getApiErrorMessage(error, 'Could not create the wish. Try again.'));
     },
   });
 };
 
-export const useParseLink = (): UseMutationResult<ParsedWishListItem, unknown, string, unknown> => {
+export const useParseLink = (): UseMutationResult<ParsedWishListItem, unknown, string> => {
   const api = useApi();
 
   return useMutation({
     mutationFn: async (url: string) => {
-      if (!url) return;
+      const { data } = await api.post<ParsedWishListItem>('/api/wish/parse', { url });
 
-      try {
-        const { data } = await api.post('/api/wish/parse', { url });
-
-        return data;
-      } catch (error: unknown) {
-        if (error instanceof AxiosError) {
-          showErrorToast(error.response?.data.message);
-        }
-      }
+      return data;
+    },
+    onError: (error) => {
+      showErrorToast(getApiErrorMessage(error, 'Could not parse the product link. Try again.'));
     },
   });
 };

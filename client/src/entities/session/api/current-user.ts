@@ -1,9 +1,6 @@
-import type { UseQueryResult } from '@tanstack/react-query';
-import { useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 import { useApi } from '@/shared/api';
-import { showErrorToast } from '@/shared/lib/notifications';
 
 import { UserResource } from '../model';
 
@@ -12,16 +9,11 @@ export const useCurrentUser = (): UseQueryResult<UserResource> => {
 
   return useQuery({
     queryKey: ['current-user'],
-    queryFn: async () => {
-      try {
-        const { data } = await api.get('/api/users/current');
+    meta: { errorMessage: 'Could not load your profile.' },
+    queryFn: async ({ signal }) => {
+      const { data } = await api.get<UserResource>(`/api/users/current`, { signal });
 
-        return data;
-      } catch (error: unknown) {
-        if (error instanceof AxiosError) {
-          showErrorToast(error.response?.data.message);
-        }
-      }
+      return data;
     },
   });
 };

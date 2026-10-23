@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 
 import { AuthContext, useAuth } from '@/entities/session';
@@ -9,6 +9,7 @@ import { FCWithChildren } from '@/shared/lib/react';
 
 export const AuthContextProvider: FCWithChildren = ({ children }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const { token, login, logout, isReady } = useAuth();
 
   const isAuthenticated = !!token;
@@ -21,5 +22,11 @@ export const AuthContextProvider: FCWithChildren = ({ children }) => {
     }
   }, [isAuthenticated, isReady, router]);
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  const canRenderPage = isReady && (isAuthenticated || pathname === navigationConfig.auth);
+
+  return (
+    <AuthContext.Provider value={value}>
+      {canRenderPage ? children : <p role="status">Loading session…</p>}
+    </AuthContext.Provider>
+  );
 };
