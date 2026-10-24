@@ -8,12 +8,13 @@ import { serializeWish } from '../serializers/wish.js';
 import { requireOwnCollection, setWishCollections } from '../services/collections.js';
 import { copyWish } from '../services/copy-wish.js';
 import { createWish } from '../services/create-wish.js';
+import { uploadWishImage } from '../services/wish-images.js';
+import { updateWish } from '../services/update-wish.js';
 import { getPrices } from '../utils/get-prices.js';
 import { InvalidPriceError } from '../utils/normalize-price.js';
 import { parseProduct } from '../utils/parse-product.js';
-import { uploadImageByUrl } from '../utils/upload-image.js';
 import { validateCollectionIds, validateId } from '../validators/collection-validator.js';
-import { validateWishUpdate } from '../validators/wish-validator.js';
+import { validateWishCreate, validateWishUpdate } from '../validators/wish-validator.js';
 
 const FETCH_OPTIONS = {
   headers: {
@@ -80,7 +81,7 @@ export const create = async (req, res, next) => {
     if (!req.body || typeof req.body !== 'object' || Array.isArray(req.body)) {
       throw new HttpError(400, 'Expected a JSON object');
     }
-    const wish = await createWish({ userId: req.userId, data: req.body });
+    const wish = await createWish({ userId: req.userId, data: validateWishCreate(req.body) });
     return res.status(201).json(serializeWish(wish, req.userId));
   } catch (e) {
     if (e instanceof HttpError) return next(e);
@@ -182,26 +183,9 @@ export const parse = async (req, res) => {
 
 export const update = async (req, res, next) => {
   try {
-    const filter = { _id: validateId(req.params.id), userId: req.userId };
     const body = req.headers['content-length'] === '0' ? undefined : req.body;
     const data = validateWishUpdate(body);
-    const existingWish = await Wish.findOne(filter);
-    if (!existingWish) throw new HttpError(404, 'Wish not found');
-
-    const { price, ...updates } = data;
-
-    if (Object.hasOwn(data, 'price') || Object.hasOwn(data, 'primaryCurrency')) {
-      const primaryCurrency = data.primaryCurrency ?? existingWish.primaryCurrency;
-      const amount = price ?? existingWish.prices?.[existingWish.primaryCurrency];
-      updates.prices = await getPrices(primaryCurrency, amount);
-      updates.primaryCurrency = primaryCurrency;
-    }
-    if (data.imageUrl && data.imageUrl !== existingWish.imageUrl) {
-      updates.imageUrl = await uploadImageByUrl(data.imageUrl);
-    }
-
-    const wish = await Wish.findOneAndUpdate(filter, { $set: updates }, { new: true, runValidators: true });
-    if (!wish) throw new HttpError(404, 'Wish not found');
+    const wish = await updateWish({ userId: req.userId, wishId: req.params.id, data });
 
     return res.status(201).json(serializeWish(wish, req.userId));
   } catch (error) {
@@ -228,4 +212,10 @@ export const deleteItem = async (req, res) => {
   });
   if (!wish) throw new HttpError(404, 'Wish not found');
   return res.status(201).json(serializeWish(wish, req.userId));
+};
+
+export const uploadImage = async (req, res) => {
+  const imageUrl = await uploadWishImage(req.userId, req.body);
+
+  return res.status(201).json({ imageUrl });
 };

@@ -1,18 +1,34 @@
 import { WISH_PRIORITIES } from '../constants/wishes.js';
 import { HttpError } from '../errors/http-error.js';
 import { normalizePrice } from '../utils/normalize-price.js';
+import { validateCollectionIds } from './collection-validator.js';
 
 const UPDATE_FIELDS = [
   'title',
   'description',
   'url',
-  'imageUrl',
+  'imageUrls',
   'price',
   'primaryCurrency',
   'isHidden',
   'isCompleted',
   'priority',
+  'collectionIds',
 ];
+
+const validateHttpUrl = (value, key) => {
+  let parsed;
+  try {
+    parsed = new URL(value);
+  } catch {
+    throw new HttpError(400, key + ' must be an HTTP or HTTPS URL');
+  }
+  if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password || value.length > 4096) {
+    throw new HttpError(400, key + ' must be an HTTP or HTTPS URL without credentials');
+  }
+
+  return value;
+};
 
 export const validateWishPriority = (priority) => {
   if (!WISH_PRIORITIES.includes(priority)) {
@@ -35,7 +51,7 @@ export const validateWishUpdate = (body) => {
 
   const data = {};
 
-  for (const key of ['title', 'description', 'url', 'imageUrl']) {
+  for (const key of ['title', 'description', 'url']) {
     if (!Object.hasOwn(body, key)) continue;
     if (key !== 'title' && body[key] === null) {
       data[key] = '';
@@ -49,17 +65,17 @@ export const validateWishUpdate = (body) => {
   }
   if (data.description?.length > 10000) throw new HttpError(400, 'Description is too long');
 
-  for (const key of ['url', 'imageUrl']) {
-    if (!data[key]) continue;
-    let parsed;
-    try {
-      parsed = new URL(data[key]);
-    } catch {
-      throw new HttpError(400, key + ' must be an HTTP or HTTPS URL');
+  if (data.url) validateHttpUrl(data.url, 'url');
+  if (Object.hasOwn(body, 'imageUrls')) {
+    if (!Array.isArray(body.imageUrls) || body.imageUrls.length > 5) {
+      throw new HttpError(400, 'Use up to 5 image URLs');
     }
-    if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password || data[key].length > 4096) {
-      throw new HttpError(400, key + ' must be an HTTP or HTTPS URL without credentials');
-    }
+    data.imageUrls = body.imageUrls.map((value) => {
+      if (typeof value !== 'string' || !value.trim()) throw new HttpError(400, 'Image URL must be a nonempty string');
+
+      return validateHttpUrl(value.trim(), 'imageUrls');
+    });
+    if (new Set(data.imageUrls).size !== data.imageUrls.length) throw new HttpError(400, 'Image URLs must be unique');
   }
 
   for (const key of ['isHidden', 'isCompleted']) {
@@ -77,5 +93,16 @@ export const validateWishUpdate = (body) => {
     }
   }
 
+  if (Object.hasOwn(body, 'collectionIds')) data.collectionIds = validateCollectionIds(body.collectionIds);
+
   return data;
+};
+
+export const validateWishCreate = (body) => {
+  const data = validateWishUpdate(body);
+  if (!Object.hasOwn(data, 'price')) throw new HttpError(400, 'Price is required');
+  if (!Object.hasOwn(data, 'primaryCurrency')) throw new HttpError(400, 'Price currency is required');
+  if (!data.title) throw new HttpError(400, 'Title is required');
+
+  return { isHidden: false, ...data };
 };

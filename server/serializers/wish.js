@@ -11,7 +11,7 @@ export const serializeWish = (wish, viewerId) => {
     url: wish.url,
     prices: wish.prices,
     primaryCurrency: wish.primaryCurrency,
-    imageUrl: wish.imageUrl,
+    imageUrls: wish.imageUrls ?? [],
     tags: wish.tags,
     date: wish.date,
     userId: wish.userId?.toString(),

@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import express, { Router } from 'express';
 
 import * as WishController from '../controllers/WishController.js';
 import { checkAuth, optionalAuth } from '../utils/check-auth.js';
@@ -10,6 +10,8 @@ router.get('/', checkAuth, WishController.getAllMyWishes);
 
 // api/wish/ideas
 router.get('/ideas', checkAuth, WishController.getFullWishesList);
+
+router.post('/image', checkAuth, express.raw({ type: 'image/*', limit: '10mb' }), WishController.uploadImage);
 
 // api/wish/:id
 router.get('/:id', optionalAuth, WishController.getWishListItem);

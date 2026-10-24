@@ -22,7 +22,7 @@ export async function copyWish({ userId, wishId }) {
       description: source.description,
       isHidden: source.isHidden,
       url: source.url,
-      imageUrl: source.imageUrl,
+      imageUrls: source.imageUrls ?? [],
       tags: source.tags,
       primaryCurrency: source.primaryCurrency,
       price,

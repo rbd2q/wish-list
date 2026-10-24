@@ -9,7 +9,7 @@ const schema = new mongoose.Schema({
   url: { type: String },
   prices: { type: Object, required: true },
   primaryCurrency: { type: String, required: true },
-  imageUrl: { type: String },
+  imageUrls: { type: [String], default: [] },
   tags: [{ type: String }],
   collectionIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Collection' }],
   date: { type: Date, default: Date.now },

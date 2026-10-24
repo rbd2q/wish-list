@@ -13,6 +13,7 @@ import AuthRoutes from './routes/auth-routes.js';
 import CollectionRoutes from './routes/collection-routes.js';
 import UserRoutes from './routes/users-routes.js';
 import WishRoutes from './routes/wish-routes.js';
+import { startPendingWishImageCleanup } from './services/wish-images.js';
 
 const app = express();
 
@@ -33,7 +34,10 @@ async function start() {
       serverSelectionTimeoutMS: 15000,
       connectTimeoutMS: 15000,
     });
-    app.listen(PORT, () => console.log(`APP HAS BEEN STARTED ON PORT ${PORT}`));
+    app.listen(PORT, () => {
+      console.log(`APP HAS BEEN STARTED ON PORT ${PORT}`);
+      startPendingWishImageCleanup();
+    });
   } catch (e) {
     console.log('Server error', e.message);
     process.exit(1);

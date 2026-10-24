@@ -49,20 +49,21 @@ export async function getCollections(userId, id) {
     userId,
     collectionIds: { $in: collections.map((collection) => collection._id) },
   })
-    .select('collectionIds imageUrl')
+    .select('collectionIds imageUrls')
     .sort({ date: -1, _id: -1 })
     .lean();
 
   for (const wish of wishes) {
     const collectionIds = new Set(wish.collectionIds.map((id) => id.toString()));
+    const coverImageUrl = wish.imageUrls?.[0];
 
     for (const collectionId of collectionIds) {
       const collection = collectionsById.get(collectionId);
       if (!collection) continue;
 
       collection.wishCount += 1;
-      if (typeof wish.imageUrl === 'string' && wish.imageUrl.length > 0 && collection.previewImages.length < 3) {
-        collection.previewImages.push(wish.imageUrl);
+      if (coverImageUrl && collection.previewImages.length < 3) {
+        collection.previewImages.push(coverImageUrl);
       }
     }
   }
