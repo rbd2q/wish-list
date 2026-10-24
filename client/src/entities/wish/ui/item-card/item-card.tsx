@@ -7,13 +7,14 @@ import { CurrencyEnum } from '@/shared/lib/currency';
 
 import { WishListItemType } from '../../model/types';
 
-interface Props {
+interface ItemCardProps {
   item: WishListItemType;
   preferredCurrency?: CurrencyEnum;
   action?: ReactNode;
 }
 
-export const ItemCard: FC<Props> = ({ item, preferredCurrency = CurrencyEnum.USD, action }) => {
+export const ItemCard: FC<ItemCardProps> = ({ item, preferredCurrency = CurrencyEnum.USD, action }) => {
+  const coverImageUrl = item.imageUrls[0];
   const price = item.prices?.[preferredCurrency];
 
   return (
@@ -26,10 +27,10 @@ export const ItemCard: FC<Props> = ({ item, preferredCurrency = CurrencyEnum.USD
           <Gift size={32} aria-hidden="true" />
           <span className="text-sm">Image unavailable</span>
         </div>
-        {item.imageUrl ? (
+        {coverImageUrl ? (
           <img
-            key={item.imageUrl}
-            src={item.imageUrl}
+            key={coverImageUrl}
+            src={coverImageUrl}
             alt=""
             loading="lazy"
             className="absolute inset-0 h-full max-h-60 w-full object-contain bg-surface-secondary p-3"

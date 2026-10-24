@@ -1,11 +1,13 @@
-import { Check, ExternalLink, Trash2 } from 'lucide-react';
+import { Check, ExternalLink, Pencil, RotateCcw, Trash2 } from 'lucide-react';
 import { Fragment } from 'react';
 
 import { WishListItemType } from '@/entities/wish';
+import { navigationConfig } from '@/shared/config/navigation';
 import { Button } from '@/shared/ui/button';
 import { ButtonLink } from '@/shared/ui/button-link';
 
-import { useDeleteItem, useMarkAsCompleted } from '../../model';
+import { getStoreUrl } from '../../lib';
+import { useDeleteItem, useMarkAsCompleted, useRestoreWish } from '../../model';
 
 interface Props {
   item: WishListItemType;
@@ -14,12 +16,22 @@ interface Props {
 export const WishActions = ({ item }: Props) => {
   const { mutate: deleteItem, isPending: isDeleting } = useDeleteItem();
   const { mutate: completeItem, isPending: isCompleting } = useMarkAsCompleted();
+  const { mutate: restoreWish, isPending: isRestoring } = useRestoreWish();
 
-  const isPending = isDeleting || isCompleting;
-  const storeUrl = item.url && /^https?:\/\//i.test(item.url) ? item.url : undefined;
+  const isPending = isRestoring || isDeleting || isCompleting;
+  const storeUrl = getStoreUrl(item.url);
 
-  const handleDelete = () => deleteItem(item.id);
-  const handleComplete = () => completeItem(item.id);
+  const handleRestore = () => {
+    restoreWish(item.id);
+  };
+
+  const handleDelete = () => {
+    deleteItem(item.id);
+  };
+
+  const handleComplete = () => {
+    completeItem(item.id);
+  };
 
   return (
     <Fragment>
@@ -34,6 +46,9 @@ export const WishActions = ({ item }: Props) => {
         </ButtonLink>
       ) : null}
       <div className="flex shrink-0 items-center gap-2">
+        <ButtonLink href={navigationConfig.editWish(item.id)} aria-label={`Edit ${item.title}`}>
+          <Pencil size={16} aria-hidden="true" />
+        </ButtonLink>
         {!item.isCompleted ? (
           <Button
             size="sm"
@@ -45,10 +60,15 @@ export const WishActions = ({ item }: Props) => {
             <Check size={18} aria-hidden="true" />
           </Button>
         ) : (
-          <span className="flex h-10 w-12 items-center justify-center text-primary" title="Completed">
-            <Check size={18} aria-hidden="true" />
-            <span className="sr-only">Completed</span>
-          </span>
+          <Button
+            size="sm"
+            variant="secondary"
+            isIconOnly
+            isDisabled={isPending}
+            aria-label={`Restore ${item.title}`}
+            onPress={handleRestore}>
+            <RotateCcw size={18} aria-hidden="true" />
+          </Button>
         )}
         <Button
           size="sm"

@@ -1,7 +1,10 @@
-import { ArrowLeft, Trash2 } from 'lucide-react';
-import { FC, Fragment, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { noop } from 'lodash';
+import { useState } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
+import { InferType } from 'yup';
 
+import { WishListItemType, WishPriority } from '@/entities/wish';
 import { CURRENCY_OPTIONS, CurrencyEnum } from '@/shared/lib/currency';
 import { Button } from '@/shared/ui/button';
 import { FormCheckbox } from '@/shared/ui/form-checkbox';
@@ -10,137 +13,129 @@ import { FormInput } from '@/shared/ui/form-input';
 import { FormSelect } from '@/shared/ui/form-select';
 import { FormTextarea } from '@/shared/ui/form-textarea';
 
-import { type AddItemFormResource, AddItemType, useAddWish, useParseLink } from '../../model';
+import { useParseLink, useSaveWish } from '../../api';
+import { applyParsedWish, wishSchema } from '../../model';
+import { CollectionsField } from './collections-field';
+import { PhotoEditor } from './photo-editor';
+import { PriorityField } from './priority-field';
+import { WishPreview } from './wish-preview';
 
-interface Props {
+type Values = InferType<typeof wishSchema>;
+
+interface AddItemFormProps {
   onBack: () => void;
+  wish?: WishListItemType;
+  collectionId?: string;
 }
 
-export const AddItemForm: FC<Props> = ({ onBack }) => {
-  const { mutateAsync: addWish, isPending: isAdding } = useAddWish();
+export const AddItemForm = ({ onBack, wish, collectionId }: AddItemFormProps) => {
+  const { mutateAsync: saveWish, isPending: isSaving } = useSaveWish(wish?.id);
   const { mutateAsync: parseLink, isPending: isParsing } = useParseLink();
-  const [step, setStep] = useState<AddItemType>(AddItemType.PARSE_ITEM);
-  const [images, setImages] = useState<Array<string>>([]);
 
+  const [images, setImages] = useState<string[]>([]);
   const {
     control,
     handleSubmit,
     setValue,
+    getValues,
+    getFieldState,
+    trigger,
     formState: { isSubmitting },
-    watch,
-  } = useForm<AddItemFormResource>({ defaultValues: { primaryCurrency: CurrencyEnum.BYN, isHidden: false } });
-  const formFields = watch();
+  } = useForm<Values>({
+    resolver: yupResolver(wishSchema),
+    defaultValues: {
+      priority: wish?.priority ?? WishPriority.MEDIUM,
+      title: wish?.title ?? '',
+      price: wish ? String(wish.prices[wish.primaryCurrency]) : '',
+      primaryCurrency: wish?.primaryCurrency ?? CurrencyEnum.BYN,
+      description: wish?.description ?? '',
+      url: wish?.url ?? '',
+      photos: (wish?.imageUrls ?? []).map((src) => ({ id: src, src })),
+      isHidden: wish?.isHidden ?? false,
+      collectionIds: wish?.collectionIds ?? (collectionId ? [collectionId] : []),
+    },
+  });
 
-  const handleParseLink = async () => {
-    if (!formFields.link) return;
+  const { title, price, primaryCurrency, photos, description, priority } = useWatch({ control });
+  const preview = photos?.[0]?.src;
+  const isPending = isSubmitting || isSaving || isParsing;
 
-    const data = await parseLink(formFields.link);
-    setValue('title', data.title);
-    setValue('price', data.price);
-    setValue('description', data.description);
-    setValue('imageUrl', data.imageUrl);
-    setValue('url', data.url);
-    setImages(data.images ?? []);
-    setStep(AddItemType.MANUALLY_ADD_ITEM);
-  };
-
-  const handleContinue = async (formData: AddItemFormResource) => {
+  const handleSave = async (values: Values) => {
     try {
-      if (step === AddItemType.PARSE_ITEM) {
-        if (formData.link) {
-          await handleParseLink();
-        } else {
-          setStep(AddItemType.MANUALLY_ADD_ITEM);
-        }
-      } else {
-        await addWish(formData);
-        onBack();
-      }
+      await saveWish(values);
+      onBack();
     } catch {
-      // Mutation hooks show request errors; preserve the current form and step.
-      return;
+      noop();
     }
   };
 
-  const handleDeleteImage = (index: number) => () => {
-    const newImages = [...images];
-    newImages.splice(index, 1);
-    setImages(newImages);
+  const handleParse = async () => {
+    if (!(await trigger('url')) || !getValues('url')) return;
+
+    const before = getValues();
+
+    try {
+      const data = await parseLink(before.url);
+
+      if (getValues('url') !== before.url) return;
+
+      setImages(applyParsedWish({ getValues, getFieldState, setValue }, before, data));
+    } catch {
+      noop();
+    }
   };
 
-  const isPending = isSubmitting || isAdding || isParsing;
-
   return (
-    <form className="w-full max-w-lg" onSubmit={handleSubmit(handleContinue)}>
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-3xl font-semibold">Add item</h1>
-        <button type="button" onClick={onBack} className="flex gap-2">
-          <ArrowLeft size={24} aria-hidden="true" />
-          Back
-        </button>
-      </div>
-      {step === AddItemType.PARSE_ITEM ? (
-        <div className="flex flex-col gap-4">
-          <div className="px-4 py-2 bg-[#fff3e0] rounded-lg">
-            You can add an item by entering the link to the product page
-          </div>
-          <FormField htmlFor="link" label="Link">
-            <FormInput id="link" name="link" type="url" placeholder="https://..." control={control} />
+    <div className="grid w-full gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+      <form
+        onSubmit={handleSubmit(handleSave)}
+        noValidate
+        className="min-w-0 rounded-2xl border border-border bg-surface p-5 md:p-8">
+        <div className="mb-6 flex items-center justify-between gap-4">
+          <h1 className="text-2xl font-semibold">{wish ? 'Edit wish' : 'Add wish'}</h1>
+          <Button type="button" variant="secondary" onPress={onBack}>
+            Cancel
+          </Button>
+        </div>
+        <FormField htmlFor="url" label="Product link">
+          <FormInput id="url" name="url" placeholder="https://…" control={control} />
+        </FormField>
+        <Button type="button" variant="secondary" onPress={handleParse} isDisabled={isPending}>
+          Autofill from link
+        </Button>
+        <p className="my-4 text-sm text-muted-foreground">
+          Enter details manually or autofill from a product link. Your manual changes are kept.
+        </p>
+        <FormField htmlFor="title" label="Title" required>
+          <FormInput id="title" name="title" control={control} />
+        </FormField>
+        <FormField htmlFor="description" label="Description">
+          <FormTextarea id="description" name="description" control={control} />
+        </FormField>
+        <div className="grid grid-cols-2 gap-3">
+          <FormField htmlFor="price" label="Price" required>
+            <FormInput id="price" name="price" inputMode="decimal" control={control} />
+          </FormField>
+          <FormField htmlFor="currency" label="Currency" required>
+            <FormSelect id="currency" name="primaryCurrency" control={control} options={CURRENCY_OPTIONS} />
           </FormField>
         </div>
-      ) : (
-        <Fragment>
-          <FormField htmlFor="title" label="Title" required>
-            <FormInput id="title" name="title" placeholder="Title" control={control} />
-          </FormField>
-
-          <FormField htmlFor="description" label="Description">
-            <FormTextarea id="description" name="description" placeholder="Description" control={control} />
-          </FormField>
-
-          <FormField htmlFor="url" label="Link">
-            <FormInput id="url" name="url" type="url" placeholder="Link" control={control} />
-          </FormField>
-
-          <FormField htmlFor="price" label="Price" required>
-            <div className="flex gap-2">
-              <FormSelect name="primaryCurrency" control={control} options={CURRENCY_OPTIONS} />
-              <FormInput id="price" name="price" placeholder="0.00" control={control} />
-            </div>
-          </FormField>
-
-          <FormField htmlFor="imageUrl" label="Image link">
-            <FormInput id="imageUrl" name="imageUrl" type="url" placeholder="Image link" control={control} />
-          </FormField>
-
-          {images.length ? (
-            <div className="flex w-full overflow-scroll gap-2 mb-4">
-              {images.map((image, index) => (
-                <div key={image} className="relative bg-white w-fit flex-none">
-                  <button
-                    type="button"
-                    onClick={handleDeleteImage(index)}
-                    className="absolute top-2 right-2 text-black border border-black rounded-md p-1 hover:bg-red-600 hover:text-white hover:border-white">
-                    <Trash2 size={16} aria-hidden="true" />
-                  </button>
-                  <img src={image} className="w-full h-full" alt="Item" />
-                </div>
-              ))}
-            </div>
-          ) : null}
-
-          <FormField htmlFor="hidden_from_others">
-            <FormCheckbox id="hidden_from_others" name="isHidden" control={control} label="Hide from others" />
-          </FormField>
-        </Fragment>
-      )}
-
-      <Button
-        type="submit"
-        isDisabled={isPending || (step === AddItemType.MANUALLY_ADD_ITEM && (!formFields.title || !formFields.price))}
-        isPending={isPending}>
-        {step === AddItemType.PARSE_ITEM ? 'Continue' : 'Add item'}
-      </Button>
-    </form>
+        <PhotoEditor control={control} candidates={images} isDisabled={isPending} />
+        <PriorityField control={control} />
+        <CollectionsField control={control} />
+        <FormCheckbox name="isHidden" control={control} label="Hide from others" />
+        <Button className="mt-6" type="submit" isDisabled={isPending} isPending={isPending}>
+          {isSaving ? 'Uploading photos and saving…' : wish ? 'Save changes' : 'Add wish'}
+        </Button>
+      </form>
+      <WishPreview
+        imageUrl={preview}
+        title={title}
+        price={price}
+        currency={primaryCurrency}
+        priority={priority}
+        description={description}
+      />
+    </div>
   );
 };

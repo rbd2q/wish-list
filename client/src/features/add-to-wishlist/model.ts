@@ -16,11 +16,7 @@ export const useAddToMyWishlist = () => {
     },
     onSuccess: (wish) => {
       queryClient.setQueryData<WishListItemType[]>(WISHLIST_QUERY_KEYS.currentUser, (items) => {
-        if (!items) {
-          return [wish];
-        }
-
-        return [...items, wish];
+        return [...(items || []), wish];
       });
 
       return queryClient.invalidateQueries({ queryKey: WISHLIST_QUERY_KEYS.currentUser });

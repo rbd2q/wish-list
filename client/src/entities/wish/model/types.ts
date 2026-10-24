@@ -1,9 +1,13 @@
 import { CurrencyEnum, PriceType } from '@/shared/lib/currency';
 
+import type { WishPriority } from './wish-priority';
+
 export interface WishListItemType {
   id: string;
+  collectionIds?: string[];
   sourceWishId?: string;
   title: string;
+  priority: WishPriority;
   isHidden: boolean;
   prices: PriceType;
   primaryCurrency: CurrencyEnum;
@@ -12,6 +16,6 @@ export interface WishListItemType {
   date: Date;
   description?: string;
   url?: string;
-  imageUrl?: string;
+  imageUrls: string[];
   tags?: string[];
 }

@@ -1,23 +1,22 @@
+import type { WishPriority } from '@/entities/wish';
 import { CurrencyEnum } from '@/shared/lib/currency';
 
+export interface WishPhoto {
+  id: string;
+  src: string;
+  file?: File;
+}
+
 export interface AddItemFormResource {
-  link?: string;
+  collectionIds?: string[];
+  photos: WishPhoto[];
   title: string;
+  priority: WishPriority;
   isHidden: boolean;
   description?: string;
   url?: string;
   price?: string;
   primaryCurrency?: CurrencyEnum;
-  imageUrl?: string;
   tags?: string[];
   isCompleted?: boolean;
-}
-
-export interface ParsedWishListItem {
-  title: string;
-  price: string;
-  description?: string;
-  url?: string;
-  imageUrl?: string;
-  images?: Array<string>;
 }
