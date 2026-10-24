@@ -3,7 +3,7 @@ import { Check, Plus } from 'lucide-react';
 import { isWishInWishlist, useGetMyWishlist, type WishListItemType } from '@/entities/wish';
 import { Button } from '@/shared/ui/button';
 
-import { useAddToMyWishlist } from '../model';
+import { useAddToMyWishlist } from '../api';
 
 interface Props {
   wish: WishListItemType;

@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { Brand } from '@/shared/ui/brand';
 
-import { AUTH_MUTATION_KEYS } from '../../model';
+import { AUTH_MUTATION_KEYS } from '../../api';
 import { AuthIntro } from '../auth-intro';
 import { SignInForm } from '../sign-in-form';
 import { SignUpForm } from '../sign-up-form';

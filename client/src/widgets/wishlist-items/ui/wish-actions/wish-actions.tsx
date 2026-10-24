@@ -6,8 +6,8 @@ import { navigationConfig } from '@/shared/config/navigation';
 import { Button } from '@/shared/ui/button';
 import { ButtonLink } from '@/shared/ui/button-link';
 
+import { useDeleteItem, useMarkAsCompleted, useRestoreWish } from '../../api';
 import { getStoreUrl } from '../../lib';
-import { useDeleteItem, useMarkAsCompleted, useRestoreWish } from '../../model';
 
 interface Props {
   item: WishListItemType;

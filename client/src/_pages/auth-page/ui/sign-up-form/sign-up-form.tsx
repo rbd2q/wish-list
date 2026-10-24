@@ -11,7 +11,8 @@ import { FormPasswordInput } from '@/shared/ui/form-password-input';
 import { FormPhoneInput } from '@/shared/ui/form-phone-input';
 import { FormSelect } from '@/shared/ui/form-select';
 
-import { type SignUpResource, signUpSchema, useSignUp } from '../../model';
+import { useSignUp } from '../../api';
+import { type SignUpResource, signUpSchema } from '../../model';
 
 export const SignUpForm = () => {
   const { mutate: signUp, isPending: isSigningUp } = useSignUp();

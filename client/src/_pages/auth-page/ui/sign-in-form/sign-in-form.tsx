@@ -7,7 +7,8 @@ import { FormField } from '@/shared/ui/form-field';
 import { FormInput } from '@/shared/ui/form-input';
 import { FormPasswordInput } from '@/shared/ui/form-password-input';
 
-import { type SignInResource, signInSchema, useSignIn } from '../../model';
+import { useSignIn } from '../../api';
+import { type SignInResource, signInSchema } from '../../model';
 
 export const SignInForm = () => {
   const { mutate: signIn, isPending: isSigningIn } = useSignIn();

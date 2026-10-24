@@ -8,8 +8,26 @@ import { getApiErrorMessage, useApi } from '@/shared/api';
 import { navigationConfig } from '@/shared/config/navigation';
 import { showErrorToast, showSuccessToast } from '@/shared/lib/notifications';
 
-import { AUTH_MUTATION_KEYS } from '../mutation-keys';
-import { SignUpResource } from '../types';
+import type { SignInResource, SignUpResource } from '../model';
+import { AUTH_MUTATION_KEYS } from './mutation-keys';
+
+export const useSignIn = (): UseMutationResult<void, unknown, SignInResource> => {
+  const { login } = useContext(AuthContext);
+  const router = useRouter();
+  const api = useApi();
+
+  return useMutation({
+    mutationKey: AUTH_MUTATION_KEYS.signIn,
+    mutationFn: async (formData: SignInResource) => {
+      const { data } = await api.post('/api/auth/login', formData);
+      login(data.token);
+      router.replace(navigationConfig.home);
+    },
+    onError: (error) => {
+      showErrorToast(getApiErrorMessage(error, 'Unable to sign in. Please try again.'));
+    },
+  });
+};
 
 export const useSignUp = (): UseMutationResult<void, unknown, SignUpResource> => {
   const { login } = useContext(AuthContext);
