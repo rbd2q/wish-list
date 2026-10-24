@@ -1,23 +1,22 @@
-import { FC } from 'react';
+import { CurrencyEnum, formatPrice, type PriceType } from '@/shared/lib/currency';
 
-import { CURRENCY_SIGNS, CurrencyEnum, PriceType } from '@/shared/lib/currency';
-
-interface Props {
+interface PricesBlockProps {
   prices: PriceType;
   preferredCurrency: CurrencyEnum;
 }
 
-export const PricesBlock: FC<Props> = ({ prices, preferredCurrency }) => {
-  const primaryPrice = `${prices[preferredCurrency]}${CURRENCY_SIGNS[preferredCurrency]}`;
+export const PricesBlock = ({ prices, preferredCurrency }: PricesBlockProps) => {
+  const primaryPrice = formatPrice(prices?.[preferredCurrency], preferredCurrency) ?? 'Price not specified';
   const secondaryPrices = Object.values(CurrencyEnum)
     .filter((currency) => currency !== preferredCurrency)
-    .map((currency) => `${prices[currency]}${CURRENCY_SIGNS[currency]}`)
+    .map((currency) => formatPrice(prices?.[currency], currency))
+    .filter((price) => price !== undefined)
     .join(' / ');
 
   return (
-    <div className="mt-8">
-      <span className="font-semibold text-3xl">{primaryPrice}</span>
-      <span className="flex flex-col text-md text-[#6c757d]">{`≈ ${secondaryPrices}`}</span>
+    <div className="mt-3 space-y-1 wrap-anywhere">
+      <p className="text-3xl font-semibold">{primaryPrice}</p>
+      {secondaryPrices ? <p className="text-sm text-muted-foreground">≈ {secondaryPrices}</p> : null}
     </div>
   );
 };

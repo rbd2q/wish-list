@@ -1,79 +1,54 @@
-import { isAxiosError } from 'axios';
-import Link from 'next/link';
+import { ShoppingBag } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
-import { useCurrentUser } from '@/entities/session';
-import { isWishInWishlist, PricesBlock, useGetMyWishItem, useGetMyWishlist } from '@/entities/wish';
+import { PricesBlock, type WishListItemType } from '@/entities/wish';
 import { AddToWishlistButton } from '@/features/add-to-wishlist';
+import { WishOwnerActions } from '@/features/manage-wish';
 import { navigationConfig } from '@/shared/config/navigation';
-import { RequestError } from '@/shared/ui/request-error';
+import type { CurrencyEnum } from '@/shared/lib/currency';
+import { getStoreUrl } from '@/shared/lib/url';
+import { ButtonLink } from '@/shared/ui/button-link';
 
+import { WishAddedDate } from './wish-added-date';
+import { WishDescription } from './wish-description';
 import { WishGallery } from './wish-gallery';
+import { WishSource } from './wish-source';
 
 interface WishDetailsProps {
-  id: string;
+  wish: WishListItemType;
+  preferredCurrency: CurrencyEnum;
+  isOwner: boolean;
 }
 
-export const WishDetails = ({ id }: WishDetailsProps) => {
-  const { data: user, isLoading: isLoadingUser, isError: isUserError, refetch: refetchUser } = useCurrentUser();
-  const {
-    data: wish,
-    isLoading: isLoadingWish,
-    isError: isWishError,
-    error: wishError,
-    refetch: refetchWish,
-  } = useGetMyWishItem(id);
-  const { data: wishlist } = useGetMyWishlist();
+export const WishDetails = ({ wish, preferredCurrency, isOwner }: WishDetailsProps) => {
+  const { replace } = useRouter();
 
-  const isLoading = isLoadingUser || isLoadingWish;
-  const isError = isUserError || isWishError;
-  const isNotFound = isAxiosError(wishError) && wishError.response?.status === 404;
-  const errorMessage = isNotFound
-    ? 'This wish does not exist or is unavailable.'
-    : 'Could not load the wish and your profile.';
-  const isInMyWishList = user?.id === wish?.userId || (!!wish && isWishInWishlist(wish, wishlist ?? []));
+  const sourceUrl = getStoreUrl(wish.url);
 
-  const handleRetry = () => {
-    refetchWish();
-    refetchUser();
-  };
-
-  if (isLoading) {
-    return <p role="status">Loading wish…</p>;
-  }
-
-  if (isError) {
-    return <RequestError message={errorMessage} onRetry={handleRetry} />;
-  }
-
-  if (!wish || !user) {
-    return <p>Wish unavailable.</p>;
-  }
+  const handleDeleted = () => replace(navigationConfig.wishlist);
 
   return (
-    <div className="grid w-full grid-cols-1 gap-6 rounded-2xl border border-border bg-surface p-5 md:grid-cols-2 md:gap-8 md:p-8">
-      <div className="min-w-0">
-        <WishGallery key={wish.id} images={wish.imageUrls} title={wish.title} />
-        <PricesBlock prices={wish.prices} preferredCurrency={user.preferredCurrency} />
-        <a
-          target="_blank"
-          className="block text-center w-full bg-amber-300 rounded-md px-6 py-2 mt-8 mb-4"
-          href={wish.url}
-          rel="noreferrer">
-          View source
-        </a>
-        {!isInMyWishList ? <AddToWishlistButton wish={wish} /> : null}
+    <article className="grid min-w-0 grid-cols-1 items-start gap-6 md:grid-cols-2 md:gap-8 lg:gap-10">
+      <WishGallery key={wish.id} images={wish.imageUrls} title={wish.title} />
+      <div className="min-w-0 space-y-6">
+        <div>
+          <h1 className="text-2xl font-semibold leading-tight wrap-anywhere lg:text-3xl">{wish.title}</h1>
+          <PricesBlock prices={wish.prices} preferredCurrency={preferredCurrency} />
+        </div>
+        <WishDescription description={wish.description} />
+        <WishSource sourceUrl={sourceUrl} />
+        <WishAddedDate date={wish.date} />
+        <div className="space-y-3">
+          {sourceUrl ? (
+            <ButtonLink href={sourceUrl} target="_blank" rel="noopener noreferrer" className="w-full">
+              <ShoppingBag size={18} aria-hidden="true" />
+              Visit store
+              <span className="sr-only"> (opens in a new tab)</span>
+            </ButtonLink>
+          ) : null}
+          {isOwner ? <WishOwnerActions wish={wish} onDeleted={handleDeleted} /> : <AddToWishlistButton wish={wish} />}
+        </div>
       </div>
-
-      <div className="min-w-0">
-        {wish.userId === user.id ? (
-          <Link href={navigationConfig.editWish(wish.id)} className="mb-4 inline-block underline">
-            Edit wish
-          </Link>
-        ) : null}
-        <h1 className="text-2xl font-semibold mb-4">{wish.title}</h1>
-        {wish.description ? <p>{wish.description}</p> : null}
-        <div className="text-[#6c757d] mt-4">Added: {new Date(wish.date).toLocaleDateString()}</div>
-      </div>
-    </div>
+    </article>
   );
 };

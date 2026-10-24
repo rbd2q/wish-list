@@ -1,5 +1,6 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import type { MouseEvent } from 'react';
+import clsx from 'clsx';
+import { ChevronLeft, ChevronRight, ImageOff } from 'lucide-react';
+import type { MouseEvent, SyntheticEvent } from 'react';
 
 interface WishGalleryControlsProps {
   images: string[];
@@ -20,6 +21,10 @@ export const WishGalleryControls = ({
     onSelect(Number(event.currentTarget.value));
   };
 
+  const handleImageError = (event: SyntheticEvent<HTMLImageElement>) => {
+    event.currentTarget.style.visibility = 'hidden';
+  };
+
   return (
     <div className="mt-3">
       <div className="flex flex-wrap gap-2">
@@ -32,8 +37,17 @@ export const WishGalleryControls = ({
               onClick={handleSelect}
               aria-label={`Show photo ${index + 1}`}
               aria-pressed={index === activeIndex}
-              className={`rounded-lg border-2 p-1 ${index === activeIndex ? 'border-primary' : 'border-transparent'}`}>
-              <img src={src} alt="" className="h-12 w-12 object-contain" />
+              className={clsx('relative rounded-lg border-2 p-1', {
+                'border-primary': index === activeIndex,
+                'border-transparent': index !== activeIndex,
+              })}>
+              <ImageOff size={20} className="absolute inset-0 m-auto text-muted-foreground" aria-hidden="true" />
+              <img
+                src={src}
+                alt=""
+                onError={handleImageError}
+                className="relative h-12 w-12 bg-surface object-contain"
+              />
             </button>
           );
         })}
@@ -43,7 +57,7 @@ export const WishGalleryControls = ({
           type="button"
           onClick={onPrevious}
           aria-label="Previous photo"
-          className="rounded-lg border border-border px-3 py-2">
+          className="min-h-11 min-w-11 rounded-lg border border-border p-3">
           <ChevronLeft size={18} aria-hidden="true" />
         </button>
         <span role="status" className="text-sm">
@@ -53,7 +67,7 @@ export const WishGalleryControls = ({
           type="button"
           onClick={onNext}
           aria-label="Next photo"
-          className="rounded-lg border border-border px-3 py-2">
+          className="min-h-11 min-w-11 rounded-lg border border-border p-3">
           <ChevronRight size={18} aria-hidden="true" />
         </button>
       </div>

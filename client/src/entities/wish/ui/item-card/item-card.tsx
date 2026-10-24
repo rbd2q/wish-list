@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { FC, ReactNode } from 'react';
 
 import { navigationConfig } from '@/shared/config/navigation';
-import { CurrencyEnum } from '@/shared/lib/currency';
+import { CurrencyEnum, formatPrice } from '@/shared/lib/currency';
 
 import { WishListItemType } from '../../model/types';
 
@@ -15,7 +15,7 @@ interface ItemCardProps {
 
 export const ItemCard: FC<ItemCardProps> = ({ item, preferredCurrency = CurrencyEnum.USD, action }) => {
   const coverImageUrl = item.imageUrls[0];
-  const price = item.prices?.[preferredCurrency];
+  const price = formatPrice(item.prices?.[preferredCurrency], preferredCurrency) ?? 'Price not specified';
 
   return (
     <article className="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-surface">
@@ -46,11 +46,7 @@ export const ItemCard: FC<ItemCardProps> = ({ item, preferredCurrency = Currency
             {item.title}
           </Link>
         </h2>
-        <p className="mt-auto text-lg font-semibold">
-          {Number.isFinite(price)
-            ? new Intl.NumberFormat('en-US', { style: 'currency', currency: preferredCurrency }).format(price)
-            : 'Price not specified'}
-        </p>
+        <p className="mt-auto text-lg font-semibold">{price}</p>
         <div className="flex items-center gap-2">{action}</div>
       </div>
     </article>
