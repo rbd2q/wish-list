@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import { Heart, Lightbulb, LogOut, Plus, UserRound } from 'lucide-react';
+import { Heart, LayoutGrid, Lightbulb, LogOut, Plus, UserRound } from 'lucide-react';
 
 import { navigationConfig } from '@/shared/config/navigation';
 import { ButtonLink } from '@/shared/ui/button-link';
@@ -10,6 +10,7 @@ import { NavigationMenuItem } from '../navigation-menu-item';
 
 const navigationItems = [
   { href: navigationConfig.wishlist, label: 'My Wishlist', icon: Heart },
+  { href: navigationConfig.collections, label: 'Collections', icon: LayoutGrid },
   { href: navigationConfig.ideas, label: 'Ideas', icon: Lightbulb },
   { href: navigationConfig.profile, label: 'Profile', icon: UserRound },
 ];

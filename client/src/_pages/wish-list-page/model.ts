@@ -42,6 +42,7 @@ const compareWishlistItems = (a: WishListItemType, b: WishListItemType, sort: Wi
 export const useWishlistFilters = (items: WishListItemType[] | undefined) => {
   const [section, setSection] = useState<WishlistSection>(WishlistSection.ACTIVE);
   const [search, setSearch] = useState('');
+  const [collectionIds, setCollectionIds] = useState<string[]>([]);
   const [sort, setSort] = useState<WishlistSort>(WishlistSort.NEWEST);
   const user = useCurrentUser();
 
@@ -49,10 +50,15 @@ export const useWishlistFilters = (items: WishListItemType[] | undefined) => {
   const wishes = items ?? [];
   const completedCount = wishes.filter((item) => item.isCompleted).length;
   const normalizedSearch = search.trim().toLocaleLowerCase();
+  const hasFilters = !!normalizedSearch || !!collectionIds.length;
   const showCompleted = section === WishlistSection.COMPLETED;
 
   const filteredItems = wishes.filter((item) => {
     if (Boolean(item.isCompleted) !== showCompleted) {
+      return false;
+    }
+
+    if (collectionIds.length && !item.collectionIds?.some((id) => collectionIds.includes(id))) {
       return false;
     }
 
@@ -65,6 +71,9 @@ export const useWishlistFilters = (items: WishListItemType[] | undefined) => {
     setSection,
     search,
     setSearch,
+    collectionIds,
+    setCollectionIds,
+    hasFilters,
     sort,
     setSort,
     currency,

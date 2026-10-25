@@ -1,0 +1,1 @@
+export { collectionSchema } from './schema';

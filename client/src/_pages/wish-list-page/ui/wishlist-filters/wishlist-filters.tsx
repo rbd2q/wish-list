@@ -1,26 +1,36 @@
 import { Search } from 'lucide-react';
-import { Fragment } from 'react';
 
 import { CurrencyEnum } from '@/shared/lib/currency';
 import { Input } from '@/shared/ui/input';
 import { Select, type SelectOption } from '@/shared/ui/select';
 
 import { WishlistSort } from '../../enums';
+import { WishlistCollectionFilter } from './wishlist-collection-filter';
 
 const dateSortOptions: SelectOption[] = [
   { value: WishlistSort.NEWEST, name: 'Most recent' },
   { value: WishlistSort.OLDEST, name: 'Oldest first' },
 ];
 
-interface Props {
+interface WishlistFiltersProps {
   search: string;
   onSearchChange: (value: string) => void;
   sort: WishlistSort;
   onSortChange: (value: WishlistSort) => void;
   currency: CurrencyEnum;
+  collectionIds: string[];
+  onCollectionsChange: (value: string[]) => void;
 }
 
-export const WishlistFilters = ({ search, onSearchChange, sort, onSortChange, currency }: Props) => {
+export const WishlistFilters = ({
+  search,
+  onSearchChange,
+  sort,
+  onSortChange,
+  currency,
+  collectionIds,
+  onCollectionsChange,
+}: WishlistFiltersProps) => {
   const sortOptions: SelectOption[] = [
     ...dateSortOptions,
     { value: WishlistSort.PRICE_ASC, name: `Price: low to high (${currency})` },
@@ -34,7 +44,7 @@ export const WishlistFilters = ({ search, onSearchChange, sort, onSortChange, cu
   };
 
   return (
-    <Fragment>
+    <div className="flex min-w-0 flex-col gap-1">
       <div className="flex flex-col gap-3 sm:flex-row">
         <Input
           type="search"
@@ -56,6 +66,7 @@ export const WishlistFilters = ({ search, onSearchChange, sort, onSortChange, cu
           />
         </div>
       </div>
-    </Fragment>
+      <WishlistCollectionFilter value={collectionIds} onChange={onCollectionsChange} />
+    </div>
   );
 };

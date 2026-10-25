@@ -1,0 +1,1 @@
+export { useDeleteCollection } from './mutations';

@@ -9,8 +9,21 @@ import { WishlistEmpty, WishlistFilters, WishlistHeader, WishlistStatus } from '
 
 export const WishListPage = () => {
   const { data, isLoading, isError, refetch } = useGetMyWishlist();
-  const { wishes, section, completedCount, currency, setSection, search, setSearch, sort, setSort, displayedItems } =
-    useWishlistFilters(data);
+  const {
+    wishes,
+    section,
+    completedCount,
+    currency,
+    setSection,
+    search,
+    setSearch,
+    sort,
+    setSort,
+    collectionIds,
+    setCollectionIds,
+    hasFilters,
+    displayedItems,
+  } = useWishlistFilters(data);
 
   const isUnavailable = isLoading || isError;
   const activeCount = wishes.length - completedCount;
@@ -31,6 +44,8 @@ export const WishListPage = () => {
         sort={sort}
         onSortChange={setSort}
         currency={currency}
+        collectionIds={collectionIds}
+        onCollectionsChange={setCollectionIds}
       />
       {isLoading ? (
         <WishlistItemsSkeleton />
@@ -49,7 +64,7 @@ export const WishListPage = () => {
           <WishlistItems items={displayedItems} preferredCurrency={currency} />
         </Fragment>
       ) : (
-        <WishlistEmpty hasFilters={!!search.trim()} hasWishes={!!wishes.length} section={section} />
+        <WishlistEmpty hasFilters={hasFilters} hasWishes={!!wishes.length} section={section} />
       )}
     </div>
   );
