@@ -1,3 +1,4 @@
+import { HttpError } from '../errors/http-error.js';
 import { getCloudinaryConfig, isCloudinaryUrl, uploadBufferToCloudinary } from '../services/cloudinary/index.js';
 import { urlToWebpBuffer } from './image/index.js';
 
@@ -12,7 +13,9 @@ export async function uploadImageByUrl(imageUrl) {
     if (!webpBuffer) return imageUrl;
     const result = await uploadBufferToCloudinary(webpBuffer);
     return result?.secure_url ?? imageUrl;
-  } catch {
+  } catch (error) {
+    if (error instanceof HttpError) throw error;
+
     return imageUrl;
   }
 }

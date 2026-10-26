@@ -153,6 +153,9 @@ importers:
       express-validator:
         specifier: ^7.3.2
         version: 7.3.2
+      ipaddr.js:
+        specifier: ^2.5.0
+        version: 2.5.0
       jsonwebtoken:
         specifier: ^9.0.3
         version: 9.0.3
@@ -168,6 +171,9 @@ importers:
       sharp:
         specifier: ^0.35.5
         version: 0.35.5(@types/node@26.6.5)
+      undici:
+        specifier: ^7.30.1
+        version: 7.30.1
     devDependencies:
       nodemon:
         specifier: ^3.1.14
@@ -4038,6 +4044,11 @@ packages:
   /ipaddr.js@1.9.1:
     resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}
     engines: {node: '>= 0.10'}
+    dev: false
+
+  /ipaddr.js@2.5.0:
+    resolution: {integrity: sha512-aq+t5NAc+cS6rZQQVWC2x98CPqGtKKTMDd4Gaodv0wShnItdKg/51djkGJ1hqH+Oy0ivDftCbSLCQob8zso01w==}
+    engines: {node: '>= 10'}
     dev: false
 
   /is-array-buffer@3.0.5:

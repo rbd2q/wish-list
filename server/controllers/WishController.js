@@ -10,18 +10,12 @@ import { copyWish } from '../services/copy-wish.js';
 import { createWish } from '../services/create-wish.js';
 import { uploadWishImage } from '../services/wish-images.js';
 import { updateWish } from '../services/update-wish.js';
+import { fetchPublicUrl } from '../utils/fetch-public-url.js';
 import { getPrices } from '../utils/get-prices.js';
 import { InvalidPriceError } from '../utils/normalize-price.js';
 import { parseProduct } from '../utils/parse-product.js';
 import { validateCollectionIds, validateId } from '../validators/collection-validator.js';
 import { validateWishCreate, validateWishUpdate } from '../validators/wish-validator.js';
-
-const FETCH_OPTIONS = {
-  headers: {
-    'User-Agent':
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-  },
-};
 
 export const getFullWishesList = async (req, res) => {
   try {
@@ -132,21 +126,21 @@ export const parse = async (req, res) => {
       });
     }
 
-    const { url } = req.body;
+    const url = req.body?.url;
     if (!url) {
       return res.status(400).json({
         message: 'URL is required',
       });
     }
 
-    const response = await fetch(url, FETCH_OPTIONS);
+    const response = await fetchPublicUrl(url);
     if (!response.ok) {
       return res.status(response.status).json({
         message: 'Failed to fetch data from the website',
       });
     }
 
-    const parsed = await parseProduct(await response.text(), url);
+    const parsed = await parseProduct(response.body.toString('utf8'), response.url);
     if (!parsed.title) {
       return res.status(400).json({
         message: 'Could not extract product data from this page',
@@ -168,6 +162,7 @@ export const parse = async (req, res) => {
       primaryCurrency,
     });
   } catch (e) {
+    if (e instanceof HttpError) return res.status(e.status).json({ message: e.message });
     if (e instanceof ExchangeRateError) {
       return res.status(503).json({ message: e.message });
     }

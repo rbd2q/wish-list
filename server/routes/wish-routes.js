@@ -23,7 +23,7 @@ router.post('/create', checkAuth, WishController.create);
 router.post('/:id/copy', checkAuth, WishController.copy);
 
 // api/wish/parse
-router.post('/parse', WishController.parse);
+router.post('/parse', checkAuth, WishController.parse);
 
 // api/wish/:id
 router.delete('/:id', checkAuth, WishController.deleteItem);
