@@ -1,3 +1,4 @@
+import { HttpError } from '../errors/http-error.js';
 import User from '../models/User.js';
 import Wish from '../models/Wish.js';
 import Analytics from '../models/Analytics.js';
@@ -38,41 +39,31 @@ const summarizeWishes = (wishes, currency) => {
 };
 
 export const getCurrentUserAnalytics = async (req, res) => {
-  try {
-    const user = await User.findById(req.userId);
+  const user = await User.findById(req.userId);
 
-    if (!user) {
-      return res.status(404).json({
-        message: 'Пользователь не найден',
-      });
-    }
-
-    const currency = SUPPORTED_CURRENCIES.includes(user.preferredCurrency) ? user.preferredCurrency : DEFAULT_CURRENCY;
-    const wishes = await Wish.find({ userId: req.userId });
-    const completedWishes = wishes.filter((wish) => wish.isCompleted);
-    const uncompletedWishes = wishes.filter((wish) => !wish.isCompleted);
-    const completedSummary = summarizeWishes(completedWishes, currency);
-    const uncompletedSummary = summarizeWishes(uncompletedWishes, currency);
-
-    const analytics = new Analytics({
-      currency,
-      totalNumber: wishes.length,
-      completedNumber: completedWishes.length,
-      uncompletedNumber: uncompletedWishes.length,
-      percentageOfUncompletedNumber: getPercentage(uncompletedWishes.length, wishes.length),
-      percentageOfCompletedNumber: getPercentage(completedWishes.length, wishes.length),
-      sumOfCompleted: completedSummary.sum,
-      sumOfUncompleted: uncompletedSummary.sum,
-      biggestWish: uncompletedSummary.biggestWishId,
-      biggestPurchase: completedSummary.biggestWishId,
-    });
-
-    return res.status(200).json(analytics);
-  } catch (error) {
-    console.error('Failed to get current user analytics', error);
-
-    return res.status(500).json({
-      message: 'Something went wrong. Try again',
-    });
+  if (!user) {
+    throw new HttpError(404, 'Пользователь не найден');
   }
+
+  const currency = SUPPORTED_CURRENCIES.includes(user.preferredCurrency) ? user.preferredCurrency : DEFAULT_CURRENCY;
+  const wishes = await Wish.find({ userId: req.userId });
+  const completedWishes = wishes.filter((wish) => wish.isCompleted);
+  const uncompletedWishes = wishes.filter((wish) => !wish.isCompleted);
+  const completedSummary = summarizeWishes(completedWishes, currency);
+  const uncompletedSummary = summarizeWishes(uncompletedWishes, currency);
+
+  const analytics = new Analytics({
+    currency,
+    totalNumber: wishes.length,
+    completedNumber: completedWishes.length,
+    uncompletedNumber: uncompletedWishes.length,
+    percentageOfUncompletedNumber: getPercentage(uncompletedWishes.length, wishes.length),
+    percentageOfCompletedNumber: getPercentage(completedWishes.length, wishes.length),
+    sumOfCompleted: completedSummary.sum,
+    sumOfUncompleted: uncompletedSummary.sum,
+    biggestWish: uncompletedSummary.biggestWishId,
+    biggestPurchase: completedSummary.biggestWishId,
+  });
+
+  return res.status(200).json(analytics);
 };
