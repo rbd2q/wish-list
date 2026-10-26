@@ -1,3 +1,4 @@
+import { Plus } from 'lucide-react';
 import Link from 'next/link';
 
 import { type Collection, CollectionCard } from '@/entities/collection';
@@ -23,5 +24,14 @@ export const CollectionsList = ({ collections }: CollectionsListProps) => (
         </div>
       </CollectionCard>
     ))}
+    <Link
+      href={navigationConfig.newCollection}
+      className="flex min-h-64 flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border bg-surface p-6 text-center hover:border-primary focus-visible:outline-2 focus-visible:outline-primary">
+      <span className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+        <Plus className="size-6" aria-hidden="true" />
+      </span>
+      <span className="font-semibold">Create collection</span>
+      <span className="max-w-48 text-sm text-muted-foreground">Organize your wishes into themed groups.</span>
+    </Link>
   </div>
 );

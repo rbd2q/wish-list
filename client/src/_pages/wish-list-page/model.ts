@@ -54,7 +54,7 @@ export const useWishlistFilters = (items: WishListItemType[] | undefined) => {
   const showCompleted = section === WishlistSection.COMPLETED;
 
   const filteredItems = wishes.filter((item) => {
-    if (Boolean(item.isCompleted) !== showCompleted) {
+    if (!!item.isCompleted !== showCompleted) {
       return false;
     }
 
