@@ -33,7 +33,7 @@ export const FormCollectionOptions = ({ control }: FormCollectionOptionsProps) =
   }
 
   if (!collections.length) {
-    return <p>No collections yet. You can save without a collection.</p>;
+    return <p>No collections yet.</p>;
   }
 
   return (

@@ -1,7 +1,10 @@
+import clsx from 'clsx';
+
 import { WishPriority } from '../model';
 
 interface PriorityBadgeProps {
   priority: WishPriority;
+  className?: string;
 }
 
 const priorityBadges: Record<WishPriority, { label: string; className: string }> = {
@@ -10,10 +13,12 @@ const priorityBadges: Record<WishPriority, { label: string; className: string }>
   [WishPriority.HIGH]: { label: 'High', className: 'bg-rose-100 text-rose-800' },
 };
 
-export const PriorityBadge = ({ priority }: PriorityBadgeProps) => {
-  const { label, className } = priorityBadges[priority];
+export const PriorityBadge = ({ priority, className }: PriorityBadgeProps) => {
+  const { label, className: colorClassName } = priorityBadges[priority];
 
   return (
-    <span className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${className}`}>{label} priority</span>
+    <span className={clsx('inline-flex rounded-full px-3 py-1 text-xs font-medium', colorClassName, className)}>
+      {label} priority
+    </span>
   );
 };

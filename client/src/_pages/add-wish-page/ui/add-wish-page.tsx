@@ -23,7 +23,13 @@ export const AddWishPage = ({ id }: AddWishPageProps) => {
   const { data: user, isLoading: isUserLoading, isError: isUserError, refetch: refetchUser } = useCurrentUser();
 
   const returnToWishlist = () => {
-    push(id ? navigationConfig.wish(id) : navigationConfig.wishlist);
+    push(
+      id
+        ? navigationConfig.wish(id)
+        : collectionId
+          ? navigationConfig.collection(collectionId)
+          : navigationConfig.wishlist,
+    );
   };
 
   const handleRetry = () => {

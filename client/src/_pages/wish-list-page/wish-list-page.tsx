@@ -1,3 +1,5 @@
+'use client';
+
 import { Fragment } from 'react';
 
 import { useGetMyWishlist } from '@/entities/wish';
@@ -28,6 +30,10 @@ export const WishListPage = () => {
   const isUnavailable = isLoading || isError;
   const activeCount = wishes.length - completedCount;
 
+  const handleRetry = () => {
+    refetch();
+  };
+
   return (
     <div className="flex w-full flex-1 flex-col gap-6">
       <WishlistHeader activeCount={activeCount} completedCount={completedCount} isUnavailable={isUnavailable} />
@@ -52,7 +58,7 @@ export const WishListPage = () => {
       ) : isError ? (
         <div role="alert" className="rounded-xl border border-border bg-surface p-6">
           <p>Could not load your wishlist.</p>
-          <Button className="mt-4" onPress={() => refetch()}>
+          <Button className="mt-4" onPress={handleRetry}>
             Try again
           </Button>
         </div>

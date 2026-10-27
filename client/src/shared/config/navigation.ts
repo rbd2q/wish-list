@@ -6,6 +6,8 @@ export const navigationConfig = {
   editWish: (id: string) => `/wish-list/${encodeURIComponent(id)}/edit`,
   addWish: '/wish-list/add',
   collections: '/collections',
+  collection: (id: string) => `/collections/${encodeURIComponent(id)}`,
+  addWishToCollection: (id: string) => `/wish-list/add?collectionId=${encodeURIComponent(id)}`,
   newCollection: '/collections/new',
   editCollection: (id: string) => `/collections/${encodeURIComponent(id)}/edit`,
   ideas: '/ideas',

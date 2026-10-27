@@ -12,15 +12,17 @@ interface CollectionsListProps {
 export const CollectionsList = ({ collections }: CollectionsListProps) => (
   <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
     {collections.map((collection) => (
-      <CollectionCard key={collection.id} collection={collection}>
-        <div className="flex flex-wrap items-center gap-3 border-t border-border pt-3">
+      <CollectionCard key={collection.id} collection={collection} href={navigationConfig.collection(collection.id)}>
+        <div className="flex flex-wrap items-center gap-3 self-start border-t border-border pt-3">
           <Link
             href={navigationConfig.editCollection(collection.id)}
-            className="inline-flex min-h-11 items-center rounded-lg px-2 text-sm font-medium text-primary underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-primary"
+            className="relative z-10 inline-flex min-h-11 items-center rounded-lg px-2 text-sm font-medium text-primary underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-primary"
             aria-label={`Edit ${collection.name}`}>
             Edit
           </Link>
-          <DeleteCollection id={collection.id} name={collection.name} />
+          <span className="relative z-10">
+            <DeleteCollection id={collection.id} name={collection.name} />
+          </span>
         </div>
       </CollectionCard>
     ))}

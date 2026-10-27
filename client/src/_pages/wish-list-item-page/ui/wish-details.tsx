@@ -10,6 +10,7 @@ import { getStoreUrl } from '@/shared/lib/url';
 import { ButtonLink } from '@/shared/ui/button-link';
 
 import { WishAddedDate } from './wish-added-date';
+import { WishCollections } from './wish-collections';
 import { WishDescription } from './wish-description';
 import { WishGallery } from './wish-gallery';
 import { WishSource } from './wish-source';
@@ -24,6 +25,8 @@ export const WishDetails = ({ wish, preferredCurrency, isOwner }: WishDetailsPro
   const { replace } = useRouter();
 
   const sourceUrl = getStoreUrl(wish.url);
+  const collectionIds = wish.collectionIds ?? [];
+  const hasCollections = isOwner && !!collectionIds.length;
 
   const handleDeleted = () => replace(navigationConfig.wishlist);
 
@@ -38,6 +41,7 @@ export const WishDetails = ({ wish, preferredCurrency, isOwner }: WishDetailsPro
         <WishDescription description={wish.description} />
         <WishSource sourceUrl={sourceUrl} />
         <WishAddedDate date={wish.date} />
+        {hasCollections ? <WishCollections collectionIds={collectionIds} /> : null}
         <div className="space-y-3">
           {sourceUrl ? (
             <ButtonLink href={sourceUrl} target="_blank" rel="noopener noreferrer" className="w-full">
