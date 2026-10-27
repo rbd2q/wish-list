@@ -1,7 +1,11 @@
-'use client';
+import type { Metadata } from 'next';
 
 import { ProfilePage } from '@/_pages/profile-page';
 
-export default function ProfileRoute() {
-  return <ProfilePage />;
-}
+export const metadata: Metadata = {
+  title: 'Profile',
+};
+
+const ProfileRoute = () => <ProfilePage />;
+
+export default ProfileRoute;

@@ -1,7 +1,11 @@
-'use client';
+import type { Metadata } from 'next';
 
 import { IdeasPage } from '@/_pages/ideas-page';
 
-export default function IdeasRoute() {
-  return <IdeasPage />;
-}
+export const metadata: Metadata = {
+  title: 'Ideas',
+};
+
+const IdeasRoute = () => <IdeasPage />;
+
+export default IdeasRoute;

@@ -1,3 +1,5 @@
+'use client';
+
 import { Lightbulb, Search } from 'lucide-react';
 import { type ChangeEvent, useState } from 'react';
 

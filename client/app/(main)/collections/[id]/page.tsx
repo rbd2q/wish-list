@@ -1,4 +1,10 @@
+import type { Metadata } from 'next';
+
 import { CollectionPage } from '@/_pages/collection-page';
+
+export const metadata: Metadata = {
+  title: 'Collection',
+};
 
 interface CollectionRouteProps {
   params: Promise<{ id: string }>;

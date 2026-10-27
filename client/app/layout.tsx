@@ -8,7 +8,10 @@ import { Providers } from './providers';
 const inter = Inter({ subsets: ['latin', 'cyrillic'], variable: '--font-inter', display: 'swap' });
 
 export const metadata: Metadata = {
-  title: 'My Wish List',
+  title: {
+    default: 'Wishly',
+    template: '%s | Wishly',
+  },
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
