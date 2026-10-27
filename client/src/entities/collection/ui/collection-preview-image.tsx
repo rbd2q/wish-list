@@ -27,7 +27,7 @@ export const CollectionPreviewImage = ({ src, icon }: CollectionPreviewImageProp
       fill
       unoptimized
       sizes="(min-width: 1280px) 120px, (min-width: 640px) 160px, 120px"
-      className="object-cover"
+      className="object-cover motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover/collection-card:scale-105"
       onError={handleError}
     />
   ) : (

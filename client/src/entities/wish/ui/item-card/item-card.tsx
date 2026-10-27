@@ -28,7 +28,7 @@ export const ItemCard: FC<ItemCardProps> = ({
   const price = formatPrice(item.prices?.[preferredCurrency], preferredCurrency) ?? 'Price not specified';
 
   return (
-    <article className="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-surface">
+    <article className="group/wish-card flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-shadow duration-200 hover:shadow-lg hover:shadow-gray-500/20 motion-reduce:transition-none">
       <Link
         href={navigationConfig.wish(item.id)}
         aria-label={`View ${item.title}`}
@@ -47,7 +47,7 @@ export const ItemCard: FC<ItemCardProps> = ({
             alt=""
             loading="lazy"
             className={clsx(
-              'absolute bg-surface-secondary',
+              'absolute bg-surface-secondary motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover/wish-card:scale-105',
               isCompact
                 ? 'inset-3 h-[calc(100%_-_24px)] w-[calc(100%_-_24px)] object-cover'
                 : 'inset-0 h-full max-h-60 w-full object-contain p-3',

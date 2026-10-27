@@ -20,7 +20,7 @@ export const CollectionCard = ({ collection, children, href }: CollectionCardPro
   const colorClassName = COLLECTION_COLOR_CLASSES[color];
 
   return (
-    <div className="relative flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-surface p-2">
+    <div className="group/collection-card relative flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-surface p-2 transition-shadow duration-200 hover:shadow-lg hover:shadow-gray-500/20 motion-reduce:transition-none">
       <div className="grid grid-cols-3 gap-1" aria-hidden="true">
         {times(COLLECTION_CONFIG.previewCount, (index) => (
           <div
