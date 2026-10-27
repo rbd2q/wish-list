@@ -21,6 +21,8 @@ export const WishListPage = () => {
     setSearch,
     sort,
     setSort,
+    priority,
+    setPriority,
     collectionIds,
     setCollectionIds,
     hasFilters,
@@ -49,6 +51,8 @@ export const WishListPage = () => {
           onSearchChange={setSearch}
           sort={sort}
           onSortChange={setSort}
+          priority={priority}
+          onPriorityChange={setPriority}
           currency={currency}
           collectionIds={collectionIds}
           onCollectionsChange={setCollectionIds}

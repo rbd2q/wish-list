@@ -9,3 +9,7 @@ export enum WishlistSort {
   PRICE_ASC = 'price-asc',
   PRICE_DESC = 'price-desc',
 }
+
+export enum WishlistPriorityFilter {
+  ALL = 'all',
+}

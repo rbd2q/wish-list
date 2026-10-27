@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { useCurrentUser } from '@/entities/session';
-import { WishListItemType } from '@/entities/wish';
+import { WishListItemType, WishPriority } from '@/entities/wish';
 import { CurrencyEnum } from '@/shared/lib/currency';
 
 import { WishlistSection, WishlistSort } from './enums';
@@ -43,6 +43,7 @@ export const useWishlistFilters = (items: WishListItemType[] | undefined) => {
   const [section, setSection] = useState<WishlistSection>(WishlistSection.ACTIVE);
   const [search, setSearch] = useState('');
   const [collectionIds, setCollectionIds] = useState<string[]>([]);
+  const [priority, setPriority] = useState<WishPriority | null>(null);
   const [sort, setSort] = useState<WishlistSort>(WishlistSort.NEWEST);
   const user = useCurrentUser();
 
@@ -50,7 +51,7 @@ export const useWishlistFilters = (items: WishListItemType[] | undefined) => {
   const wishes = items ?? [];
   const completedCount = wishes.filter((item) => item.isCompleted).length;
   const normalizedSearch = search.trim().toLocaleLowerCase();
-  const hasFilters = !!normalizedSearch || !!collectionIds.length;
+  const hasFilters = !!normalizedSearch || !!collectionIds.length || !!priority;
   const showCompleted = section === WishlistSection.COMPLETED;
 
   const filteredItems = wishes.filter((item) => {
@@ -59,6 +60,10 @@ export const useWishlistFilters = (items: WishListItemType[] | undefined) => {
     }
 
     if (collectionIds.length && !item.collectionIds?.some((id) => collectionIds.includes(id))) {
+      return false;
+    }
+
+    if (priority && item.priority !== priority) {
       return false;
     }
 
@@ -74,6 +79,8 @@ export const useWishlistFilters = (items: WishListItemType[] | undefined) => {
     collectionIds,
     setCollectionIds,
     hasFilters,
+    priority,
+    setPriority,
     sort,
     setSort,
     currency,

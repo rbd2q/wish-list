@@ -62,11 +62,9 @@ export const ItemCard: FC<ItemCardProps> = ({
             Completed
           </span>
         ) : null}
-        {isCompact ? (
-          <span className="absolute top-4 right-4">
-            <PriorityBadge priority={item.priority} className="px-2! py-0.5! text-[10px]!" />
-          </span>
-        ) : null}
+        <span className="absolute top-4 right-4">
+          <PriorityBadge priority={item.priority} className="px-2! py-0.5! text-[10px]!" />
+        </span>
       </Link>
       <div className={clsx('flex flex-1 flex-col', isCompact ? 'gap-2.5 p-4' : 'gap-4 p-4')}>
         <h2

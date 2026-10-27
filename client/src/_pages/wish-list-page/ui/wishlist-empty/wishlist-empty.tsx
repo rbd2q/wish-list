@@ -15,7 +15,7 @@ export const WishlistEmpty = ({ hasFilters, hasWishes, section }: Props) => (
     {hasFilters ? (
       <Fragment>
         <p className="font-medium">No matching wishes</p>
-        <p className="mt-2 text-sm text-muted-foreground">Try another title, collection, or status filter.</p>
+        <p className="mt-2 text-sm text-muted-foreground">Try another title, collection, priority, or status filter.</p>
       </Fragment>
     ) : (
       <Fragment>
