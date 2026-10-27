@@ -1,7 +1,8 @@
 import clsx from 'clsx';
 import { Gift } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, SyntheticEvent } from 'react';
 
 import { navigationConfig } from '@/shared/config/navigation';
 import { CurrencyEnum, formatPrice } from '@/shared/lib/currency';
@@ -27,6 +28,10 @@ export const ItemCard: FC<ItemCardProps> = ({
   const coverImageUrl = item.imageUrls[0];
   const price = formatPrice(item.prices?.[preferredCurrency], preferredCurrency) ?? 'Price not specified';
 
+  const handleImageError = (event: SyntheticEvent<HTMLImageElement>) => {
+    event.currentTarget.style.visibility = 'hidden';
+  };
+
   return (
     <article className="group/wish-card flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-shadow duration-200 hover:shadow-lg hover:shadow-gray-500/20 motion-reduce:transition-none">
       <Link
@@ -41,7 +46,10 @@ export const ItemCard: FC<ItemCardProps> = ({
           <span className="text-sm">Image unavailable</span>
         </div>
         {coverImageUrl ? (
-          <img
+          <Image
+            unoptimized
+            width={0}
+            height={0}
             key={coverImageUrl}
             src={coverImageUrl}
             alt=""
@@ -52,9 +60,7 @@ export const ItemCard: FC<ItemCardProps> = ({
                 ? 'inset-3 h-[calc(100%_-_24px)] w-[calc(100%_-_24px)] object-cover'
                 : 'inset-0 h-full max-h-60 w-full object-contain p-3',
             )}
-            onError={(event) => {
-              event.currentTarget.style.visibility = 'hidden';
-            }}
+            onError={handleImageError}
           />
         ) : null}
         {isCompact && item.isCompleted ? (

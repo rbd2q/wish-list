@@ -1,4 +1,5 @@
 import { Modal } from '@heroui/react';
+import Image from 'next/image';
 
 interface PhotoPreviewProps {
   src: string;
@@ -21,7 +22,14 @@ export const PhotoPreview = ({ src, title, onClose }: PhotoPreviewProps) => {
               <Modal.Heading className="wrap-anywhere">{title}</Modal.Heading>
             </Modal.Header>
             <Modal.Body>
-              <img src={src} alt={title} className="max-h-[70dvh] w-full rounded-xl object-contain" />
+              <Image
+                unoptimized
+                width={0}
+                height={0}
+                src={src}
+                alt={title}
+                className="h-auto max-h-[70dvh] w-full rounded-xl object-contain"
+              />
             </Modal.Body>
           </Modal.Dialog>
         </Modal.Container>

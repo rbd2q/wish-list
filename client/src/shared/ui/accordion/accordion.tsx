@@ -23,6 +23,7 @@ export const Accordion: FCWithChildren<Props> = ({ defaultOpened, title, icon, c
   return (
     <div className={clsx(styles.accordion, isOpen && styles['accordion--opened'])}>
       <button
+        type="button"
         onClick={handleToggle}
         className={clsx(styles.accordion__header, icon && styles['accordion__header--has-icon'])}>
         {icon ? <div className={styles.accordion__icon}>{icon}</div> : null}

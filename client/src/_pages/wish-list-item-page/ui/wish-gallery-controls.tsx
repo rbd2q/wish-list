@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { ChevronLeft, ChevronRight, ImageOff } from 'lucide-react';
+import Image from 'next/image';
 import type { MouseEvent, SyntheticEvent } from 'react';
 
 interface WishGalleryControlsProps {
@@ -42,7 +43,10 @@ export const WishGalleryControls = ({
                 'border-transparent': index !== activeIndex,
               })}>
               <ImageOff size={20} className="absolute inset-0 m-auto text-muted-foreground" aria-hidden="true" />
-              <img
+              <Image
+                unoptimized
+                width={48}
+                height={48}
                 src={src}
                 alt=""
                 onError={handleImageError}

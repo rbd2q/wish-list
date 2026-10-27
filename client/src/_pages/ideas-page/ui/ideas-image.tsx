@@ -1,4 +1,5 @@
 import { Gift } from 'lucide-react';
+import Image from 'next/image';
 import { useState } from 'react';
 
 interface IdeasImageProps {
@@ -21,5 +22,16 @@ export const IdeasImage = ({ src }: IdeasImageProps) => {
     );
   }
 
-  return <img src={src} alt="" loading="lazy" onError={handleImageError} className="block h-auto w-full" />;
+  return (
+    <Image
+      unoptimized
+      width={0}
+      height={0}
+      src={src}
+      alt=""
+      loading="lazy"
+      onError={handleImageError}
+      className="block h-auto w-full"
+    />
+  );
 };

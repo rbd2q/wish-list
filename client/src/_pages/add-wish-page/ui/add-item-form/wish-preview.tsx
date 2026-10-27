@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import { PriorityBadge, type WishPriority } from '@/entities/wish';
 import { CurrencyEnum } from '@/shared/lib/currency';
 
@@ -15,9 +17,9 @@ export const WishPreview = ({ imageUrl, title, price, currency, description, pri
     <aside className="min-w-0">
       <h2 className="mb-3 text-lg font-semibold">Preview</h2>
       <article className="overflow-hidden rounded-2xl border border-border bg-surface">
-        <div className="flex aspect-square items-center justify-center bg-surface-secondary">
+        <div className="relative flex aspect-square items-center justify-center bg-surface-secondary">
           {imageUrl ? (
-            <img src={imageUrl} alt="Wish preview" className="h-full w-full object-contain p-4" />
+            <Image unoptimized fill src={imageUrl} alt="Wish preview" className="object-contain p-4" />
           ) : (
             <span className="text-muted-foreground">Image unavailable</span>
           )}

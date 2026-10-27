@@ -1,4 +1,5 @@
 import { Gift } from 'lucide-react';
+import Image from 'next/image';
 import { useState } from 'react';
 
 import { WishGalleryControls } from './wish-gallery-controls';
@@ -36,9 +37,11 @@ export const WishGallery = ({ images, title }: WishGalleryProps) => {
               <span className="text-sm">Image unavailable</span>
             </div>
           ) : (
-            <img
+            <Image
+              unoptimized
+              fill
               key={selectedImage}
-              className="absolute inset-0 h-full w-full bg-surface object-contain"
+              className="bg-surface object-contain"
               src={selectedImage}
               alt={title}
               onError={handleImageError}

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { type MouseEvent, useState } from 'react';
 import type { Control } from 'react-hook-form';
 import type { InferType } from 'yup';
@@ -54,7 +55,14 @@ export const PhotoEditor = ({ control, candidates, isDisabled }: PhotoEditorProp
                   disabled={isFull || photos.some((photo) => photo.src === src)}
                   aria-label={`Add product photo ${index + 1}`}
                   className="rounded-lg border border-border p-1 disabled:opacity-40">
-                  <img src={src} alt="Product option" className="h-16 w-16 object-contain" />
+                  <Image
+                    unoptimized
+                    width={64}
+                    height={64}
+                    src={src}
+                    alt="Product option"
+                    className="h-16 w-16 object-contain"
+                  />
                 </button>
               );
             })}

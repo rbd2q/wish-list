@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import type { MouseEvent } from 'react';
 
 import type { WishPhoto } from '../../model';
@@ -33,7 +34,14 @@ export const PhotoList = ({ photos, onPreview, onRemove, onSetCover }: PhotoList
               onClick={handlePreview}
               aria-label={`Enlarge photo ${index + 1}`}
               className="shrink-0 rounded-lg focus-visible:ring-2 focus-visible:ring-primary">
-              <img src={photo.src} alt={`Photo ${index + 1}`} className="h-16 w-16 rounded-lg object-contain" />
+              <Image
+                unoptimized
+                width={64}
+                height={64}
+                src={photo.src}
+                alt={`Photo ${index + 1}`}
+                className="h-16 w-16 rounded-lg object-contain"
+              />
             </button>
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium">{index === 0 ? 'Cover photo' : `Photo ${index + 1}`}</p>
