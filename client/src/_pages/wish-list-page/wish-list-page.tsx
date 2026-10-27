@@ -36,23 +36,24 @@ export const WishListPage = () => {
 
   return (
     <div className="flex w-full flex-1 flex-col gap-6">
-      <WishlistHeader activeCount={activeCount} completedCount={completedCount} isUnavailable={isUnavailable} />
-      <WishlistStatus
-        section={section}
-        onSectionChange={setSection}
-        activeCount={activeCount}
-        completedCount={completedCount}
-        isUnavailable={isUnavailable}
-      />
-      <WishlistFilters
-        search={search}
-        onSearchChange={setSearch}
-        sort={sort}
-        onSortChange={setSort}
-        currency={currency}
-        collectionIds={collectionIds}
-        onCollectionsChange={setCollectionIds}
-      />
+      <WishlistHeader activeCount={activeCount} completedCount={completedCount} isUnavailable={isUnavailable}>
+        <WishlistStatus
+          section={section}
+          onSectionChange={setSection}
+          activeCount={activeCount}
+          completedCount={completedCount}
+          isUnavailable={isUnavailable}
+        />
+        <WishlistFilters
+          search={search}
+          onSearchChange={setSearch}
+          sort={sort}
+          onSortChange={setSort}
+          currency={currency}
+          collectionIds={collectionIds}
+          onCollectionsChange={setCollectionIds}
+        />
+      </WishlistHeader>
       {isLoading ? (
         <WishlistItemsSkeleton />
       ) : isError ? (
