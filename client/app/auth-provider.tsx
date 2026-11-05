@@ -7,15 +7,16 @@ import { useEffect, useMemo } from 'react';
 import { AuthContext, useAuth } from '@/entities/session';
 import { navigationConfig } from '@/shared/config/navigation';
 import { FCWithChildren } from '@/shared/lib/react';
+import { RequestError } from '@/shared/ui/request-error';
 
 export const AuthContextProvider: FCWithChildren = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const { token, login, logout, isReady } = useAuth();
+  const { userId, login, logout, isReady, error, refreshSession } = useAuth();
 
-  const isAuthenticated = !!token;
+  const isAuthenticated = !!userId;
 
-  const value = useMemo(() => ({ token, login, logout, isAuthenticated }), [token, login, logout, isAuthenticated]);
+  const value = useMemo(() => ({ userId, login, logout, isAuthenticated }), [userId, login, logout, isAuthenticated]);
 
   useEffect(() => {
     if (isReady && !isAuthenticated) {
@@ -24,6 +25,18 @@ export const AuthContextProvider: FCWithChildren = ({ children }) => {
   }, [isAuthenticated, isReady, router]);
 
   const canRenderPage = isReady && (isAuthenticated || pathname === navigationConfig.auth);
+
+  const handleRetry = () => {
+    refreshSession();
+  };
+
+  if (error) {
+    return (
+      <div className="flex min-h-dvh items-center justify-center p-6">
+        <RequestError message="Unable to verify your session." onRetry={handleRetry} />
+      </div>
+    );
+  }
 
   return (
     <AuthContext.Provider value={value}>

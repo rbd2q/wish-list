@@ -1,29 +1,12 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 
-import { storageName } from './token-storage';
-
-const config: AxiosRequestConfig = {
+export const api = axios.create({
   withCredentials: true,
   headers: {
     Accept: 'application/json',
     'X-Detect-Locale': 'false',
+    'X-CSRF-Protection': '1',
   },
-};
+});
 
-export const useApi = () => {
-  let impersonationToken = '';
-
-  if (typeof window !== 'undefined' && localStorage.getItem(storageName)) {
-    impersonationToken = localStorage.getItem(storageName) ?? '';
-  }
-
-  const actualConfig = {
-    ...config,
-    headers: {
-      ...config.headers,
-      Authorization: `Bearer ${impersonationToken || process.env.NEXT_PUBLIC_BEARER_TOKEN}`,
-    },
-  };
-
-  return axios.create(actualConfig);
-};
+export const useApi = () => api;

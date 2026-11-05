@@ -2,8 +2,7 @@ import { validationResult } from 'express-validator';
 import { HttpError } from '../errors/http-error.js';
 import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import config from 'config';
+import { clearSessionCookie, createSession, refreshSession, revokeSession } from '../services/session.js';
 
 export const login = async (req, res) => {
   const errors = validationResult(req);
@@ -22,8 +21,8 @@ export const login = async (req, res) => {
     throw new HttpError(400, 'Incorrect e-mail or password');
   }
 
-  const token = jwt.sign({ userId: user.id }, config.get('jwt_secret_key'), { expiresIn: '1h' });
-  res.json({ token, userId: user.id });
+  await createSession(req, res, user.id);
+  res.json({ userId: user.id });
 };
 
 export const register = async (req, res) => {
@@ -44,4 +43,20 @@ export const register = async (req, res) => {
   await user.save();
 
   res.status(201).json({ message: 'User has been created!' });
+};
+
+export const getSession = (req, res) => {
+  res.json({ userId: req.userId });
+};
+
+export const logout = async (req, res) => {
+  await revokeSession(req);
+  clearSessionCookie(res);
+  res.sendStatus(204);
+};
+
+export const refresh = async (req, res) => {
+  const userId = await refreshSession(req, res);
+
+  res.json({ userId });
 };

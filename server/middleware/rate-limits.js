@@ -6,6 +6,7 @@ import {
   LOGIN_ACCOUNT_RATE_LIMIT,
   LOGIN_IP_RATE_LIMIT,
   PARSE_USER_RATE_LIMIT,
+  REFRESH_IP_RATE_LIMIT,
   REGISTER_RATE_LIMIT,
   RESOURCE_IP_RATE_LIMIT,
 } from '../config/rate-limits.js';
@@ -37,6 +38,7 @@ export const loginAccountRateLimiter = rateLimit({
   keyGenerator: getLoginAccountKey,
   skipSuccessfulRequests: true,
 });
+export const refreshIpRateLimiter = rateLimit({ ...RATE_LIMIT_OPTIONS, ...REFRESH_IP_RATE_LIMIT });
 export const registerRateLimiter = rateLimit({ ...RATE_LIMIT_OPTIONS, ...REGISTER_RATE_LIMIT });
 
 const resourceIpRateLimiter = rateLimit({ ...RATE_LIMIT_OPTIONS, ...RESOURCE_IP_RATE_LIMIT });

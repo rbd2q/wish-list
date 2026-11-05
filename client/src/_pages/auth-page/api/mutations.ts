@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
 
-import { AuthContext } from '@/entities/session';
+import { AuthContext, signInSession } from '@/entities/session';
 import { getApiErrorMessage, useApi } from '@/shared/api';
 import { navigationConfig } from '@/shared/config/navigation';
 import { showErrorToast, showSuccessToast } from '@/shared/lib/notifications';
@@ -14,13 +14,12 @@ import { AUTH_MUTATION_KEYS } from './mutation-keys';
 export const useSignIn = (): UseMutationResult<void, unknown, SignInResource> => {
   const { login } = useContext(AuthContext);
   const router = useRouter();
-  const api = useApi();
 
   return useMutation({
     mutationKey: AUTH_MUTATION_KEYS.signIn,
     mutationFn: async (formData: SignInResource) => {
-      const { data } = await api.post('/api/auth/login', formData);
-      login(data.token);
+      const data = await signInSession(formData);
+      login(data.userId);
       router.replace(navigationConfig.home);
     },
     onError: (error) => {
@@ -40,8 +39,8 @@ export const useSignUp = (): UseMutationResult<void, unknown, SignUpResource> =>
       await api.post('/api/auth/register', formData);
       showSuccessToast('User created');
       try {
-        const { data } = await api.post('/api/auth/login', { email: formData.email, password: formData.password });
-        login(data.token);
+        const data = await signInSession({ email: formData.email, password: formData.password });
+        login(data.userId);
         router.replace(navigationConfig.home);
       } catch {
         showErrorToast('Your account was created, but automatic sign-in failed. Please sign in.');

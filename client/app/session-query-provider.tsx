@@ -38,7 +38,7 @@ const SessionQueryCache: FCWithChildren = ({ children }) => {
 };
 
 export const SessionQueryProvider: FCWithChildren = ({ children }) => {
-  const { token } = useContext(AuthContext);
+  const { userId } = useContext(AuthContext);
 
-  return <SessionQueryCache key={token ?? 'guest'}>{children}</SessionQueryCache>;
+  return <SessionQueryCache key={userId ?? 'guest'}>{children}</SessionQueryCache>;
 };

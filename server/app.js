@@ -1,12 +1,14 @@
 import './config/environment.js';
 
 import dns from 'dns';
+import cookieParser from 'cookie-parser';
 dns.setDefaultResultOrder('ipv4first');
 
 import config from 'config';
 import express from 'express';
 import mongoose from 'mongoose';
 
+import { csrfProtection } from './middleware/csrf-protection.js';
 import { handleApiError } from './errors/http-error.js';
 import AnalyticsRoutes from './routes/analytics-routes.js';
 import AuthRoutes from './routes/auth-routes.js';
@@ -17,6 +19,8 @@ import { startPendingWishImageCleanup } from './services/wish-images.js';
 
 const app = express();
 
+app.use('/api', cookieParser());
+app.use('/api', csrfProtection);
 app.use(express.json({ extended: true }));
 
 app.use('/api/auth', AuthRoutes);

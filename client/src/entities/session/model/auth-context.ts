@@ -1,16 +1,16 @@
 import { createContext } from 'react';
 
 interface AuthContextType {
-  token: string | null;
-  login: (jwtToken: string) => void;
-  logout: () => void;
+  userId: string | null;
+  login: (userId: string) => void;
+  logout: () => Promise<void>;
   isAuthenticated: boolean;
 }
 
 const defaultContext: AuthContextType = {
-  token: null,
+  userId: null,
   login: () => {},
-  logout: () => {},
+  logout: async () => {},
   isAuthenticated: false,
 };
 

@@ -1,38 +1,55 @@
-import { useCallback, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import { storageName } from '@/shared/api/token-storage';
+import { getApiErrorMessage } from '@/shared/api';
+import { showErrorToast } from '@/shared/lib/notifications';
 
-const TOKEN_CHANGE_EVENT = 'auth-token-change';
-
-const subscribeToToken = (onChange: () => void) => {
-  window.addEventListener('storage', onChange);
-  window.addEventListener(TOKEN_CHANGE_EVENT, onChange);
-
-  return () => {
-    window.removeEventListener('storage', onChange);
-    window.removeEventListener(TOKEN_CHANGE_EVENT, onChange);
-  };
-};
-
-const getStoredToken = () => localStorage.getItem(storageName);
-const getServerToken = () => null;
-const getClientReady = () => true;
-const getServerReady = () => false;
+import { endSession, getSession } from '../api/session';
+import { installSessionRefresh } from '../api/session-refresh';
 
 export const useAuth = () => {
-  const token = useSyncExternalStore(subscribeToToken, getStoredToken, getServerToken);
-  const isReady = useSyncExternalStore(subscribeToToken, getClientReady, getServerReady);
+  const [session, setSession] = useState<{ userId: string | null; isReady: boolean; error: boolean }>({
+    userId: null,
+    isReady: false,
+    error: false,
+  });
 
-  const login = useCallback((jwtToken: string) => {
-    localStorage.setItem(storageName, jwtToken);
-    // The native storage event only notifies other tabs.
-    window.dispatchEvent(new Event(TOKEN_CHANGE_EVENT));
+  const login = useCallback((userId: string | null) => {
+    setSession({ userId, isReady: true, error: false });
   }, []);
 
-  const logout = useCallback(() => {
-    localStorage.removeItem(storageName);
-    window.dispatchEvent(new Event(TOKEN_CHANGE_EVENT));
+  const refreshSession = useCallback(async () => {
+    try {
+      const userId = await getSession();
+
+      setSession({ userId, isReady: true, error: false });
+    } catch {
+      setSession((current) => ({ ...current, error: true, isReady: false }));
+    }
   }, []);
 
-  return { login, logout, token, isReady };
+  const logout = useCallback(async () => {
+    try {
+      await endSession();
+      login(null);
+    } catch (error) {
+      showErrorToast(getApiErrorMessage(error, 'Unable to sign out. Please try again.'));
+    }
+  }, [login]);
+
+  useEffect(() => {
+    const initializeSession = async () => {
+      await refreshSession();
+    };
+
+    const uninstallRefresh = installSessionRefresh(() => login(null));
+    window.addEventListener('focus', refreshSession);
+    initializeSession();
+
+    return () => {
+      uninstallRefresh();
+      window.removeEventListener('focus', refreshSession);
+    };
+  }, [login, refreshSession]);
+
+  return { ...session, login, logout, refreshSession };
 };

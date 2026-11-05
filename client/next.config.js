@@ -21,6 +21,9 @@ const nextConfig = {
         source: '/api/auth/login',
         destination: 'http://localhost:8000/api/auth/login',
       },
+      { source: '/api/auth/refresh', destination: 'http://localhost:8000/api/auth/refresh' },
+      { source: '/api/auth/session', destination: 'http://localhost:8000/api/auth/session' },
+      { source: '/api/auth/logout', destination: 'http://localhost:8000/api/auth/logout' },
       {
         source: '/api/users/current',
         destination: 'http://localhost:8000/api/users/current',
