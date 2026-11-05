@@ -1,6 +1,7 @@
 import { validationResult } from 'express-validator';
 import { isObjectIdOrHexString } from 'mongoose';
 
+import { RECENT_WISHES_LIMIT } from '../constants/wishes.js';
 import { HttpError } from '../errors/http-error.js';
 import Wish from '../models/Wish.js';
 import { serializeWish } from '../serializers/wish.js';
@@ -46,6 +47,12 @@ export const getAllMyWishes = async (req, res) => {
   }
 
   const wishes = await Wish.find(filter);
+  return res.json(wishes.map((wish) => serializeWish(wish, req.userId)));
+};
+
+export const getRecentMyWishes = async (req, res) => {
+  const wishes = await Wish.find({ userId: req.userId }).sort({ date: -1, _id: -1 }).limit(RECENT_WISHES_LIMIT);
+
   return res.json(wishes.map((wish) => serializeWish(wish, req.userId)));
 };
 

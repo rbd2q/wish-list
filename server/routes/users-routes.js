@@ -7,5 +7,6 @@ const router = Router();
 
 // api/users/current
 router.get('/current', checkAuth, UserController.getCurrentUser);
+router.get('/current/stats', checkAuth, UserController.getCurrentUserStats);
 
 export default router;

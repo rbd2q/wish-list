@@ -11,6 +11,7 @@ router.get('/', checkAuth, WishController.getAllMyWishes);
 
 // api/wish/ideas
 router.get('/ideas', checkAuth, WishController.getFullWishesList);
+router.get('/recent', checkAuth, WishController.getRecentMyWishes);
 
 router.post(
   '/image',

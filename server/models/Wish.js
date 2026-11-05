@@ -20,5 +20,6 @@ const schema = new mongoose.Schema({
 });
 
 schema.index({ userId: 1, collectionIds: 1 });
+schema.index({ userId: 1, date: -1, _id: -1 });
 
 export default mongoose.model('Wish', schema);
