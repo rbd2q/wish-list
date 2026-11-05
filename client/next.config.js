@@ -25,12 +25,20 @@ const nextConfig = {
       { source: '/api/auth/session', destination: 'http://localhost:8000/api/auth/session' },
       { source: '/api/auth/logout', destination: 'http://localhost:8000/api/auth/logout' },
       {
+        source: '/api/users/current/stats',
+        destination: 'http://localhost:8000/api/users/current/stats',
+      },
+      {
         source: '/api/users/current',
         destination: 'http://localhost:8000/api/users/current',
       },
       {
         source: '/api/wish',
         destination: 'http://localhost:8000/api/wish',
+      },
+      {
+        source: '/api/wish/recent',
+        destination: 'http://localhost:8000/api/wish/recent',
       },
       {
         source: '/api/wish/ideas',

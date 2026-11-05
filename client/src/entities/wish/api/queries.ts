@@ -47,3 +47,17 @@ export const useGetAllItems = (): UseQueryResult<WishListItemType[]> => {
     },
   });
 };
+
+export const useRecentWishes = (): UseQueryResult<WishListItemType[]> => {
+  const api = useApi();
+
+  return useQuery({
+    queryKey: WISHLIST_QUERY_KEYS.recent,
+    meta: { errorMessage: 'Could not load your recent wishes.' },
+    queryFn: async ({ signal }) => {
+      const { data } = await api.get<WishListItemType[]>('/api/wish/recent', { signal });
+
+      return data;
+    },
+  });
+};

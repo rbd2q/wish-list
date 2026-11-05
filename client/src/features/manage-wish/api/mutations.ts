@@ -2,6 +2,7 @@ import type { UseMutationResult } from '@tanstack/react-query';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { COLLECTION_QUERY_KEYS } from '@/entities/collection';
+import { SESSION_QUERY_KEYS } from '@/entities/session';
 import { WISHLIST_QUERY_KEYS, WishListItemType } from '@/entities/wish';
 import { getApiErrorMessage, useApi } from '@/shared/api';
 import { showErrorToast } from '@/shared/lib/notifications';
@@ -29,6 +30,8 @@ const useWishMutation = (action: WishAction): UseMutationResult<WishListItemType
       queryClient.setQueryData<WishListItemType[]>(WISHLIST_QUERY_KEYS.currentUser, (items) =>
         items?.flatMap((item) => (item.id === wish.id ? (action === WishAction.DELETE ? [] : [wish]) : [item])),
       );
+      queryClient.invalidateQueries({ queryKey: SESSION_QUERY_KEYS.stats });
+      queryClient.invalidateQueries({ queryKey: WISHLIST_QUERY_KEYS.recent });
       queryClient.invalidateQueries({ queryKey: WISHLIST_QUERY_KEYS.detail(wish.id) });
       queryClient.invalidateQueries({ queryKey: WISHLIST_QUERY_KEYS.ideas });
       queryClient.invalidateQueries({ queryKey: COLLECTION_QUERY_KEYS.all });

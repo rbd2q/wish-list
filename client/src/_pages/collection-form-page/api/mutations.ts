@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { type Collection, COLLECTION_QUERY_KEYS, type CollectionValues } from '@/entities/collection';
+import { SESSION_QUERY_KEYS } from '@/entities/session';
 import { getApiErrorMessage, useApi } from '@/shared/api';
 import { showErrorToast, showSuccessToast } from '@/shared/lib/notifications';
 
@@ -26,6 +27,11 @@ export const useSaveCollection = (id?: string) => {
           : undefined,
       );
       queryClient.invalidateQueries({ queryKey: COLLECTION_QUERY_KEYS.all });
+
+      if (!id) {
+        queryClient.invalidateQueries({ queryKey: SESSION_QUERY_KEYS.stats });
+      }
+
       showSuccessToast(id ? 'Collection updated.' : 'Collection created.');
     },
     onError: (error) => {

@@ -27,6 +27,7 @@ export const useChangeMembership = (collectionId: string) => {
       queryClient.setQueryData(WISHLIST_QUERY_KEYS.detail(wish.id), wish);
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: WISHLIST_QUERY_KEYS.currentUser }),
+        queryClient.invalidateQueries({ queryKey: WISHLIST_QUERY_KEYS.recent }),
         queryClient.invalidateQueries({ queryKey: COLLECTION_QUERY_KEYS.all }),
       ]);
     },

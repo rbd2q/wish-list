@@ -5,13 +5,14 @@ import { EmptyBlock } from '@/shared/ui/empty-block';
 
 import { WishActions } from '../wish-actions';
 
-interface Props {
+interface WishlistItemsProps {
   items: WishListItemType[];
   isIdeasPage?: boolean;
   preferredCurrency?: CurrencyEnum;
+  showPriority?: boolean;
 }
 
-export const WishlistItems = ({ items, isIdeasPage, preferredCurrency }: Props) => {
+export const WishlistItems = ({ items, isIdeasPage, preferredCurrency, showPriority }: WishlistItemsProps) => {
   if (!items.length) {
     return <EmptyBlock />;
   }
@@ -23,6 +24,7 @@ export const WishlistItems = ({ items, isIdeasPage, preferredCurrency }: Props) 
           key={item.id}
           item={item}
           preferredCurrency={preferredCurrency}
+          showPriority={showPriority}
           action={isIdeasPage ? <AddToWishlistButton wish={item} /> : <WishActions item={item} />}
         />
       ))}

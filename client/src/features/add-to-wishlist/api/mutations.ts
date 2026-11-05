@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { SESSION_QUERY_KEYS } from '@/entities/session';
 import { WISHLIST_QUERY_KEYS, WishListItemType } from '@/entities/wish';
 import { getApiErrorMessage, useApi } from '@/shared/api';
 import { showErrorToast } from '@/shared/lib/notifications';
@@ -19,7 +20,11 @@ export const useAddToMyWishlist = () => {
         return [...(items || []), wish];
       });
 
-      return queryClient.invalidateQueries({ queryKey: WISHLIST_QUERY_KEYS.currentUser });
+      return Promise.all([
+        queryClient.invalidateQueries({ queryKey: WISHLIST_QUERY_KEYS.currentUser }),
+        queryClient.invalidateQueries({ queryKey: SESSION_QUERY_KEYS.stats }),
+        queryClient.invalidateQueries({ queryKey: WISHLIST_QUERY_KEYS.recent }),
+      ]);
     },
     onError: (error) => {
       showErrorToast(getApiErrorMessage(error, 'Could not add the wish. Try again.'));

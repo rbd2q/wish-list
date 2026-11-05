@@ -16,6 +16,7 @@ interface ItemCardProps {
   preferredCurrency?: CurrencyEnum;
   action?: ReactNode;
   variant?: ItemCardVariant;
+  showPriority?: boolean;
 }
 
 export const ItemCard: FC<ItemCardProps> = ({
@@ -23,6 +24,7 @@ export const ItemCard: FC<ItemCardProps> = ({
   preferredCurrency = CurrencyEnum.USD,
   action,
   variant = ItemCardVariant.DEFAULT,
+  showPriority = true,
 }) => {
   const isCompact = variant === ItemCardVariant.COMPACT;
   const coverImageUrl = item.imageUrls[0];
@@ -68,9 +70,11 @@ export const ItemCard: FC<ItemCardProps> = ({
             Completed
           </span>
         ) : null}
-        <span className="absolute top-4 right-4">
-          <PriorityBadge priority={item.priority} className="px-2! py-0.5! text-[10px]!" />
-        </span>
+        {showPriority ? (
+          <span className="absolute top-4 right-4">
+            <PriorityBadge priority={item.priority} className="px-2! py-0.5! text-[10px]!" />
+          </span>
+        ) : null}
       </Link>
       <div className={clsx('flex flex-1 flex-col', isCompact ? 'gap-2.5 p-4' : 'gap-4 p-4')}>
         <h2
